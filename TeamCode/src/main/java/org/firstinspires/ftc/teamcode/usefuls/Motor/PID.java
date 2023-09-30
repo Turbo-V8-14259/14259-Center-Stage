@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.pid;
+package org.firstinspires.ftc.teamcode.usefuls.Motor;
 
 import org.firstinspires.ftc.teamcode.usefuls.Timer;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
