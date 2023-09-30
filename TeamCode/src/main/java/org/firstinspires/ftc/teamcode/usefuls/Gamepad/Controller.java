@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.usefuls.Controller;
+package org.firstinspires.ftc.teamcode.usefuls.Gamepad;
 
 public interface Controller {
     public static enum EventType {

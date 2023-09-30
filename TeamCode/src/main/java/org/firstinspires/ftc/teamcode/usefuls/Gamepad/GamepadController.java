@@ -1,8 +1,6 @@
-package org.firstinspires.ftc.teamcode.usefuls.Controller;
+package org.firstinspires.ftc.teamcode.usefuls.Gamepad;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
-
-import org.firstinspires.ftc.teamcode.usefuls.Controller.Controller;
 
 
 public class GamepadController implements Controller {
