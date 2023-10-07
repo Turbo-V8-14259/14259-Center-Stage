@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.usefuls.Imu;
+import org.firstinspires.ftc.teamcode.hardware.Imu;
 
 public class ImuWrapperTests extends LinearOpMode {
     Imu imu = new Imu();

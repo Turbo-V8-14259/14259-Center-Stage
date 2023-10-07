@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.usefuls;
+package org.firstinspires.ftc.teamcode.hardware;
 
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -29,7 +29,6 @@ public class Imu{
     public double getYawR(){
         update();
         return orientation.getYaw(AngleUnit.RADIANS);
-
     }
 
     public double getPitchR(){
