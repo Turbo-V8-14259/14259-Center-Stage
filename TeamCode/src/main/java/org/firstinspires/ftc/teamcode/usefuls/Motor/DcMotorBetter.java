@@ -21,10 +21,19 @@ public class DcMotorBetter implements Motor {
 //        dcMotorEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER); //I got trolled
     }
 
-    public DcMotorBetter setLowerBound(double bound) { this.lowerBound = bound; return this; }
-    public DcMotorBetter setUpperBound(double bound) { this.upperBound = bound; return this; }
+    public DcMotorBetter setLowerBound(double bound) {
+        this.lowerBound = bound;
+        return this;
+    }
+    public DcMotorBetter setUpperBound(double bound) {
+        this.upperBound = bound;
+        return this;
+    }
 
-    public DcMotorBetter setDirection(DcMotorEx.Direction direction) { this.direction = direction; return this; }
+    public DcMotorBetter setDirection(DcMotorEx.Direction direction) {
+        this.direction = direction;
+        return this;
+    }
     public DcMotorBetter setMode(DcMotorEx.RunMode runMode) { this.runMode = runMode; return this; }
 
     public DcMotorBetter setPosition(double position) {
@@ -85,7 +94,13 @@ public class DcMotorBetter implements Motor {
         return this;
     }
 
-    public boolean isBusy() { return this.dcMotorEx.isBusy(); }
+    public boolean isBusy() {
+        return this.dcMotorEx.isBusy();
+    }
+
+    public void resetEncoder() {
+        this.dcMotorEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+    }
 
     public void update() {
         switch (this.runMode) {

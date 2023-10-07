@@ -12,5 +12,6 @@ public interface Motor {
     public Motor setDirection(DcMotor.Direction direction);
     public Motor setPosition(double position);
     public Motor addPosition(double position);
+    public void resetEncoder();
     public void update();
 }

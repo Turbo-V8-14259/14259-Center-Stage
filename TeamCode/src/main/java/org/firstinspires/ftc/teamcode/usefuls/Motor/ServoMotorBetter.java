@@ -18,8 +18,14 @@ public class  ServoMotorBetter implements Motor {
         this.servo = dcMotorEx;
     }
 
-    public ServoMotorBetter setLowerBound(double bound) { this.lowerBound = bound; return this; }
-    public ServoMotorBetter setUpperBound(double bound) { this.upperBound = bound; return this; }
+    public ServoMotorBetter setLowerBound(double bound) {
+        this.lowerBound = bound;
+        return this;
+    }
+    public ServoMotorBetter setUpperBound(double bound) {
+        this.upperBound = bound;
+        return this;
+    }
 
     public ServoMotorBetter setDirection(DcMotorEx.Direction direction) {
         switch (direction) {
@@ -45,6 +51,9 @@ public class  ServoMotorBetter implements Motor {
     public ServoMotorBetter addPosition(double position) {
         this.position += position;
         return this;
+    }
+    public void resetEncoder() {
+        //lmao its a servo you bozo
     }
 
     public void update() {
