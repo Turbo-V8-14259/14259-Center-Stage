@@ -9,10 +9,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class Imu{
     //todo: test
-    static RevHubOrientationOnRobot.LogoFacingDirection[] logoFacingDirections
-            = RevHubOrientationOnRobot.LogoFacingDirection.values();
-    static RevHubOrientationOnRobot.UsbFacingDirection[] usbFacingDirections
-            = RevHubOrientationOnRobot.UsbFacingDirection.values();
+    static RevHubOrientationOnRobot.LogoFacingDirection[] logoFacingDirections = RevHubOrientationOnRobot.LogoFacingDirection.values();
+    static RevHubOrientationOnRobot.UsbFacingDirection[] usbFacingDirections = RevHubOrientationOnRobot.UsbFacingDirection.values();
 
     int logoFacingDirectionPosition;
     int usbFacingDirectionPosition;
@@ -22,7 +20,7 @@ public class Imu{
 
     YawPitchRollAngles angles;
 
-    public void init() {
+    public void init(){
         logoFacingDirectionPosition = 0; // Up
         usbFacingDirectionPosition = 2; // Forward
         RevHubOrientationOnRobot.LogoFacingDirection logo = logoFacingDirections[logoFacingDirectionPosition];
