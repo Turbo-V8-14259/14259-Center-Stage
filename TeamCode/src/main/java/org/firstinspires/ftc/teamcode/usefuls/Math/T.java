@@ -44,7 +44,7 @@ public class T {
 
 
 
-    
+
     //inverse trig functions (output angles)
 
     public static double arctan(double x) {

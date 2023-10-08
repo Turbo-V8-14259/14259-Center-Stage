@@ -9,9 +9,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 public class Imu{
     //todo: test
 
-    public HardwareMap hardwareMap;
+    private HardwareMap hardwareMap;
 
-    public IMU imu;
+    private IMU imu;
 
     YawPitchRollAngles orientation;
 
