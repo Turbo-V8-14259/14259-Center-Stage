@@ -50,19 +50,18 @@ public class PID {
         double deDt = M.lerp((e - this.e) / dt, this.deDt, this.coefficients.deDtGain);
 
         double det = e * dt;
-        if (Math.signum(det) != Math.signum(this.et)) this.et = 0.0;
+        if(Math.signum(det) != Math.signum(this.et)) {this.et = 0.0;}
         double et = M.clamp(this.et + det, -this.coefficients.etMax, this.coefficients.etMax);
 
         double factor = 0.0;
         factor += this.coefficients.kp * e;
-        factor += this.coefficients.ki * et;
-        factor += this.coefficients.kd * deDt;
+        factor += this.coefficients.ki * et; //Absement/Absition (Integral of d/t)
+        factor += this.coefficients.kd * deDt; //Velocity (Derivative of d/t)
 
         this.e = e;
         this.et = et;
         this.deDt = deDt;
 
         this.responseFunction.execute(factor);
-        //some cring epilepson stuff to save loop times cause min value or sm sm
     }
 }

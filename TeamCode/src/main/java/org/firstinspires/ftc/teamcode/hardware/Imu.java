@@ -14,24 +14,24 @@ public class Imu{
 
     int logoFacingDirectionPosition;
     int usbFacingDirectionPosition;
-    private HardwareMap hardwareMap;
-
+    private YawPitchRollAngles angles;
     private IMU imu;
 
-    YawPitchRollAngles angles;
+    public Imu(IMU imu){
+        this.imu = imu;
+    }
 
     public void init(){
         logoFacingDirectionPosition = 0; // Up
         usbFacingDirectionPosition = 2; // Forward
         RevHubOrientationOnRobot.LogoFacingDirection logo = logoFacingDirections[logoFacingDirectionPosition];
         RevHubOrientationOnRobot.UsbFacingDirection usb = usbFacingDirections[usbFacingDirectionPosition];
-        imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot orientationOnRobot = new RevHubOrientationOnRobot(logo, usb);
-        imu.initialize(new IMU.Parameters(orientationOnRobot));
+        this.imu.initialize(new IMU.Parameters(orientationOnRobot));
     }
 
     public void update(){
-       angles = imu.getRobotYawPitchRollAngles();
+       angles = this.imu.getRobotYawPitchRollAngles();
     }
 
 
