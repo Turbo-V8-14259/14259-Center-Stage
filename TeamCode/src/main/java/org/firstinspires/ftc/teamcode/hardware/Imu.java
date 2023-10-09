@@ -36,7 +36,6 @@ public class Imu{
 
 
     //always radians
-
     public double getYawR(){
         return angles.getYaw(AngleUnit.RADIANS);
     }

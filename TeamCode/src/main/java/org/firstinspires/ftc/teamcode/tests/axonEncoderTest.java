@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.usefuls.Sensors.axonEncoder;
 @TeleOp
 public class axonEncoderTest extends LinearOpMode {
-    private axonEncoder bruh;
+    private axonEncoder test;
     AnalogInput encoder;
     CRServo a;
 
@@ -19,13 +19,13 @@ public class axonEncoderTest extends LinearOpMode {
 
 
         encoder = hardwareMap.get(AnalogInput.class, "input");
-        bruh = new axonEncoder(encoder);
+        test = new axonEncoder(encoder);
         a = hardwareMap.get(CRServo.class, "axon");
         waitForStart();
 
         while(opModeIsActive()){
-            a.setPower(1);
-            telemetry.addData("angle", bruh.update());
+            a.setPower(.2);
+            telemetry.addData("angle", test.update());
 
             telemetry.update();
 
