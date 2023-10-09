@@ -20,14 +20,11 @@ public class ImuWrapperTests extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
+            imu.update();
 
-            yaw = imu.getYawR();
-            pitch = imu.getPitchR();
-            roll = imu.getRollR();
-
-            telemetry.addData("yaw", yaw);
-            telemetry.addData("pitch", pitch);
-            telemetry.addData("roll", roll);
+            telemetry.addData("yaw", imu.getYawR());
+            telemetry.addData("pitch", imu.getPitchR());
+            telemetry.addData("roll", imu.getRollR());
             telemetry.update();
 
         }

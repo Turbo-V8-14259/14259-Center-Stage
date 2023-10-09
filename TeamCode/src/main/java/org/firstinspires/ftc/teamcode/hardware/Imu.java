@@ -38,17 +38,14 @@ public class Imu{
     //always radians
 
     public double getYawR(){
-        update();
         return angles.getYaw(AngleUnit.RADIANS);
     }
 
     public double getPitchR(){
-        update();
         return angles.getPitch(AngleUnit.RADIANS);
     }
 
     public double getRollR(){
-        update();
         return angles.getRoll(AngleUnit.RADIANS);
     }
 
