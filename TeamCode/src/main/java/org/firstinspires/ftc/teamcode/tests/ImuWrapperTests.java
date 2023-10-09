@@ -9,10 +9,6 @@ import org.firstinspires.ftc.teamcode.hardware.Imu;
 public class ImuWrapperTests extends LinearOpMode {
     Imu imu = new Imu();
 
-    double yaw;
-    double pitch;
-    double roll;
-
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -26,7 +22,6 @@ public class ImuWrapperTests extends LinearOpMode {
             telemetry.addData("pitch", imu.getPitchR());
             telemetry.addData("roll", imu.getRollR());
             telemetry.update();
-
         }
     }
 }
