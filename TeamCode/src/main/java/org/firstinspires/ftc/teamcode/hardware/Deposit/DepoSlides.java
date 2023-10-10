@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
+import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
 public class DepoSlides{
     private static final double INCHES_TO_TICKS = 0; //number
@@ -13,17 +14,32 @@ public class DepoSlides{
     private static final double UPPER_BOUND = 0; //number
     private static final double INIT_INCHES = 0;
 
+    double targetLinSlidePosition;
+
     private DcMotorBetter leftMotor;
     private DcMotorBetter rightMotor;
+
+    public PID linSlideController;
+
+    private double Kp = 0, Ki = 0, Kd =0;
+
 
     public DepoSlides(DcMotorBetter leftMotor, DcMotorBetter rightMotor) {
         this.leftMotor = leftMotor;
         this.leftMotor.setLowerBound(DepoSlides.LOWER_BOUND);
         this.leftMotor.setUpperBound(DepoSlides.UPPER_BOUND);
+        this.leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         this.rightMotor = rightMotor;
         this.rightMotor.setLowerBound(DepoSlides.LOWER_BOUND);
         this.rightMotor.setUpperBound(DepoSlides.UPPER_BOUND);
+        this.leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
+                () -> this.targetLinSlidePosition - this.leftMotor.getCurrentPosition(),
+                factor -> {
+                    this.leftMotor.setPower(M.clamp(-factor, .5, -.5));
+                    this.rightMotor.setPower(M.clamp(-factor, .5, -.5));
+                });
     }
 
     public DepoSlides setPosition(double position) {
@@ -76,6 +92,8 @@ public class DepoSlides{
     public double getTargetPosition() {
         return this.leftMotor.getTargetPosition();
     }
+
+    public void setTargetPosition(double target){ this.targetLinSlidePosition = target;}
 
     public double getCurrentInches() {
         return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
