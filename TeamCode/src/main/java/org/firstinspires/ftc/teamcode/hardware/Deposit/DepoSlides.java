@@ -1,4 +1,92 @@
 package org.firstinspires.ftc.teamcode.hardware.Deposit;
 
-public class DepoSlides {
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+
+import org.firstinspires.ftc.teamcode.usefuls.Math.M;
+import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
+
+public class DepoSlides{
+    private static final double INCHES_TO_TICKS = 0; //number
+    private static final double LOWER_BOUND = 0;
+    private static final double UPPER_BOUND = 0; //number
+    private static final double INIT_INCHES = 0;
+
+    private DcMotorBetter leftMotor;
+    private DcMotorBetter rightMotor;
+
+    public DepoSlides(DcMotorBetter leftMotor, DcMotorBetter rightMotor) {
+        this.leftMotor = leftMotor;
+        this.leftMotor.setLowerBound(DepoSlides.LOWER_BOUND);
+        this.leftMotor.setUpperBound(DepoSlides.UPPER_BOUND);
+
+        this.rightMotor = rightMotor;
+        this.rightMotor.setLowerBound(DepoSlides.LOWER_BOUND);
+        this.rightMotor.setUpperBound(DepoSlides.UPPER_BOUND);
+    }
+
+    public DepoSlides setPosition(double position) {
+        this.leftMotor.setPosition(position);
+        this.rightMotor.setPosition(position);
+        return this;
+    }
+
+    public DepoSlides setInches(double inches) {
+        this.setPosition(M.normalize((inches - DepoSlides.INIT_INCHES) * DepoSlides.INCHES_TO_TICKS, DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND));
+        return this;
+    }
+
+    public DepoSlides setPower(double power) {
+        this.leftMotor.setPower(power);
+        this.rightMotor.setPower(power);
+        return this;
+    }
+
+    public DepoSlides addPosition(double position) {
+        this.leftMotor.addPosition(position);
+        this.rightMotor.addPosition(position);
+        return this;
+    }
+
+    public DepoSlides addPower(double power) {
+        this.leftMotor.addPower(power);
+        this.rightMotor.addPower(power);
+        return this;
+    }
+
+    public DepoSlides stop() {
+        this.leftMotor.stop();
+        this.rightMotor.stop();
+        return this;
+    }
+
+    public DepoSlides stopAndResetEncoder() {
+        this.leftMotor.stopAndResetEncoder();
+        this.rightMotor.stopAndResetEncoder();
+        return this;
+    }
+
+    public boolean isBusy() { return this.leftMotor.isBusy() || this.rightMotor.isBusy(); }
+
+    public double getCurrentPosition() {
+        return this.leftMotor.getCurrentPosition();
+    }
+
+    public double getTargetPosition() {
+        return this.leftMotor.getTargetPosition();
+    }
+
+    public double getCurrentInches() {
+        return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
+    }
+
+    public double getTargetInches() {
+        return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getTargetPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
+    }
+
+    public void update() {
+        this.leftMotor.update();
+        this.rightMotor.update();
+    }
 }
