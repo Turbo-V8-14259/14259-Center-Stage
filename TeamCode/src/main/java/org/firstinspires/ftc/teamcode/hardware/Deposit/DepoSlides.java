@@ -9,15 +9,19 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
 public class DepoSlides{
+    public double linSlidePower = 0;
+    public int linSlidePosition = 0; //either 0,1, or 2 for now
+    private double[] linSlidePositions = {0,0.5,1};
+
     private static final double INCHES_TO_TICKS = 0; //number
     private static final double LOWER_BOUND = 0;
     private static final double UPPER_BOUND = 0; //number
     private static final double INIT_INCHES = 0;
 
-    double targetLinSlidePosition;
+    private double targetLinSlidePosition = this.linSlidePositions[linSlidePosition];
 
-    private DcMotorBetter leftMotor;
-    private DcMotorBetter rightMotor;
+    public DcMotorBetter leftMotor;
+    public DcMotorBetter rightMotor;
 
     public PID linSlideController;
 
@@ -93,8 +97,6 @@ public class DepoSlides{
         return this.leftMotor.getTargetPosition();
     }
 
-    public void setTargetPosition(double target){ this.targetLinSlidePosition = target;}
-
     public double getCurrentInches() {
         return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
     }
@@ -104,6 +106,8 @@ public class DepoSlides{
     }
 
     public void update() {
+        targetLinSlidePosition = M.clamp(this.linSlidePositions[this.linSlidePosition],0,1);
+        this.linSlideController.update();
         this.leftMotor.update();
         this.rightMotor.update();
     }

@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.usefuls.Sensors.axonEncoder;
 @TeleOp
 public class depoSlidesTest extends LinearOpMode {
     private DepoSlides slides;
-
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -20,9 +19,8 @@ public class depoSlidesTest extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
-            slides.setPosition(.5);
-            slides.linSlideController.update();
-
+            slides.linSlidePosition = 1;
+            slides.update();
             telemetry.addData("position", slides.getCurrentPosition());
             telemetry.addData("target", slides.getTargetPosition());
             telemetry.update();
