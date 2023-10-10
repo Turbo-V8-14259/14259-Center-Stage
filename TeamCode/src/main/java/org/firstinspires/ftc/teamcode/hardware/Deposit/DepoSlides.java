@@ -106,7 +106,7 @@ public class DepoSlides{
     }
 
     public void update() {
-        targetLinSlidePosition = M.clamp(this.linSlidePositions[this.linSlidePosition],0,1);
+        this.targetLinSlidePosition = M.clamp(this.linSlidePositions[this.linSlidePosition],0,1);
         this.linSlideController.update();
         this.leftMotor.update();
         this.rightMotor.update();
