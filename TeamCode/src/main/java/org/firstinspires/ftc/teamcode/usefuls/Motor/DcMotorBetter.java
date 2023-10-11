@@ -17,8 +17,6 @@ public class DcMotorBetter implements Motor {
 
     public DcMotorBetter(DcMotorEx dcMotorEx) {
         this.dcMotorEx = dcMotorEx;
-
-//        dcMotorEx.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER); //I got trolled
     }
 
     public DcMotorBetter setLowerBound(double bound) {
