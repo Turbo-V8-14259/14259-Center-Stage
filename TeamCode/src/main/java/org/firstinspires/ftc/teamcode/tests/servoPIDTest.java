@@ -29,20 +29,19 @@ public class servoPIDTest extends LinearOpMode {
         a = hardwareMap.get(CRServo.class, "axon");
         this.servoController = new AnglePID(new AnglePID.Coefficients(Kp, Ki, Kd),
                 () -> this.targetServoAngle - this.angle.update(),
-                factor -> {
-                    this.a.setPower(M.clamp(-factor, .5, -.5));
-
-                });
-        
+                factor -> this.a.setPower(M.clamp(-factor, .5, -.5)));
         waitForStart();
 
         while(opModeIsActive()){
-
+            targetServoAngle = 90;
+            servoController.update();
             telemetryUpdate();
         }
     }
     public void telemetryUpdate() {
+
         telemetry.addData("Angle in Degrees; ", angle.update());
+        telemetry.addData("The target angle in Degrees is: ", targetServoAngle);
         telemetry.update();
     }
 
