@@ -23,7 +23,7 @@ public class DepoSlides{
 
     public PID linSlideController;
 
-    private double Kp = 0, Ki = 0, Kd =0;
+    private double Kp = 0, Ki = 0, Kd = 0;
 
 
     public DepoSlides(DcMotorBetter leftMotor, DcMotorBetter rightMotor) {
