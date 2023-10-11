@@ -68,7 +68,16 @@ public class T {
     //arc sin
 
 
+    public double angleWrap(double inputRad) {
+        int inputSign = (inputRad < 0) ? -1 : 1;
+        inputRad = Math.abs(inputRad);
 
+        inputRad += M.PI;
+        inputRad %= 2*M.PI;
+        inputRad -= M.PI;
+
+        return inputRad * inputSign;
+    }
 
 
 }
