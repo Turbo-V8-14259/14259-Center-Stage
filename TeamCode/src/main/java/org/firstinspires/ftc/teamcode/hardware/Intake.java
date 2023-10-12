@@ -15,11 +15,14 @@ public class Intake{
         return this;
     }
 
-    public Intake setPower(double p){intakePower = p;}
+    public Intake setPower(double p){
+        intakePower = p;
+        return this;
+    }
     public boolean isBusy() { return this.intakeMotor.isBusy();}
 
     public void update() {
         this.intakeMotor.setPower(intakePower);
     }
-    
+
 }
