@@ -20,26 +20,26 @@ public class servoPIDTest extends LinearOpMode {
 
     private double targetServoAngle = 0;
 
+    private double angleInRad = 0;
+
     @Override
     public void runOpMode() throws InterruptedException {
-
-
         angularEncoder = hardwareMap.get(AnalogInput.class, "input");
         angle = new axonEncoder(angularEncoder);
         a = hardwareMap.get(CRServo.class, "axon");
         this.servoController = new AnglePID(new AnglePID.Coefficients(Kp, Ki, Kd),
-                () -> this.targetServoAngle - this.angle.update(),
+                () -> this.targetServoAngle - angleInRad,
                 factor -> this.a.setPower(M.clamp(-factor, .5, -.5)));
         waitForStart();
 
         while(opModeIsActive()){
-            targetServoAngle = 90;
+            angleInRad = M.toRadians(this.angle.update());
+            targetServoAngle = M.PI/2;
             servoController.update();
             telemetryUpdate();
         }
     }
     public void telemetryUpdate() {
-
         telemetry.addData("Angle in Degrees; ", angle.update());
         telemetry.addData("The target angle in Degrees is: ", targetServoAngle);
         telemetry.update();
