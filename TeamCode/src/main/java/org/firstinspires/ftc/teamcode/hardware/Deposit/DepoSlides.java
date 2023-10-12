@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
 public class DepoSlides{
     public double target;
-    private double linSlidePower = 0;
     private static final double INCHES_TO_TICKS = 0; //number
     private static final double LOWER_BOUND = 0;
     private static final double UPPER_BOUND = 0; //number
