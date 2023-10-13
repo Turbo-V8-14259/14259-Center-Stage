@@ -13,6 +13,7 @@ public class Blinkdin {
 
     public Blinkdin changePattern(RevBlinkinLedDriver.BlinkinPattern newPattern){
         this.pattern = newPattern;
+        return this;
     }
 
     public void update(){

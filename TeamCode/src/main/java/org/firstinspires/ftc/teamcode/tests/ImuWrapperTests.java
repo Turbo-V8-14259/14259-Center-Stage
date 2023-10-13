@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.teamcode.hardware.Imu;
+import org.firstinspires.ftc.teamcode.hardware.Sensors.Imu;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 
 @TeleOp
