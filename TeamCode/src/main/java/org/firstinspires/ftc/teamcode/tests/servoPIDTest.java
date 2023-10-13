@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.AnglePID;
-import org.firstinspires.ftc.teamcode.usefuls.Sensors.axonEncoder;
+import org.firstinspires.ftc.teamcode.hardware.Sensors.axonEncoder;
 @TeleOp
 @Config
 public class servoPIDTest extends LinearOpMode {
@@ -23,18 +23,30 @@ public class servoPIDTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+
         angularEncoder = hardwareMap.get(AnalogInput.class, "input");
         angle = new axonEncoder(angularEncoder);
+
+
         a = hardwareMap.get(CRServo.class, "axon");
+
+
         this.servoController = new AnglePID(new AnglePID.Coefficients(Kp, Ki, Kd),
                 () -> this.targetServoAngle - angleInRad,
                 factor -> this.a.setPower(M.clamp(-factor, .5, -.5)));
+
+
         waitForStart();
 
         while(opModeIsActive()){
+
             angleInRad = M.toRadians(this.angle.update());
+
             targetServoAngle = M.PI/2;
             servoController.update();
+
+
             telemetryUpdate();
         }
     }

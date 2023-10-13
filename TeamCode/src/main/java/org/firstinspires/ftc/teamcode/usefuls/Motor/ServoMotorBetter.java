@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
-import org.firstinspires.ftc.teamcode.usefuls.Motor.Motor;
 
 
 public class  ServoMotorBetter implements Motor {

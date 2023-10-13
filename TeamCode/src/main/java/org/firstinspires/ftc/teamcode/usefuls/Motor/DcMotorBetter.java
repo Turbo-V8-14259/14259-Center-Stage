@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.usefuls.Motor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
-import org.firstinspires.ftc.teamcode.usefuls.Motor.Motor;
 
 public class DcMotorBetter implements Motor {
     private DcMotorEx dcMotorEx;

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 
-import org.firstinspires.ftc.teamcode.usefuls.Sensors.axonEncoder;
+import org.firstinspires.ftc.teamcode.hardware.Sensors.axonEncoder;
 @TeleOp
 public class axonEncoderTest extends LinearOpMode {
     private axonEncoder test;

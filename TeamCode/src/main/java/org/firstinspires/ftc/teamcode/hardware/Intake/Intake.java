@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware;
+package org.firstinspires.ftc.teamcode.hardware.Intake;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 public class Intake{

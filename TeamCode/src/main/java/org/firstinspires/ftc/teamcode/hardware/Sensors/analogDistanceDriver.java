@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.usefuls.Sensors;
+package org.firstinspires.ftc.teamcode.hardware.Sensors;
 
 import com.qualcomm.robotcore.hardware.AnalogInput;
 
