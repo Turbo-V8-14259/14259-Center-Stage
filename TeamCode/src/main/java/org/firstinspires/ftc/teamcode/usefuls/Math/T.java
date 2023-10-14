@@ -28,7 +28,7 @@ public class T {
 
     public static double cos(double adjacent, double hypotenuse){
         if (hypotenuse == 0) {
-            throw new IllegalArgumentException("Hypotenuse cannot be zero");
+            return Double.NaN;
         }
         return adjacent/hypotenuse;
     }
@@ -40,7 +40,7 @@ public class T {
 
     public static double tan(double opposite, double adjacent){
         if (adjacent == 0) {
-            throw new IllegalArgumentException("Adjacent cannot be zero");
+            return Double.NaN;
         }
         return opposite/adjacent;
     }
@@ -51,6 +51,7 @@ public class T {
     public static double arctan(double x) {
         return Math.atan(x);
     }
+
     //arc tangent, only 1 vector, and domain restriction from -pi/2 to pi/2
 
     public static double arctan2(double y, double x) {
@@ -60,7 +61,7 @@ public class T {
 
     public static double arccos(double v) {
         if (v < -1 || v > 1) {
-            throw new IllegalArgumentException("Input value must be within the range [-1, 1]");
+            return Double.NaN;
         }
         return Math.acos(v);
     }
@@ -68,7 +69,7 @@ public class T {
 
     public static double arcsin(double v) {
         if (v < -1 || v > 1) {
-            throw new IllegalArgumentException("Input value must be within the range [-1, 1]");
+            return Double.NaN;
         }
         return Math.asin(v);
     }
