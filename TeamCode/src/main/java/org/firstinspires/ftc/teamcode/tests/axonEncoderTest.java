@@ -15,11 +15,7 @@ public class axonEncoderTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
-
-        encoder = hardwareMap.get(AnalogInput.class, "input");
-        test = new axonEncoder(encoder);
-        a = hardwareMap.get(CRServo.class, "axon");
+        initializeComponents();
         waitForStart();
 
         while(opModeIsActive()){
@@ -27,8 +23,13 @@ public class axonEncoderTest extends LinearOpMode {
             telemetry.addData("angle", test.update());
 
             telemetry.update();
-
         }
+    }
+
+    private void initializeComponents() {
+        encoder = hardwareMap.get(AnalogInput.class, "input");
+        test = new axonEncoder(encoder);
+        a = hardwareMap.get(CRServo.class, "axon");
     }
 
 }
