@@ -8,17 +8,16 @@ public class T {
     }
     //hypotenuse legnth
 
-
-
-
-
-
     //forward trig functions (outputs numbers)
 
     public static double sin(double rad) {
         return Math.sin(rad);
     }
+
     public static double sin(double opposite, double hypotenuse){
+        if (hypotenuse == 0) {
+            throw new IllegalArgumentException("Hypotenuse cannot be zero");
+        }
         return opposite/hypotenuse;
     }
     //sin
@@ -26,7 +25,11 @@ public class T {
     public static double cos(double rad) {
         return Math.cos(rad);
     }
+
     public static double cos(double adjacent, double hypotenuse){
+        if (hypotenuse == 0) {
+            throw new IllegalArgumentException("Hypotenuse cannot be zero");
+        }
         return adjacent/hypotenuse;
     }
     //cos
@@ -34,16 +37,14 @@ public class T {
     public static double tan(double rad) {
         return Math.tan(rad);
     }
+
     public static double tan(double opposite, double adjacent){
+        if (adjacent == 0) {
+            throw new IllegalArgumentException("Adjacent cannot be zero");
+        }
         return opposite/adjacent;
     }
     //tan
-
-
-
-
-
-
 
     //inverse trig functions (output angles)
 
@@ -58,17 +59,22 @@ public class T {
     //arc tangent but better, y,x, and domain restricted to -pi and pi
 
     public static double arccos(double v) {
+        if (v < -1 || v > 1) {
+            throw new IllegalArgumentException("Input value must be within the range [-1, 1]");
+        }
         return Math.acos(v);
     }
     //arc cosine
 
     public static double arcsin(double v) {
+        if (v < -1 || v > 1) {
+            throw new IllegalArgumentException("Input value must be within the range [-1, 1]");
+        }
         return Math.asin(v);
     }
     //arc sin
 
-
-    public double angleWrap(double inputRad) {
+    public static double angleWrap(double inputRad) {
         int inputSign = (inputRad < 0) ? -1 : 1;
         inputRad = Math.abs(inputRad);
 
@@ -78,6 +84,4 @@ public class T {
 
         return inputRad * inputSign;
     }
-
-
 }
