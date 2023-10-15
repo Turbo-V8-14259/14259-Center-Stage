@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.usefuls.Math;
 
 //T for Trigonometry !!
-public class T {
+public final class T {
 
     public static double hypot(double a, double b) {
         return Math.hypot(a,b);
@@ -75,14 +75,16 @@ public class T {
     }
     //arc sin
 
-    public static double angleWrap(double inputRad) {
-        int inputSign = (inputRad < 0) ? -1 : 1;
+    public double angleWrap(double inputRad) {
+        int inputSign = 1;
+        if(inputRad < 0) { inputSign = -1; }
         inputRad = Math.abs(inputRad);
 
-        inputRad += M.PI;
-        inputRad %= 2*M.PI;
-        inputRad -= M.PI;
+        inputRad += Math.PI;
+        inputRad %= 2*Math.PI;
+        inputRad *= inputSign;
+        inputRad -= Math.PI;
 
-        return inputRad * inputSign;
+        return inputRad;
     }
 }
