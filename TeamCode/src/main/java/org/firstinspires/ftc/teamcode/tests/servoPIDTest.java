@@ -32,8 +32,8 @@ public class servoPIDTest extends LinearOpMode {
         a = hardwareMap.get(CRServo.class, "axon");
 
         this.servoController = new AnglePID(new AnglePID.Coefficients(Kp, Ki, Kd),
-                () -> this.targetServoAngle - this.angle.update(),
-                factor -> this.a.setPower(M.clamp(factor, .1, -.1)));
+                () -> this.angle.update()- this.targetServoAngle,
+                factor -> this.a.setPower(M.clamp(factor, -.1, .1)));
 
 
         waitForStart();
