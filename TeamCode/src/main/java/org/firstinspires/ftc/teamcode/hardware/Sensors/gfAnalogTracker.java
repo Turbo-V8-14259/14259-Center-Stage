@@ -54,9 +54,6 @@ public class gfAnalogTracker {
 
             lastValidReading = currentReading;
         }
-
-
-
         lastReading = currentReading;
     }
     public double getPos(){
