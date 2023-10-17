@@ -24,7 +24,6 @@ public class servoPIDTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-
         angularEncoder = hardwareMap.get(AnalogInput.class, "input");
         angle = new axonEncoder(angularEncoder);
 
