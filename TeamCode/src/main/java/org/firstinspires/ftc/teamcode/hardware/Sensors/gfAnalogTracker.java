@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 
 //Gluten free meta
 public class gfAnalogTracker {
-    AnalogInput m_encoder;
+    AnalogInput a_encoder;
     public static final double All_telemetry_trackers_wrapAroundThreshold = 0.45;
     public static final double limit_top = 1;
     public static final double limit_bot = 0;
@@ -21,7 +21,7 @@ public class gfAnalogTracker {
 
 
     public gfAnalogTracker(AnalogInput encoder){
-        m_encoder = encoder;
+        a_encoder = encoder;
         reset();
     }
 
@@ -34,7 +34,7 @@ public class gfAnalogTracker {
     }
 
     private double getCurrentReading(){
-        return Math.abs(m_encoder.getVoltage()/ m_encoder.getMaxVoltage());
+        return Math.abs(a_encoder.getVoltage()/3.3);
     }
 
     public void update(){
