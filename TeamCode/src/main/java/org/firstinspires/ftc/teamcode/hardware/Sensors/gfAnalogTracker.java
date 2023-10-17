@@ -51,7 +51,6 @@ public class gfAnalogTracker {
                     num_of_wraparounds ++;
                 }
             }
-
             lastValidReading = currentReading;
         }
         lastReading = currentReading;

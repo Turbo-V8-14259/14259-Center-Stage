@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode.tests;
+package org.firstinspires.ftc.teamcode.opmode.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 
 import org.firstinspires.ftc.teamcode.hardware.Sensors.gfAnalogTracker;
 
+@TeleOp
 public class gfTracketTest extends LinearOpMode {
     private AnalogInput tracker;
     private gfAnalogTracker actualTracker;
