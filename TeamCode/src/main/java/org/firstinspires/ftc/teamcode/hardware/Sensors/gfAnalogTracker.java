@@ -3,25 +3,22 @@ import com.qualcomm.robotcore.hardware.AnalogInput;
 
 //Gluten free meta
 public class gfAnalogTracker {
-    AnalogInput a_encoder;
-    public static final double All_telemetry_trackers_wrapAroundThreshold = 0.45;
-    public static final double limit_top = 1;
-    public static final double limit_bot = 0;
+    private AnalogInput encoder;
+    private static final double ALL_TELEMETRY_TRACKERS_WRAPAROUND_THRESHOLD = 0.45;
+    private static final double LIMIT_TOP = 1;
+    private static final double LIMIT_BOT = 0;
 
-    double resetReading = 0.0f;
-    double currentReading = 0.0f;
-    double lastReading = 0.0f;
-    double lastValidReading = 0.0f;
+    private double resetReading = 0.0f;
+    private double currentReading = 0.0f;
+    private double lastReading = 0.0f;
+    private double lastValidReading = 0.0f;
 
-    int num_of_wraparounds = 0;
+    private int num_of_wraparounds = 0;
 
-    boolean wrapingAround = false;
-
-
-
+    private boolean wrapingAround = false;
 
     public gfAnalogTracker(AnalogInput encoder){
-        a_encoder = encoder;
+        this.encoder = encoder;
         reset();
     }
 
@@ -34,13 +31,13 @@ public class gfAnalogTracker {
     }
 
     private double getCurrentReading(){
-        return Math.abs(a_encoder.getVoltage()/3.3);
+        return Math.abs(encoder.getVoltage()/3.3);
     }
 
     public void update(){
         currentReading = getCurrentReading();
         double delta_temp = currentReading-lastReading;
-        if(Math.abs(delta_temp) > All_telemetry_trackers_wrapAroundThreshold){
+        if(Math.abs(delta_temp) > ALL_TELEMETRY_TRACKERS_WRAPAROUND_THRESHOLD){
             wrapingAround = true;
         }else{
             if(wrapingAround){
@@ -55,9 +52,11 @@ public class gfAnalogTracker {
         }
         lastReading = currentReading;
     }
+    
     public double getPos(){
-        return (num_of_wraparounds+((lastValidReading-resetReading)-limit_bot)/(limit_top-limit_bot));
+        return (num_of_wraparounds+((lastValidReading-resetReading)-LIMIT_BOT)/(LIMIT_TOP-LIMIT_BOT));
     }
+    
     public double getRAW(){
         return currentReading;
     }
