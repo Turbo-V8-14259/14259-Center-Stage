@@ -19,7 +19,7 @@ public class servoPIDTest extends LinearOpMode {
     private AnglePID servoController;
     private double Kp = 0.5, Ki = 0, Kd = 0;
     private double targetServoAngle = 0;
-    private double angleInDeg = 0;
+    private double angleInDeg;
 
     @Override
     public void runOpMode() throws InterruptedException {
