@@ -26,9 +26,11 @@ public class CalculateDeposit extends LinearOpMode {
 
     private Pitch pitch;
 
-    public void calculateDepositExtensionAndPitchAngle(Rotation2d robotAngle, double robotX, double robotY, double currentDepositExtension, double currentPitchAngle) {
-        /*
+    private MecanumDrive drive
 
+    public void calculateDepositExtensionAndPitchAngle(Rotation2d robotAngle, double robotX, double robotY, double currentDepositExtension, double currentPitchAngle) {
+        
+        /*
         robotX is in inches
         robotY is in inches
         assume robot angle is 0-360 degrees or 0-2pi radians (you choose),
@@ -39,13 +41,23 @@ public class CalculateDeposit extends LinearOpMode {
 
         current pitch angle is 0-360 degrees or 0-2pi radians (you choose),
         The pitch angle is a bit tricky, lets do fully flat is 0 degrees, and fully vertical is 90 degrees to keep it consistent; the backboard would be 60 degrees.
-
          */
+
+        drive.updatePoseEstimate();
+        this.robotAngle = drive.pose.heading;
+        this.robotX = drive.pose.position.x;
+        this.robotY = drive.pose.position.y;
+
+        slides.update();
+        pitch.update();
+        this.currentDepositExtension = slides.getCurrentInches();
+        this.currentPitchAngle = pitch.getCurrentRadians();
+
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+        drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
 
         pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "pitchMotor")));
         slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"rightSlides")));
@@ -56,12 +68,6 @@ public class CalculateDeposit extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()){
-            drive.updatePoseEstimate();
-            this.robotAngle = drive.pose.heading; //idk what axis it is but whatever
-            this.robotX = drive.pose.position.x;
-            this.robotY = drive.pose.position.y;
-            this.currentDepositExtension = slides.getCurrentInches();
-            this.currentPitchAngle = pitch.getCurrentRadians();
 
             calculateDepositExtensionAndPitchAngle(robotAngle, robotX, robotY, currentDepositExtension, currentPitchAngle);
 
