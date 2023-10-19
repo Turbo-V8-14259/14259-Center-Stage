@@ -28,7 +28,7 @@ public class CalculateDeposit extends LinearOpMode {
 
     private MecanumDrive drive;
 
-    public void calculateDepositExtensionAndPitchAngle(Rotation2d robotAngle, double robotX, double robotY, double currentDepositExtension, double currentPitchAngle) {
+    public void calculateDEAPA(Rotation2d robotAngle, double robotX, double robotY, double currentDepositExtension, double currentPitchAngle) {
 
         /*
         robotX is in inches
@@ -69,7 +69,7 @@ public class CalculateDeposit extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()){
 
-            calculateDepositExtensionAndPitchAngle(robotAngle, robotX, robotY, currentDepositExtension, currentPitchAngle);
+            calculateDEAPA(robotAngle, robotX, robotY, currentDepositExtension, currentPitchAngle);
 
         }
     }
