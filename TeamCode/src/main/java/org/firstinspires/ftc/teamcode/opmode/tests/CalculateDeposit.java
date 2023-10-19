@@ -43,15 +43,24 @@ public class CalculateDeposit extends LinearOpMode {
         The pitch angle is a bit tricky, lets do fully flat is 0 degrees, and fully vertical is 90 degrees to keep it consistent; the backboard would be 60 degrees.
          */
 
+        slides.update();
+        pitch.update();
         drive.updatePoseEstimate();
+
         this.robotAngle = drive.pose.heading;
         this.robotX = drive.pose.position.x;
         this.robotY = drive.pose.position.y;
 
-        slides.update();
-        pitch.update();
         this.currentDepositExtension = slides.getCurrentInches();
         this.currentPitchAngle = pitch.getCurrentRadians();
+
+        /*
+            Write code here, to use the variables just be like
+            
+            M.sin(robotAngle)
+
+            or whatever operations you want to use.
+        */
 
     }
 
