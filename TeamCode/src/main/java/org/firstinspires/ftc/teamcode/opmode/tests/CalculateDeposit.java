@@ -26,10 +26,10 @@ public class CalculateDeposit extends LinearOpMode {
 
     private Pitch pitch;
 
-    private MecanumDrive drive
+    private MecanumDrive drive;
 
     public void calculateDepositExtensionAndPitchAngle(Rotation2d robotAngle, double robotX, double robotY, double currentDepositExtension, double currentPitchAngle) {
-        
+
         /*
         robotX is in inches
         robotY is in inches
