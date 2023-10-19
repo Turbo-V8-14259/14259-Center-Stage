@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.hardware.Deposit;
+package org.firstinspires.ftc.teamcode.opmode.tests;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
+import org.firstinspires.ftc.teamcode.hardware.Deposit.Pitch;
 import org.firstinspires.ftc.teamcode.hardware.Sensors.Imu;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.drive.MecanumDrive;
