@@ -47,16 +47,16 @@ public class CalculateDeposit extends LinearOpMode {
         pitch.update();
         drive.updatePoseEstimate();
 
-        this.robotAngle = drive.pose.heading;
-        this.robotX = drive.pose.position.x;
-        this.robotY = drive.pose.position.y;
+        robotAngle = drive.pose.heading;
+        robotX = drive.pose.position.x;
+        robotY = drive.pose.position.y;
 
-        this.currentDepositExtension = slides.getCurrentInches();
-        this.currentPitchAngle = pitch.getCurrentRadians();
+        currentDepositExtension = slides.getCurrentInches();
+        currentPitchAngle = pitch.getCurrentRadians();
 
         /*
             Write code here, to use the variables just be like
-            
+
             M.sin(robotAngle)
 
             or whatever operations you want to use.
