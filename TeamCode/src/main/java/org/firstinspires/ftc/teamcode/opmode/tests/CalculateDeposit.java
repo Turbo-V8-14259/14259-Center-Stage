@@ -43,16 +43,6 @@ public class CalculateDeposit extends LinearOpMode {
         The pitch angle is a bit tricky, lets do fully flat is 0 degrees, and fully vertical is 90 degrees to keep it consistent; the backboard would be 60 degrees.
          */
 
-        slides.update();
-        pitch.update();
-        drive.updatePoseEstimate();
-
-        robotAngle = drive.pose.heading;
-        robotX = drive.pose.position.x;
-        robotY = drive.pose.position.y;
-
-        currentDepositExtension = slides.getCurrentInches();
-        currentPitchAngle = pitch.getCurrentRadians();
 
         /*
             Write code here, to use the variables just be like
@@ -77,7 +67,16 @@ public class CalculateDeposit extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()){
+            slides.update();
+            pitch.update();
+            drive.updatePoseEstimate();
 
+            this.robotAngle = drive.pose.heading;
+            this.robotX = drive.pose.position.x;
+            this.robotY = drive.pose.position.y;
+
+            this.currentDepositExtension = slides.getCurrentInches();
+            this.currentPitchAngle = pitch.getCurrentRadians();
             calculateDEAPA(robotAngle, robotX, robotY, currentDepositExtension, currentPitchAngle);
 
         }
