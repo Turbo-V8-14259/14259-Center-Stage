@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.hardware.Intake.Intake;
 import org.firstinspires.ftc.teamcode.hardware.Sensors.Blinkdin;
 import org.firstinspires.ftc.teamcode.hardware.Sensors.Imu;
 import org.firstinspires.ftc.teamcode.hardware.Sensors.axonEncoder;
+import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGampead;
 
 public class Robot {
     public MecanumDrive drive;
@@ -19,7 +20,9 @@ public class Robot {
     public Imu imu;
     public axonEncoder turretEncoder;
     public Blinkdin LED;
-    public Robot(MecanumDrive drive, DepoSlides depoSlides, Pitch pitch, DepoTurret depoTurret, Intake intake, Imu imu, axonEncoder turretEncoder, Blinkdin LED) {
+    public stickyGampead gamepadOne;
+    public stickyGampead gamepadTwo;
+    public Robot(MecanumDrive drive, DepoSlides depoSlides, Pitch pitch, DepoTurret depoTurret, Intake intake, Imu imu, axonEncoder turretEncoder, Blinkdin LED, stickyGampead gamepadOne, stickyGampead gamepadTwo){ {
         this.drive = drive;
         this.depoSlides = depoSlides;
         this.pitch = pitch;
@@ -30,5 +33,10 @@ public class Robot {
 
         this.imu = imu;
         this.imu.init();
+
+        this.gamepadOne = gamepadOne;
+        this.gamepadTwo = gamepadTwo;
+        
+        }
     }
 }
