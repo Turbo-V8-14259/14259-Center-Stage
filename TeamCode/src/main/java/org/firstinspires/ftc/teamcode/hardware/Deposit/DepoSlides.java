@@ -10,7 +10,7 @@ public class DepoSlides{
     public double target;
     private static final double INCHES_TO_TICKS = 0; //number
     private static final double LOWER_BOUND = 0;
-    private static final double UPPER_BOUND = 0; //number
+    private static final double UPPER_BOUND = 1000; //number
     private static final double INIT_INCHES = 0;
 
     private double targetLinSlidePosition = 0;
@@ -20,7 +20,7 @@ public class DepoSlides{
 
     public PID linSlideController;
 
-    private double Kp = 0, Ki = 0, Kd = 0;
+    private double Kp = 1, Ki = 0, Kd = 0;
 
 
     public DepoSlides(DcMotorBetter leftMotor, DcMotorBetter rightMotor) {
@@ -34,7 +34,7 @@ public class DepoSlides{
         this.rightMotor.setUpperBound(DepoSlides.UPPER_BOUND);
         this.leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
-                () -> this.targetLinSlidePosition - this.leftMotor.getCurrentPosition(),
+                () -> this.leftMotor.getCurrentPosition()-this.targetLinSlidePosition,
                 factor -> {
                     this.leftMotor.setPower(M.clamp(-factor, .5, -.5));
                     this.rightMotor.setPower(M.clamp(-factor, .5, -.5));
