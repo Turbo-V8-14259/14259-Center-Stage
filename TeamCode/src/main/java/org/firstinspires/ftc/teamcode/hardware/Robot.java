@@ -36,7 +36,9 @@ public class Robot {
 
         this.gamepadOne = gamepadOne;
         this.gamepadTwo = gamepadTwo;
-        
+
         }
     }
+
+
 }

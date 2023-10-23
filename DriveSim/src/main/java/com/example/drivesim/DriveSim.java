@@ -9,6 +9,13 @@ import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 public class DriveSim {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(800);
+//        Pose2d initialPosition = new Pose2d(59, -38, Math.toRadians(0));
+//        Vector2d secondPosition = new Vector2d(12,-38);
+//        Pose2d thirdPosition = new Pose2d(35,-32,Math.toRadians(90));
+//        Pose2d fourthPosition = new Pose2d(12,-50,Math.toRadians(-90));
+//        Pose2d fifthPosition = new Pose2d(12,-55, Math.toRadians(-90));
+//        Pose2d sixthPosition = new Pose2d(12,0, Math.toRadians(-90));
+//        Pose2d seventhPosition = new Pose2d(15,11, Math.toRadians(-120));
         Pose2d initialPosition = new Pose2d(59, -38, Math.toRadians(0));
         Vector2d secondPosition = new Vector2d(12,-38);
         Pose2d thirdPosition = new Pose2d(35,-32,Math.toRadians(90));
