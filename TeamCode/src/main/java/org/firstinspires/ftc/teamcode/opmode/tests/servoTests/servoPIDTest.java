@@ -24,8 +24,6 @@ public class servoPIDTest extends LinearOpMode {
     int count = 0;
     double currentAngle;
     double lastAngle;
-
-    double actualAngle;
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -40,7 +38,6 @@ public class servoPIDTest extends LinearOpMode {
         this.servoController = new AnglePID(new AnglePID.Coefficients(Kp, Ki, Kd),
                 () -> this.updateAngle()- this.updateTargetAngle(),
                 factor -> this.a.setPower(M.clamp(factor, -1, 1)));
-
 
         waitForStart();
 
