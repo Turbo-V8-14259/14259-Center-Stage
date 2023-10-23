@@ -23,6 +23,7 @@ public class axonEncoder{
         angle = getVoltage()/3.3*360;
         return angle;
     }//0 to 360 then wraps around back to 0
+
     public double updateAngle(){
         currentAngle = update();
         if(Math.abs(currentAngle - lastAngle) > 180){
@@ -31,5 +32,9 @@ public class axonEncoder{
         lastAngle = currentAngle;
         return count * 360 + currentAngle;
     }//-inf to pos inf
+
+    public double getAngleWrapped(){
+        return updateAngle();
+    }
 
 }
