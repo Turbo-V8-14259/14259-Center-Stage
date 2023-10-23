@@ -46,4 +46,14 @@ public class axonEncoderTest extends LinearOpMode {
         test = new axonEncoder(encoder);
         a = hardwareMap.get(CRServo.class, "axon");
     }
+
+    public double updateAngle(){
+        currentAngle = test.update();
+        if(Math.abs(currentAngle - lastAngle) > 180){
+            count += Math.signum(lastAngle - currentAngle);
+        }
+        lastAngle = currentAngle;
+        return count * 360 + currentAngle;
+    }
+
 }
