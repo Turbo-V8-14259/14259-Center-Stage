@@ -13,6 +13,10 @@ public class AnglePID {
     private double et = 0.0;
     private double deDt = 0.0;
 
+    private int count = 0;
+    private double currentAngle;
+    private double lastAngle;
+
     public static class Coefficients {
         public double kp = 0.0, ki = 0.0, kd = 0.0, deDtGain = 0.0, etMax = 1e+99;
 
@@ -44,7 +48,7 @@ public class AnglePID {
     public void update() {
         this.timer.update();
 
-        double e = this.errorFunction.execute();
+        double e = updateAngle();
         double dt = this.timer.getDt();
 
         double deDt = M.lerp((e - this.e) / dt, this.deDt, this.coefficients.deDtGain);
@@ -63,5 +67,13 @@ public class AnglePID {
         this.deDt = deDt;
 
         this.responseFunction.execute(factor);
+    }
+    private double updateAngle(){
+        currentAngle = this.errorFunction.execute();
+        if(Math.abs(currentAngle - lastAngle) > 180){
+            count += Math.signum(lastAngle - currentAngle);
+        }
+        lastAngle = currentAngle;
+        return count * 360 + currentAngle;
     }
 }
