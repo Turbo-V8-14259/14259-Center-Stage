@@ -48,7 +48,7 @@ public class AnglePID {
     public void update() {
         this.timer.update();
 
-        double e = updateAngle();
+        double e = this.updateAngle();
         double dt = this.timer.getDt();
 
         double deDt = M.lerp((e - this.e) / dt, this.deDt, this.coefficients.deDtGain);
@@ -69,11 +69,11 @@ public class AnglePID {
         this.responseFunction.execute(factor);
     }
     private double updateAngle(){
-        currentAngle = this.errorFunction.execute();
-        if(Math.abs(currentAngle - lastAngle) > 180){
-            count += Math.signum(lastAngle - currentAngle);
+        this.currentAngle = this.errorFunction.execute();
+        if(Math.abs(this.currentAngle - this.lastAngle) > 180){
+            this.count += Math.signum(this.lastAngle - this.currentAngle);
         }
-        lastAngle = currentAngle;
-        return count * 360 + currentAngle;
+        this.lastAngle = this.currentAngle;
+        return this.count * 360 + this.currentAngle;
     }
 }
