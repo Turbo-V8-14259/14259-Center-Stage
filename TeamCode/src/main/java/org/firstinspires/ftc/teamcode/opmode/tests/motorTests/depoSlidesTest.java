@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmode.tests.motorTests;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -15,14 +17,18 @@ public class depoSlidesTest extends LinearOpMode {
     private DepoSlides slides;
     @Override
     public void runOpMode() throws InterruptedException {
+
         slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"rightSlides")));
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         waitForStart();
 
         while(opModeIsActive()){
+
             slides.target = targetSet;
             slides.update();
             telemetry.addData("position", slides.getCurrentPosition());
-            telemetry.addData("target", slides.getTargetPosition());
+            telemetry.addData("target", targetSet);
             telemetry.update();
 
         }

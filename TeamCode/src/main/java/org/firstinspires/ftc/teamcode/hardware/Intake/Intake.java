@@ -7,7 +7,6 @@ public class Intake{
 
     public Intake(DcMotorEx intakeMotor) {
         this.intakeMotor = intakeMotor;
-
     }
 
     public Intake stop(){

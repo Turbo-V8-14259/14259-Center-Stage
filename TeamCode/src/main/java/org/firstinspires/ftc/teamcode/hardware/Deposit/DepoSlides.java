@@ -1,11 +1,14 @@
 package org.firstinspires.ftc.teamcode.hardware.Deposit;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
+
+@Config
 public class DepoSlides{
     public double target;
     private static final double INCHES_TO_TICKS = 0; //number
@@ -20,7 +23,7 @@ public class DepoSlides{
 
     public PID linSlideController;
 
-    private double Kp = 1, Ki = 0, Kd = 0;
+    public static double Kp = 1, Ki = 0, Kd = 0;
 
 
     public DepoSlides(DcMotorBetter leftMotor, DcMotorBetter rightMotor) {
@@ -36,8 +39,8 @@ public class DepoSlides{
         this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
                 () -> this.leftMotor.getCurrentPosition()-this.targetLinSlidePosition,
                 factor -> {
-                    this.leftMotor.setPower(M.clamp(-factor, .5, -.5));
-                    this.rightMotor.setPower(M.clamp(-factor, .5, -.5));
+                    this.leftMotor.setPower(M.clamp(-factor, 1, -1));
+                    this.rightMotor.setPower(M.clamp(-factor, 1, -1));
                 });
     }
 

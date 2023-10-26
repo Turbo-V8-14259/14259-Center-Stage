@@ -19,7 +19,7 @@ public class servoPIDTest extends LinearOpMode {
     private AnalogInput angularEncoder;
     private CRServo a;
     private AnglePID servoController;
-    public static double Kp = 0.01, Ki = 0, Kd = 0;
+    public static double Kp = 0.013, Ki = 0.003, Kd = 0.0005;
     public static double targetServoAngle;
     int count = 0;
     double currentAngle;
@@ -37,7 +37,7 @@ public class servoPIDTest extends LinearOpMode {
 
         this.servoController = new AnglePID(new AnglePID.Coefficients(Kp, Ki, Kd),
                 //() -> this.updateAngle()- this.updateTargetAngle(),
-                () -> this.angle.update()- this.updateTargetAngle(),
+                () -> this.updateAngle()- this.updateTargetAngle(),
 
                 factor -> this.a.setPower(M.clamp(factor, -1, 1)));
 
