@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode.tests.servoTests;
 
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -21,24 +23,31 @@ public class axonEncoderTest extends LinearOpMode {
     double actualAngle;
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         initializeComponents();
         waitForStart();
 
         while(opModeIsActive()){
+
             currentAngle = test.update();
             if(Math.abs(currentAngle - lastAngle) > 180){
                 count += Math.signum(lastAngle - currentAngle);
             }
+
+
             a.setPower(0);
+
+
             actualAngle = count * 360 + currentAngle;
             telemetry.addData("angle", actualAngle);
+
             telemetry.addData("raw", test.update());
             telemetry.addData("count: ", count);
             telemetry.update();
+
+
             lastAngle = currentAngle;
         }
-
-        //working
     }
 
     private void initializeComponents() {
