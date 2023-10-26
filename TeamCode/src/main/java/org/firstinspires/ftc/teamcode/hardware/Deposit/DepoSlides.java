@@ -18,12 +18,16 @@ public class DepoSlides{
 
     private double targetLinSlidePosition = 0;
 
-    public DcMotorBetter leftMotor;
-    public DcMotorBetter rightMotor;
+    private DcMotorBetter leftMotor;
+    private DcMotorBetter rightMotor;
 
-    public PID linSlideController;
+    private PID linSlideController;
 
     public static double Kp = 1, Ki = 0, Kd = 0;
+
+    public boolean pidRunning = true;
+
+    public double passivePower = 0;
 
 
     public DepoSlides(DcMotorBetter leftMotor, DcMotorBetter rightMotor) {
@@ -108,8 +112,12 @@ public class DepoSlides{
     }
 
     public void update() {
-        this.targetLinSlidePosition = setTargetLinSlidePosition();
-        this.linSlideController.update();
+        if(pidRunning){
+            this.targetLinSlidePosition = setTargetLinSlidePosition();
+            this.linSlideController.update();
+        }else{
+            this.setPower(passivePower);
+        }
         this.leftMotor.update();
         this.rightMotor.update();
     }

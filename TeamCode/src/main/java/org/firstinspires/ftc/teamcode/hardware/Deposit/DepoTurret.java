@@ -13,17 +13,21 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.AnglePID;
 public class DepoTurret{
     public double target;
 
-    int count = 0;
-    double currentAngle;
-    double lastAngle;
+    private int count = 0;
+    private double currentAngle;
+    private double lastAngle;
 
     public AnglePID servoController;
-    CRServo turret;
-    AnalogInput angularEncoder;
-    axonEncoder angle;
-
+    private CRServo turret;
+    private AnalogInput angularEncoder;
+    private axonEncoder angle;
 
     public static double Kp = 0.006, Ki = 0.0025, Kd = 0;
+
+    public boolean pidRunning = true;
+
+    public double passivePower = 0;
+
 
 
     public DepoTurret(CRServo turret, AnalogInput angularEncoder) {
@@ -34,12 +38,6 @@ public class DepoTurret{
                 () -> this.updateAngle()- this.updateTargetAngle(),
 
                 factor -> this.turret.setPower(M.clamp(factor, -.5, .5)));
-
-    }
-
-    public void update() {
-        this.target = updateTargetAngle();
-        this.servoController.update();
 
     }
     public double updateTargetAngle(){
@@ -54,5 +52,15 @@ public class DepoTurret{
         lastAngle = currentAngle;
         return count * 360 + currentAngle;
     }
+
+    public void update() {
+        if(pidRunning) {
+            this.target = updateTargetAngle();
+            this.servoController.update();
+        }else{
+            this.turret.setPower(passivePower);
+        }
+    }
+
 
 }
