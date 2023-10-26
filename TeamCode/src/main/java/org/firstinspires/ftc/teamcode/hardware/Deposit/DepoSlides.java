@@ -28,6 +28,7 @@ public class DepoSlides{
     public boolean pidRunning = true;
 
     public double passivePower = 0;
+    //this should contain a power that holds the slides up when its not moving; you probably need to use trig for this since the slides change angle.
 
 
     public DepoSlides(DcMotorBetter leftMotor, DcMotorBetter rightMotor) {
