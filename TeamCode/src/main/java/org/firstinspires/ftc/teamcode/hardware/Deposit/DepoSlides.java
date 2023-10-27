@@ -18,7 +18,7 @@ public class DepoSlides{
         STOPPED
     }
 
-    public DepositState depositFSM = DepositState.STOPPED;
+    public DepositState depositFSM;
 
     public double target;
     public double targetDepositInches;
@@ -64,6 +64,9 @@ public class DepoSlides{
     public void setInches(double inches) {
         this.target = (M.normalize((inches - DepoSlides.INIT_INCHES) * DepoSlides.INCHES_TO_TICKS, DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND));
     }
+    public double getCurrentInches() {
+        return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
+    }
 
     public DepoSlides setPower(double power) {
         this.leftMotor.setPower(power);
@@ -98,7 +101,6 @@ public class DepoSlides{
             case UP:
                 this.targetDepositInches = 15; //placehollder
                 this.setInches(targetDepositInches);
-                setTargetLinSlidePosition();
                 break;
             case MIDDLE:
                 break;
@@ -135,9 +137,6 @@ public class DepoSlides{
     //        return this;
     //    }
 
-    //    public double getCurrentInches() {
-    //        return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
-    //    }
 
     //    public DepoSlides setPosition(double position) {
     //        this.leftMotor.setPosition(position);

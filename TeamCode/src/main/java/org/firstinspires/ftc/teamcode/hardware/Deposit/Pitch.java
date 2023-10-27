@@ -32,28 +32,16 @@ public class Pitch {
                 factor -> this.pitchMotor.setPower(M.clamp(-factor, 0.5, -0.5)));
     }
 
-    public Pitch setPosition(double position) {
-        this.pitchMotor.setPosition(position);
-        return this;
+    public void setRadians(double rads) {
+        target = (M.normalize((rads - Pitch.INIT_RADIANS) * Pitch.RADIANS_TO_TICKS, Pitch.LOWER_BOUND, Pitch.UPPER_BOUND));
     }
 
-    public Pitch setInches(double inches) {
-        this.setPosition(M.normalize((inches - Pitch.INIT_RADIANS) * Pitch.RADIANS_TO_TICKS, Pitch.LOWER_BOUND, Pitch.UPPER_BOUND));
-        return this;
+    public double getCurrentRadians() {
+        return M.lerp(Pitch.LOWER_BOUND, Pitch.UPPER_BOUND, this.getCurrentPosition()) / Pitch.RADIANS_TO_TICKS + Pitch.INIT_RADIANS;
     }
 
     public Pitch setPower(double power) {
         this.pitchMotor.setPower(power);
-        return this;
-    }
-
-    public Pitch addPosition(double position) {
-        this.pitchMotor.addPosition(position);
-        return this;
-    }
-
-    public Pitch addPower(double power) {
-        this.pitchMotor.addPower(power);
         return this;
     }
 
@@ -73,18 +61,6 @@ public class Pitch {
 
     public double getCurrentPosition() {
         return this.pitchMotor.getCurrentPosition();
-    }
-
-    public double getTargetPosition() {
-        return this.pitchMotor.getTargetPosition();
-    }
-
-    public double getCurrentRadians() {
-        return M.lerp(Pitch.LOWER_BOUND, Pitch.UPPER_BOUND, this.getCurrentPosition()) / Pitch.RADIANS_TO_TICKS + Pitch.INIT_RADIANS;
-    }
-
-    public double getTargetRadians() {
-        return M.lerp(Pitch.LOWER_BOUND, Pitch.UPPER_BOUND, this.getTargetPosition()) / Pitch.RADIANS_TO_TICKS + Pitch.INIT_RADIANS;
     }
 
     public double setTargetPitchPosition() {

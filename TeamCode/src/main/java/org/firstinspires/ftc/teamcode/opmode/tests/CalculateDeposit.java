@@ -21,11 +21,8 @@ public class CalculateDeposit extends LinearOpMode {
     private double currentDepositExtension;
     private double currentPitchAngle;
     private Imu imu;
-
     private DepoSlides slides;
-
     private Pitch pitch;
-
     private MecanumDrive drive;
 
     public void calculateDEAPA(Rotation2d robotAngle, double robotX, double robotY, double currentDepositExtension, double currentPitchAngle) {

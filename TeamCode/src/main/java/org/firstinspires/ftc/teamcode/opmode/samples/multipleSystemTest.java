@@ -44,6 +44,9 @@ public class multipleSystemTest extends LinearOpMode {
             turret.update();
 
             telemetry.addData("error",error);
+            telemetry.addData("slides pos ", slides.getCurrentPosition());
+            telemetry.addData("slides inch ", slides.getCurrentInches());
+            telemetry.addData("target ", bothTarget);
             telemetry.update();
         }
 
