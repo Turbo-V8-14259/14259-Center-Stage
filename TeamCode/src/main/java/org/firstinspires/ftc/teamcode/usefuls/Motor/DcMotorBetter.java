@@ -74,6 +74,9 @@ public class DcMotorBetter implements Motor {
     public double getCurrentPosition() {
         return M.normalize(this.dcMotorEx.getCurrentPosition(), this.lowerBound, this.upperBound);
     }
+    public double getCurrentPositionRAW(){
+        return this.dcMotorEx.getCurrentPosition();
+    }
 
     public DcMotorEx.RunMode getMode() {
         return this.dcMotorEx.getMode();

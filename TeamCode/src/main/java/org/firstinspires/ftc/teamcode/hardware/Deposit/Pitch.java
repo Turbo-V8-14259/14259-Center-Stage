@@ -25,7 +25,7 @@ public class Pitch {
         this.pitchMotor = pitchMotor;
         this.pitchMotor.setLowerBound(Pitch.LOWER_BOUND);
         this.pitchMotor.setUpperBound(Pitch.UPPER_BOUND);
-        this.pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        this.pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         this.pitchController = new PID(new PID.Coefficients(Kp, Ki, Kd),
                 () -> this.targetPitchPosition - this.pitchMotor.getCurrentPosition(),

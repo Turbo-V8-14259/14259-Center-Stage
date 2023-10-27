@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.usefuls.Gamepad;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-public class stickyGampead {
+public class stickyGamepad {
     private final Gamepad gamepad;
 
     public boolean dpad_up, dpad_down, dpad_left, dpad_right;
@@ -17,7 +17,7 @@ public class stickyGampead {
     private boolean left_stick_button_down, right_stick_button_down;
     private boolean back_down;
 
-    public stickyGampead(Gamepad gamepad) {
+    public stickyGamepad(Gamepad gamepad) {
         this.gamepad = gamepad;
     }
 
