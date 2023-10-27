@@ -23,9 +23,9 @@ public class DepoSlides{
     public double target;
     public double targetDepositInches;
 
-    private static final double INCHES_TO_TICKS = 0; //number
+    private static final double INCHES_TO_TICKS = 100; //number
     private static final double LOWER_BOUND = 0;
-    private static final double UPPER_BOUND = 1000; //number
+    private static final double UPPER_BOUND = 2600; //number
     private static final double INIT_INCHES = 0;
 
     private double targetLinSlidePosition = 0;
@@ -39,7 +39,7 @@ public class DepoSlides{
 
     public boolean pidRunning = true;
 
-    public double passivePower = 0;
+    //    public double passivePower = 0;
     //this should contain a power that holds the slides up when its not moving; you probably need to use trig for this since the slides change angle.
 
 
@@ -61,32 +61,13 @@ public class DepoSlides{
                 });
     }
 
-    public DepoSlides setPosition(double position) {
-        this.leftMotor.setPosition(position);
-        this.rightMotor.setPosition(position);
-        return this;
-    }
-
-    public DepoSlides setInches(double inches) {
+    public void setInches(double inches) {
         this.target = (M.normalize((inches - DepoSlides.INIT_INCHES) * DepoSlides.INCHES_TO_TICKS, DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND));
-        return this;
     }
 
     public DepoSlides setPower(double power) {
         this.leftMotor.setPower(power);
         this.rightMotor.setPower(power);
-        return this;
-    }
-
-    public DepoSlides addPosition(double position) {
-        this.leftMotor.addPosition(position);
-        this.rightMotor.addPosition(position);
-        return this;
-    }
-
-    public DepoSlides addPower(double power) {
-        this.leftMotor.addPower(power);
-        this.rightMotor.addPower(power);
         return this;
     }
 
@@ -106,10 +87,6 @@ public class DepoSlides{
 
     public double getCurrentPosition() {
         return this.leftMotor.getCurrentPosition();
-    }
-
-    public double getCurrentInches() {
-        return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
     }
 
     public double setTargetLinSlidePosition(){
@@ -144,5 +121,27 @@ public class DepoSlides{
 
     //    public double getTargetPosition() {
     //        return this.leftMotor.getTargetPosition();
+    //    }
+
+    //    public DepoSlides addPosition(double position) {
+    //        this.leftMotor.addPosition(position);
+    //        this.rightMotor.addPosition(position);
+    //        return this;
+    //    }
+    //
+    //    public DepoSlides addPower(double power) {
+    //        this.leftMotor.addPower(power);
+    //        this.rightMotor.addPower(power);
+    //        return this;
+    //    }
+
+    //    public double getCurrentInches() {
+    //        return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
+    //    }
+
+    //    public DepoSlides setPosition(double position) {
+    //        this.leftMotor.setPosition(position);
+    //        this.rightMotor.setPosition(position);
+    //        return this;
     //    }
 }
