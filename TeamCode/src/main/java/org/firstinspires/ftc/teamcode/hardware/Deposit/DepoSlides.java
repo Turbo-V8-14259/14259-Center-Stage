@@ -30,7 +30,7 @@ public class DepoSlides{
 
     private double targetLinSlidePosition = 0;
 
-    private DcMotorBetter leftMotor;
+    public DcMotorBetter leftMotor;
     private DcMotorBetter rightMotor;
 
     private PID linSlideController;
