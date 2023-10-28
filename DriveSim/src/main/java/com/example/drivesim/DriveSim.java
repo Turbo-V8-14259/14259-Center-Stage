@@ -6,16 +6,23 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import kotlin.math.UMathKt;
+
 public class DriveSim {
     public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
-        Pose2d initialPosition = new Pose2d(59, -38, Math.toRadians(0));
-        Vector2d secondPosition = new Vector2d(12,-38);
-        Pose2d thirdPosition = new Pose2d(35,-32,Math.toRadians(90));
-        Pose2d fourthPosition = new Pose2d(12,-50,Math.toRadians(-90));
-        Pose2d fifthPosition = new Pose2d(12,-55, Math.toRadians(-90));
-        Pose2d sixthPosition = new Pose2d(12,0, Math.toRadians(-90));
-        Pose2d seventhPosition = new Pose2d(15,11, Math.toRadians(-120));
+        MeepMeep meepMeep = new MeepMeep(500);
+        int x =0, y=0;//arbitrary adjustment values
+        int posNum = 0;//0, 1, 2, 3 clockwise from bottom left
+        int mult[][] = {{1,1,1}, {1, -1, -1}, {-1, -1}, {-1, 1}};
+        Pose2d initialPosition = new Pose2d(-35*mult[posNum][0]+x, -65*mult[posNum][1]+y, Math.toRadians(-90*mult[posNum][2]));
+        Vector2d secondPosition = new Vector2d(-35*mult[posNum][0]+x,-11.6*mult[posNum][1]+y);
+        Pose2d thirdPositionR = new Pose2d(-35*mult[posNum][0]+x,-29*mult[posNum][1]+y,Math.toRadians(0));//or -180
+        Pose2d thirdPositionL = new Pose2d(-35*mult[posNum][0]+x, -29*mult[posNum][1]+y, Math.toRadians(-180*mult[posNum][2]));
+        Vector2d thirdPositionF = new Vector2d(-35*mult[posNum][0]+x, -14*mult[posNum][1]+y);
+        Pose2d fourthPosition = new Pose2d(-35*mult[posNum][0]+x,-11.6*mult[posNum][1]+y,Math.toRadians(-90*mult[posNum][2]));
+        Pose2d fifthPosition = new Pose2d(-55*mult[posNum][0]+x,-11.6*mult[posNum][1]+y, Math.toRadians(-180*mult[posNum][2]));
+        Pose2d sixthPosition = new Pose2d(5*mult[posNum][0]+x, -11.6*mult[posNum][1]+y, Math.toRadians(-180*mult[posNum][2]));
+        Pose2d seventhPosition = new Pose2d(14*mult[posNum][0]+x, -16*mult[posNum][1]+y, Math.toRadians(-200*mult[posNum][2]));
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
@@ -36,12 +43,18 @@ public class DriveSim {
 ////                                .splineToSplineHeading(new Pose2d(20, -14, Math.toRadians(0)), Math.toRadians(0)) goofy spline shit for right side
 ////                                .splineTo(new Vector2d(24, -11), Math.toRadians(0))
                                         .lineTo(secondPosition)
-                                        .splineToSplineHeading(thirdPosition, CalculateTangents.calculateTangent(secondPosition,thirdPosition)) //or y -47 and -45degree for down randomization and x 24 for straight
+                                        .splineToSplineHeading(thirdPositionR, CalculateTangents.calculateTangent(secondPosition,thirdPositionR)) //or y -47 and -45degree for down randomization and x 24 for straight
 //                                .lineToLinearHeading(fourthPosition)
-                                        .splineToSplineHeading(fourthPosition, CalculateTangents.calculateTangent(thirdPosition,fourthPosition))
-                                        .lineTo(new Vector2d(fourthPosition.getX(),fourthPosition.getY()-10))
+                                        .splineToSplineHeading(fourthPosition, CalculateTangents.calculateTangent(thirdPositionR,fourthPosition))
+                                        .lineToLinearHeading(fifthPosition)
                                         .lineToLinearHeading(sixthPosition)
-                                        .splineToSplineHeading(seventhPosition, CalculateTangents.calculateTangent(sixthPosition,seventhPosition))
+                                        .splineToSplineHeading(seventhPosition, CalculateTangents.calculateTangent(sixthPosition, seventhPosition))
+//                                        .lineTo(sixthPosition)
+//                                        .strafeTo(seventhPosition)
+//                                        .splineToSplineHeading(fifthPosition, CalculateTangents.calculateTangent(fourthPosition,fifthPosition))
+//                                        .lineTo(new Vector2d(fourthPosition.getX(),fourthPosition.getY()-10))
+//                                        .lineToLinearHeading(sixthPosition)
+//                                        .splineToSplineHeading(seventhPosition, CalculateTangents.calculateTangent(sixthPosition,seventhPosition))
                                         .build()
                 );
 
