@@ -96,7 +96,8 @@ public class DepoSlides{
         return target;
     }
 
-    public void update() {
+    public void setState(DepositState state){
+        this.depositFSM = state;
         switch(depositFSM){
             case UP:
                 this.targetDepositInches = 15; //placehollder
@@ -112,6 +113,9 @@ public class DepoSlides{
                 this.pidRunning = false;
                 break;
         }
+    }
+
+    public void update() {
         this.targetLinSlidePosition = setTargetLinSlidePosition();
         this.linSlideController.update();
         this.leftMotor.update();

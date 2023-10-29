@@ -30,7 +30,11 @@ public class multipleSystemTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()){
-            slides.target = bothTarget;
+            if(bothTarget == 1){
+                slides.setState(DepoSlides.DepositState.UP);
+            }else if(bothTarget ==2){
+                slides.setState(DepoSlides.DepositState.DOWN);
+            }
             error = Math.abs(slides.getCurrentPosition()-slides.target);
             telemetry.addData("turret target",turret.target);
 
