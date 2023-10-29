@@ -8,10 +8,10 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
 public class Pitch {
     public double target = 0;
-    private static final double RADIANS_TO_TICKS = 0;
+    private static final double DEGREES_TO_TICKS = 0;
     private static final double LOWER_BOUND = 0;
-    private static final double UPPER_BOUND = 0;
-    private static final double INIT_RADIANS = 0;
+    private static final double UPPER_BOUND = 4000;
+    private static final double INIT_DEGREES = 0;
 
     private double targetPitchPosition = 0;
 
@@ -26,25 +26,25 @@ public class Pitch {
         this.pitchMotor.setLowerBound(Pitch.LOWER_BOUND);
         this.pitchMotor.setUpperBound(Pitch.UPPER_BOUND);
         this.pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
         this.pitchController = new PID(new PID.Coefficients(Kp, Ki, Kd),
                 () -> this.targetPitchPosition - this.pitchMotor.getCurrentPosition(),
                 factor -> this.pitchMotor.setPower(M.clamp(-factor, 0.5, -0.5)));
     }
 
-    public void setRadians(double rads) {
-        target = (M.normalize((rads - Pitch.INIT_RADIANS) * Pitch.RADIANS_TO_TICKS, Pitch.LOWER_BOUND, Pitch.UPPER_BOUND));
+    public void setDegrees(double deg) {
+        target = (M.normalize((deg - Pitch.INIT_DEGREES) * Pitch.DEGREES_TO_TICKS, Pitch.LOWER_BOUND, Pitch.UPPER_BOUND));
     }
+    //"its not linear :nerd:" - Leo
 
-    public double getCurrentRadians() {
-        return M.lerp(Pitch.LOWER_BOUND, Pitch.UPPER_BOUND, this.getCurrentPosition()) / Pitch.RADIANS_TO_TICKS + Pitch.INIT_RADIANS;
+    public double getCurrentDegrees() {
+        return M.lerp(Pitch.LOWER_BOUND, Pitch.UPPER_BOUND, this.getCurrentPosition()) / Pitch.DEGREES_TO_TICKS + Pitch.INIT_DEGREES;
     }
+    //"its not linear :nerd:" - Leo
 
     public Pitch setPower(double power) {
         this.pitchMotor.setPower(power);
         return this;
     }
-
     public Pitch stop() {
         this.pitchMotor.stop();
         return this;
@@ -72,7 +72,4 @@ public class Pitch {
         this.pitchController.update();
         this.pitchMotor.update();
     }
-    //Aint this just my deposit code Leo
-    //me when you didn't bother to remove the Inches functions for the pitch after copying the deposit :yaw:
-
 }

@@ -18,7 +18,7 @@ public class DepoSlides{
         STOPPED
     }
 
-    public DepositState depositFSM;
+    public DepositState depositFSM = DepositState.STOPPED;
 
     public double target;
     public double targetDepositInches;
@@ -47,12 +47,12 @@ public class DepoSlides{
         this.leftMotor = leftMotor;
         this.leftMotor.setLowerBound(DepoSlides.LOWER_BOUND);
         this.leftMotor.setUpperBound(DepoSlides.UPPER_BOUND);
-        this.leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        this.leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         this.rightMotor = rightMotor;
         this.rightMotor.setLowerBound(DepoSlides.LOWER_BOUND);
         this.rightMotor.setUpperBound(DepoSlides.UPPER_BOUND);
-        this.leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
                 () -> this.leftMotor.getCurrentPosition()-this.targetLinSlidePosition,
                 factor -> {
@@ -105,6 +105,8 @@ public class DepoSlides{
             case MIDDLE:
                 break;
             case DOWN:
+                this.targetDepositInches = 0;
+                this.setInches(targetDepositInches);
                 break;
             case STOPPED:
                 this.pidRunning = false;

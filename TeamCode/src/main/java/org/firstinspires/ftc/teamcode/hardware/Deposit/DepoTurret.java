@@ -24,10 +24,6 @@ public class DepoTurret{
 
     public static double Kp = 0.006, Ki = 0.0025, Kd = 0;
 
-    public boolean pidRunning = true;
-
-    public double passivePower = 0;
-
 
 
     public DepoTurret(CRServo turret, AnalogInput angularEncoder) {
@@ -54,12 +50,8 @@ public class DepoTurret{
     }
 
     public void update() {
-        if(pidRunning) {
             this.target = updateTargetAngle();
             this.servoController.update();
-        }else{
-            this.turret.setPower(passivePower);
-        }
     }
 
 

@@ -73,7 +73,7 @@ public class CalculateDeposit extends LinearOpMode {
             this.robotY = drive.pose.position.y;
 
             this.currentDepositExtension = slides.getCurrentInches();
-            this.currentPitchAngle = pitch.getCurrentRadians();
+            this.currentPitchAngle = pitch.getCurrentDegrees();
             calculateDEAPA(robotAngle, robotX, robotY, currentDepositExtension, currentPitchAngle);
 
         }
