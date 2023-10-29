@@ -8,7 +8,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 public class Imu{
-    //todo: test
+    private int count = 0;
+    private double currentAngle;
+    private double lastAngle;
     static RevHubOrientationOnRobot.LogoFacingDirection[] logoFacingDirections = RevHubOrientationOnRobot.LogoFacingDirection.values();
     static RevHubOrientationOnRobot.UsbFacingDirection[] usbFacingDirections = RevHubOrientationOnRobot.UsbFacingDirection.values();
 
@@ -35,18 +37,26 @@ public class Imu{
     }
 
 
-    //always radians
+
+    //degrees
     public double getYawR(){
-        return angles.getYaw(AngleUnit.RADIANS);
+        return angles.getYaw(AngleUnit.DEGREES);
     }
 
     public double getPitchR(){
-        return angles.getPitch(AngleUnit.RADIANS);
+        return angles.getPitch(AngleUnit.DEGREES);
     }
 
     public double getRollR(){
-        return angles.getRoll(AngleUnit.RADIANS);
+        return angles.getRoll(AngleUnit.DEGREES);
     }
 
-
+    public double updateAngleWrapped(){
+        currentAngle = getYawR(); //or getPitchR or getRollR
+        if(Math.abs(currentAngle - lastAngle) > 180){
+            count += Math.signum(lastAngle - currentAngle);
+        }
+        lastAngle = currentAngle;
+        return count * 360 + currentAngle;
+    }
 }
