@@ -38,7 +38,7 @@ public class DepoSlides{
 
     public static double Kp = 1, Ki = 0, Kd = 0;
 
-    
+
     //todo: pid running condition
     public boolean pidRunning = true;
     public double passivePower = 0;

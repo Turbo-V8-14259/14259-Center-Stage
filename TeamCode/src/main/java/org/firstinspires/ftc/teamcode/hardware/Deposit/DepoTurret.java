@@ -11,6 +11,17 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.AnglePID;
 
 @Config
 public class DepoTurret{
+    public enum TurretState {
+        TRANSFER,
+        TELE_SCORING,
+        AUTO_SCORING_ANGLE,
+        AUTO_1,
+        AUTO_2,
+        AUTO_3,
+        STOPPED
+    }
+    public DepoTurret.TurretState turretFSM = TurretState.STOPPED;
+
     public double target;
 
     private int count = 0;
