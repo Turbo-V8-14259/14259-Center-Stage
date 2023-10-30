@@ -34,14 +34,14 @@ public class DepoSlides{
 
     public DcMotorBetter leftMotor;
     private DcMotorBetter rightMotor;
-
     private PID linSlideController;
 
     public static double Kp = 1, Ki = 0, Kd = 0;
 
+    
+    //todo: pid running condition
     public boolean pidRunning = true;
-
-    //    public double passivePower = 0;
+    public double passivePower = 0;
     //this should contain a power that holds the slides up when its not moving; you probably need to use trig for this since the slides change angle.
 
 
@@ -56,7 +56,7 @@ public class DepoSlides{
         this.rightMotor.setUpperBound(DepoSlides.UPPER_BOUND);
         this.rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
-                () -> this.leftMotor.getCurrentPosition()-this.targetLinSlidePosition,
+                () -> this.leftMotor.getCurrentPosition() - this.targetLinSlidePosition,
                 factor -> {
                     this.leftMotor.setPower(M.clamp(-factor, 1, -1));
                     this.rightMotor.setPower(M.clamp(-factor, 1, -1));
@@ -69,35 +69,31 @@ public class DepoSlides{
     public double getCurrentInches() {
         return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
     }
-
+    public double getTargetInches(){
+        return targetDepositInches;
+    }
     public DepoSlides setPower(double power) {
         this.leftMotor.setPower(power);
         this.rightMotor.setPower(power);
         return this;
     }
-
     public DepoSlides stop() {
         this.leftMotor.stop();
         this.rightMotor.stop();
         return this;
     }
-
     public DepoSlides stopAndResetEncoder() {
         this.leftMotor.stopAndResetEncoder();
         this.rightMotor.stopAndResetEncoder();
         return this;
     }
-
     public boolean isBusy() { return this.leftMotor.isBusy() || this.rightMotor.isBusy(); }
-
     public double getCurrentPosition() {
         return this.leftMotor.getCurrentPosition();
     }
-
     public double setTargetLinSlidePosition(){
         return target;
     }
-
     public void setState(DepositState state){
         this.depositFSM = state;
         switch(depositFSM){
@@ -121,39 +117,10 @@ public class DepoSlides{
                 break;
         }
     }
-
     public void update() {
         this.targetLinSlidePosition = setTargetLinSlidePosition();
         this.linSlideController.update();
         this.leftMotor.update();
         this.rightMotor.update();
     }
-
-
-    //    public double getTargetInches() {
-    //        return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getTargetPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
-    //    }
-
-    //    public double getTargetPosition() {
-    //        return this.leftMotor.getTargetPosition();
-    //    }
-
-    //    public DepoSlides addPosition(double position) {
-    //        this.leftMotor.addPosition(position);
-    //        this.rightMotor.addPosition(position);
-    //        return this;
-    //    }
-    //
-    //    public DepoSlides addPower(double power) {
-    //        this.leftMotor.addPower(power);
-    //        this.rightMotor.addPower(power);
-    //        return this;
-    //    }
-
-
-    //    public DepoSlides setPosition(double position) {
-    //        this.leftMotor.setPosition(position);
-    //        this.rightMotor.setPosition(position);
-    //        return this;
-    //    }
 }

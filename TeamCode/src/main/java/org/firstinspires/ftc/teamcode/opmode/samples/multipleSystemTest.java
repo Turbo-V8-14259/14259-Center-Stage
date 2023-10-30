@@ -30,6 +30,7 @@ public class multipleSystemTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()){
+
             if(bothTarget == 1){
                 slides.setState(DepoSlides.DepositState.UP);
             }else if(bothTarget == 2){
