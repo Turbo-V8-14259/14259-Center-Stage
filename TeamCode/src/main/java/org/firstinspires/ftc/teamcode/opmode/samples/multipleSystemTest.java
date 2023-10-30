@@ -32,17 +32,15 @@ public class multipleSystemTest extends LinearOpMode {
         while(opModeIsActive()){
             if(bothTarget == 1){
                 slides.setState(DepoSlides.DepositState.UP);
-            }else if(bothTarget ==2){
+            }else if(bothTarget == 2){
+                slides.setState(DepoSlides.DepositState.MIDDLE);
+            }else if(bothTarget == 3){
                 slides.setState(DepoSlides.DepositState.DOWN);
             }
-            error = Math.abs(slides.getCurrentPosition()-slides.target);
-            telemetry.addData("turret target",turret.target);
 
-//            if(bothTarget == 1){
-//                slides.depositFSM = slides.depositFSM.UP;
-//            }else if(bothTarget == 2){
-//                slides.depositFSM = slides.depositFSM.DOWN;
-//            }
+            error = Math.abs(slides.getCurrentPosition() - slides.target);
+            telemetry.addData("turret target", turret.target);
+
             //basically acts at the end of the action of the error; in this case slides
             if(error < 0.1){
                 turret.target = bothTarget * 100;

@@ -15,17 +15,19 @@ public class DepoSlides{
         UP,
         MIDDLE,
         DOWN,
+        AUTO_EXTENSION,
         STOPPED
     }
 
     public DepositState depositFSM = DepositState.STOPPED;
 
     public double target;
+    public double maxTargetInches;
     public double targetDepositInches;
 
     private static final double INCHES_TO_TICKS = 100; //number
-    private static final double LOWER_BOUND = 0;
-    private static final double UPPER_BOUND = 2600; //number
+    private static final double LOWER_BOUND = 0; //number in ticks
+    private static final double UPPER_BOUND = 2600; //number in ticks
     private static final double INIT_INCHES = 0;
 
     private double targetLinSlidePosition = 0;
@@ -100,14 +102,19 @@ public class DepoSlides{
         this.depositFSM = state;
         switch(depositFSM){
             case UP:
-                this.targetDepositInches = 15; //placehollder
+                this.maxTargetInches = M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, DepoSlides.UPPER_BOUND) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
+                this.targetDepositInches = this.maxTargetInches; //placehollder
                 this.setInches(targetDepositInches);
                 break;
             case MIDDLE:
+                this.targetDepositInches = (this.maxTargetInches/2);
+                this.setInches(targetDepositInches);
                 break;
             case DOWN:
                 this.targetDepositInches = 0;
                 this.setInches(targetDepositInches);
+                break;
+            case AUTO_EXTENSION:
                 break;
             case STOPPED:
                 this.pidRunning = false;
