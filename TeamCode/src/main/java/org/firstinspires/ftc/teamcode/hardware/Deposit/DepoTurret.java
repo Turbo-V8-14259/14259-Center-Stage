@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.AnglePID;
 
 @Config
 public class DepoTurret{
+    public int[] presetAngle = {0, 180};
+
     public enum TurretState {
         TRANSFER,
         TELE_SCORING,
@@ -35,6 +37,8 @@ public class DepoTurret{
 
     public static double Kp = 0.006, Ki = 0.0025, Kd = 0;
 
+    public boolean pidRunning = true;
+
 
 
     public DepoTurret(CRServo turret, AnalogInput angularEncoder) {
@@ -42,12 +46,12 @@ public class DepoTurret{
         this.angularEncoder = angularEncoder;
         this.angle = new axonEncoder(angularEncoder);
         this.servoController = new AnglePID(new AnglePID.Coefficients(Kp, Ki, Kd),
-                () -> this.updateAngle()- this.updateTargetAngle(),
+                () -> this.updateAngle()- this.setTargetAngle(),
 
                 factor -> this.turret.setPower(M.clamp(factor, -.5, .5)));
 
     }
-    public double updateTargetAngle(){
+    public double setTargetAngle(){
         return target;
     }
 
@@ -60,8 +64,32 @@ public class DepoTurret{
         return count * 360 + currentAngle;
     }
 
+
+    public void setState(DepoTurret.TurretState state){
+        this.turretFSM = state;
+        switch(turretFSM){
+            case TRANSFER:
+                this.target = presetAngle[0];
+                break;
+            case TELE_SCORING:
+                this.target = presetAngle[1];
+                break;
+            case AUTO_SCORING_ANGLE:
+                break;
+            case AUTO_1:
+                break;
+            case STOPPED:
+                this.pidRunning = false;
+                break;
+        }//untested
+    }
+
+    public DepoTurret.TurretState getState(){
+        return turretFSM;
+    }//untested
+
     public void update() {
-            this.target = updateTargetAngle();
+            this.target = setTargetAngle();
             this.servoController.update();
     }
 
