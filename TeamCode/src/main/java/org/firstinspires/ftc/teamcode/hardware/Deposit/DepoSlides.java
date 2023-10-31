@@ -115,8 +115,13 @@ public class DepoSlides{
             case STOPPED:
                 this.pidRunning = false;
                 break;
-        }
+        }//untested
     }
+
+    public DepoSlides.DepositState getState(){
+        return depositFSM;
+    }//untested
+
     public void update() {
         this.targetLinSlidePosition = setTargetLinSlidePosition();
         this.linSlideController.update();
