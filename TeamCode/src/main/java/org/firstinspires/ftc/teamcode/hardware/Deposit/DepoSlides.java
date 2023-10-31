@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 @Config
 public class DepoSlides{
 
+    public int[] presetInches = {0, 15, 30, 45};
+
     public enum DepositState {
         UP,
         MIDDLE,
@@ -107,7 +109,7 @@ public class DepoSlides{
                 this.setInches(targetDepositInches);
                 break;
             case DOWN:
-                this.targetDepositInches = 0;
+                this.targetDepositInches = presetInches[0];
                 this.setInches(targetDepositInches);
                 break;
             case AUTO_EXTENSION:
