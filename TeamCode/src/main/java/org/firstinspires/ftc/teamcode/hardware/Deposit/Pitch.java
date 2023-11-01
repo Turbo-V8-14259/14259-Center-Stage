@@ -21,6 +21,10 @@ public class Pitch {
 
     private double Kp = 0, Ki = 0, Kd = 0;
 
+    public boolean manualMode = true;
+
+    private double manualPower = 0;
+
     public Pitch(DcMotorBetter pitchMotor) {
         this.pitchMotor = pitchMotor;
         this.pitchMotor.setLowerBound(Pitch.LOWER_BOUND);
@@ -67,9 +71,18 @@ public class Pitch {
         return target;
     }
 
+    public void setPowerManual(double power){
+        this.manualPower = power;
+    }
+
+
     public void update() {
-        this.targetPitchPosition = setTargetPitchPosition();
-        this.pitchController.update();
+        if(manualMode){
+            this.pitchMotor.setPower(manualPower);
+        }else {
+            this.targetPitchPosition = setTargetPitchPosition();
+            this.pitchController.update();
+        }
         this.pitchMotor.update();
     }
 }

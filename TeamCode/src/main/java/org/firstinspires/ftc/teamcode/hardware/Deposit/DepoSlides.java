@@ -38,12 +38,13 @@ public class DepoSlides{
     private DcMotorBetter rightMotor;
     private PID linSlideController;
 
-    public static double Kp = 1, Ki = 0, Kd = 0;
+    public static double Kp = 2, Ki = 0, Kd = 0;
 
 
     //todo: pid running condition
     public boolean pidRunning = true;
-    public double passivePower = 0;
+    public boolean passive = false;
+    public double passivePower = 0.1;
     //this should contain a power that holds the slides up when its not moving; you probably need to use trig for this since the slides change angle.
 
 
@@ -100,15 +101,16 @@ public class DepoSlides{
         this.depositFSM = state;
         switch(depositFSM){
             case UP:
-                this.maxTargetInches = M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, DepoSlides.UPPER_BOUND) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
-                this.targetDepositInches = this.maxTargetInches; //placehollder
-                this.setInches(targetDepositInches);
+                this.pidRunning = true;
+                this.setInches(15);
                 break;
             case MIDDLE:
+                this.pidRunning = true;
                 this.targetDepositInches = (this.maxTargetInches/2);
                 this.setInches(targetDepositInches);
                 break;
             case DOWN:
+                this.pidRunning = true;
                 this.targetDepositInches = presetInches[0];
                 this.setInches(targetDepositInches);
                 break;
@@ -116,6 +118,7 @@ public class DepoSlides{
                 break;
             case STOPPED:
                 this.pidRunning = false;
+                this.passive = true;
                 break;
         }//untested
     }
@@ -125,8 +128,16 @@ public class DepoSlides{
     }//untested
 
     public void update() {
-        this.targetLinSlidePosition = setTargetLinSlidePosition();
-        this.linSlideController.update();
+        if(pidRunning){
+            this.targetLinSlidePosition = setTargetLinSlidePosition();
+            this.linSlideController.update();
+        }else if(!pidRunning && passive){
+            this.leftMotor.setPower(passivePower);
+            this.rightMotor.setPower(passivePower);
+        }else{
+            this.leftMotor.setPower(0);
+            this.rightMotor.setPower(0);
+        }
         this.leftMotor.update();
         this.rightMotor.update();
     }

@@ -11,11 +11,16 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoTurret;
+import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 
 @TeleOp
 @Config
 public class multipleSystemTest extends LinearOpMode {
+    DepoSlides slides;
+    DepoTurret turret;
+    stickyGamepad gamepada;
+
 
     public static double bothTarget = 0;
     double error;
@@ -23,20 +28,29 @@ public class multipleSystemTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        DepoSlides slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "rightSlides")));
-        DepoTurret turret = new DepoTurret(hardwareMap.get(CRServo.class, "axon"), hardwareMap.get(AnalogInput.class, "input"));
-
+        slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "rightSlides")));
+        turret = new DepoTurret(hardwareMap.get(CRServo.class, "axon"), hardwareMap.get(AnalogInput.class, "input"));
+        gamepada = new stickyGamepad(gamepad1);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
         waitForStart();
         while(opModeIsActive()){
+            if(gamepada.a){
+                bothTarget=1;
+            }else if(gamepada.b){
+                bothTarget =3;
+            }else if(gamepada.x){
+                bothTarget = 0;
+            }
 
-            if(bothTarget == 1){
+            if(bothTarget==1){
                 slides.setState(DepoSlides.DepositState.UP);
             }else if(bothTarget == 2){
                 slides.setState(DepoSlides.DepositState.MIDDLE);
-            }else if(bothTarget == 3){
+            }else if(bothTarget==3){
                 slides.setState(DepoSlides.DepositState.DOWN);
+            }else if(bothTarget ==0){
+                slides.setState(DepoSlides.DepositState.STOPPED);
             }
 
             error = Math.abs(slides.getCurrentPosition() - slides.target);
@@ -47,15 +61,23 @@ public class multipleSystemTest extends LinearOpMode {
                 turret.target = bothTarget * 100;
             }
 
-            slides.update();
-            turret.update();
-
+            telemetry.addData("slides state", slides.getState());
             telemetry.addData("error",error);
             telemetry.addData("slides pos ", slides.getCurrentPosition());
             telemetry.addData("slides inch ", slides.getCurrentInches());
             telemetry.addData("target ", bothTarget);
-            telemetry.update();
+            telemetry.addData("a", gamepada.a);
+            telemetry.addData("araw", gamepad1.a);
+            telemetry.addData("b", gamepada.b);
+            telemetry.addData("braw",gamepad1.b);
+            updateAll();
         }
 
+    }
+    public void updateAll(){
+        slides.update();
+        turret.update();
+        gamepada.update();
+        telemetry.update();
     }
 }

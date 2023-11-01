@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.usefuls.Math;
 
 public final class M {
-
     public static final double PI = Math.PI;
 
     public static double lerp(double a, double b, double w) {
@@ -55,4 +54,5 @@ public final class M {
     public static double toRadians(double deg){
         return Math.toRadians(deg);
     }
+
 }
