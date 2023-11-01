@@ -133,14 +133,12 @@ public class DepoSlides{
 
 
     public void update() {
-
         if(pidRunning){
             this.targetLinSlidePosition = setTargetLinSlidePosition();
             this.linSlideController.update();
         }else if(!pidRunning && passive){
             this.leftMotor.setPower(passivePower);
             this.rightMotor.setPower(passivePower);
-
         }else if(manualMode){
             this.leftMotor.setPower(manualPower);
             this.rightMotor.setPower(manualPower);

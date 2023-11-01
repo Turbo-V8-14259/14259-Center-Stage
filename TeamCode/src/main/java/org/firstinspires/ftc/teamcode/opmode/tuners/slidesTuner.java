@@ -17,6 +17,8 @@ public class slidesTuner extends LinearOpMode {
         stickyGamepad stickyPad = new stickyGamepad(gamepad1);
         waitForStart();
         while(opModeIsActive()){
+            slides.pidRunning = false;
+            slides.passive = false;
             slides.manualMode = true;
             slides.setPowerManual(gamepad1.left_trigger - gamepad1.right_stick_x);
             telemetry.addData("Slides encoder position ", slides.leftMotor.getCurrentPositionRAW());
