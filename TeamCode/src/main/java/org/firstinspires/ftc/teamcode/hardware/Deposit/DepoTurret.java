@@ -20,6 +20,7 @@ public class DepoTurret{
         AUTO_1,
         AUTO_2,
         AUTO_3,
+        ANGLE_LOCK,
         STOPPED
     }
     public DepoTurret.TurretState turretFSM = TurretState.STOPPED;
@@ -38,6 +39,8 @@ public class DepoTurret{
     public static double Kp = 0.006, Ki = 0.0025, Kd = 0;
 
     public boolean pidRunning = true;
+
+    public double lockTarget, robotAngle;
 
 
 
@@ -63,18 +66,34 @@ public class DepoTurret{
         return count * 360 + currentAngle;
     }
 
+
+    public void angleLockSet(double lockTarg, double robAng){
+        this.lockTarget = lockTarg;
+        this.robotAngle = robAng;
+    }
+
+    public void angleLock(){
+        this.target = lockTarget - robotAngle;
+    }
+
     public void setState(DepoTurret.TurretState state){
         this.turretFSM = state;
         switch(turretFSM){
             case TRANSFER:
+                pidRunning = true;
                 this.target = presetAngle[0];
                 break;
             case TELE_SCORING:
+                pidRunning = true;
                 this.target = presetAngle[1];
                 break;
             case AUTO_SCORING_ANGLE:
                 break;
             case AUTO_1:
+                break;
+            case ANGLE_LOCK:
+                pidRunning = true;
+                this.angleLock();
                 break;
             case STOPPED:
                 this.pidRunning = false;
@@ -87,8 +106,12 @@ public class DepoTurret{
     }//untested
 
     public void update() {
+        if(pidRunning){
             this.target = setTargetAngle();
             this.servoController.update();
+        }else{
+
+        }
     }
 
 

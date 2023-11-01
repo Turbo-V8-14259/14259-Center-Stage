@@ -36,8 +36,6 @@ public class Imu{
        angles = this.imu.getRobotYawPitchRollAngles();
     }
 
-
-
     //degrees
     public double getYawR(){
         return angles.getYaw(AngleUnit.DEGREES);
