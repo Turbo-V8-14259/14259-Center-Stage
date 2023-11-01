@@ -44,9 +44,10 @@ public class DepoSlides{
     //todo: pid running condition
     public boolean pidRunning = true;
     public boolean passive = false;
+    public boolean manualMode = false;
     public double passivePower = 0.1;
     //this should contain a power that holds the slides up when its not moving; you probably need to use trig for this since the slides change angle.
-
+    private double manualPower = 0;
 
     public DepoSlides(DcMotorBetter leftMotor, DcMotorBetter rightMotor) {
         this.leftMotor = leftMotor;
@@ -126,15 +127,24 @@ public class DepoSlides{
     public DepoSlides.DepositState getState(){
         return depositFSM;
     }//untested
+    public void setPowerManual(double power){
+        this.manualPower = power;
+    }
+
 
     public void update() {
+
         if(pidRunning){
             this.targetLinSlidePosition = setTargetLinSlidePosition();
             this.linSlideController.update();
         }else if(!pidRunning && passive){
             this.leftMotor.setPower(passivePower);
             this.rightMotor.setPower(passivePower);
-        }else{
+
+        }else if(manualMode){
+            this.leftMotor.setPower(manualPower);
+            this.rightMotor.setPower(manualPower);
+        else{
             this.leftMotor.setPower(0);
             this.rightMotor.setPower(0);
         }
