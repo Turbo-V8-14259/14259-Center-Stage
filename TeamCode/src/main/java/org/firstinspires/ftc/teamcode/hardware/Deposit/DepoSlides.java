@@ -10,9 +10,6 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
 @Config
 public class DepoSlides {
-
-    public int[] presetInches = {0, 15, 30, 45};
-
     public enum DepositState {
         UP,
         MIDDLE,
@@ -20,28 +17,24 @@ public class DepoSlides {
         AUTO_EXTENSION,
         STOPPED
     }
-
     public DepositState depositFSM = DepositState.STOPPED;
 
-    public double target;
     public double maxTargetInches;
-    public double targetDepositInches;
-
     private static final double INCHES_TO_TICKS = 100; //number
     private static final double LOWER_BOUND = 0; //number in ticks
     private static final double UPPER_BOUND = 2600; //number in ticks
     private static final double INIT_INCHES = 0;
-
     private double targetLinSlidePosition = 0;
+    public double targetDepositInches = 0;
+    public double target;
+    public int[] presetInches = {0, 15, 30, 45};
+
 
     public DcMotorBetter leftMotor;
     private DcMotorBetter rightMotor;
     private PID linSlideController;
 
     public static double Kp = 2, Ki = 0, Kd = 0;
-
-
-    //todo: pid running condition
     public boolean pidRunning = true;
     public boolean passive = false;
     public boolean manualMode = false;
@@ -66,49 +59,39 @@ public class DepoSlides {
                     this.rightMotor.setPower(M.clamp(-factor, 1, -1));
                 });
     }
-
     public void setInches(double inches) {
         this.target = (M.normalize((inches - DepoSlides.INIT_INCHES) * DepoSlides.INCHES_TO_TICKS, DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND));
     }
-
     public double getCurrentInches() {
         return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
     }
-
     public double getTargetInches() {
         return targetDepositInches;
     }
-
     public DepoSlides setPower(double power) {
         this.leftMotor.setPower(power);
         this.rightMotor.setPower(power);
         return this;
     }
-
     public DepoSlides stop() {
         this.leftMotor.stop();
         this.rightMotor.stop();
         return this;
     }
-
     public DepoSlides stopAndResetEncoder() {
         this.leftMotor.stopAndResetEncoder();
         this.rightMotor.stopAndResetEncoder();
         return this;
     }
-
     public boolean isBusy() {
         return this.leftMotor.isBusy() || this.rightMotor.isBusy();
     }
-
     public double getCurrentPosition() {
         return this.leftMotor.getCurrentPosition();
     }
-
     public double setTargetLinSlidePosition() {
         return target;
     }
-
     public void setState(DepositState state) {
         this.depositFSM = state;
         switch (depositFSM) {
@@ -134,16 +117,12 @@ public class DepoSlides {
                 break;
         }//untested
     }
-
     public DepoSlides.DepositState getState() {
         return depositFSM;
     }//untested
-
     public void setPowerManual(double power) {
         this.manualPower = power;
     }
-
-
     public void update() {
         if(pidRunning) {
             this.targetLinSlidePosition = setTargetLinSlidePosition();
