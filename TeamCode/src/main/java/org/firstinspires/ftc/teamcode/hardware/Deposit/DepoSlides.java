@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
 
 @Config
-public class DepoSlides{
+public class DepoSlides {
 
     public int[] presetInches = {0, 15, 30, 45};
 
@@ -70,44 +70,55 @@ public class DepoSlides{
     public void setInches(double inches) {
         this.target = (M.normalize((inches - DepoSlides.INIT_INCHES) * DepoSlides.INCHES_TO_TICKS, DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND));
     }
+
     public double getCurrentInches() {
         return M.lerp(DepoSlides.LOWER_BOUND, DepoSlides.UPPER_BOUND, this.getCurrentPosition()) / DepoSlides.INCHES_TO_TICKS + DepoSlides.INIT_INCHES;
     }
-    public double getTargetInches(){
+
+    public double getTargetInches() {
         return targetDepositInches;
     }
+
     public DepoSlides setPower(double power) {
         this.leftMotor.setPower(power);
         this.rightMotor.setPower(power);
         return this;
     }
+
     public DepoSlides stop() {
         this.leftMotor.stop();
         this.rightMotor.stop();
         return this;
     }
+
     public DepoSlides stopAndResetEncoder() {
         this.leftMotor.stopAndResetEncoder();
         this.rightMotor.stopAndResetEncoder();
         return this;
     }
-    public boolean isBusy() { return this.leftMotor.isBusy() || this.rightMotor.isBusy(); }
+
+    public boolean isBusy() {
+        return this.leftMotor.isBusy() || this.rightMotor.isBusy();
+    }
+
     public double getCurrentPosition() {
         return this.leftMotor.getCurrentPosition();
     }
-    public double setTargetLinSlidePosition(){
+
+    public double setTargetLinSlidePosition() {
         return target;
     }
-    public void setState(DepositState state){
+
+    public void setState(DepositState state) {
         this.depositFSM = state;
-        switch(depositFSM){
+        switch (depositFSM) {
             case UP:
                 this.pidRunning = true;
                 this.setInches(15);
                 break;
             case MIDDLE:
                 this.pidRunning = true;
-                this.targetDepositInches = (this.maxTargetInches/2);
+                this.targetDepositInches = (this.maxTargetInches / 2);
                 this.setInches(targetDepositInches);
                 break;
             case DOWN:
@@ -124,22 +135,23 @@ public class DepoSlides{
         }//untested
     }
 
-    public DepoSlides.DepositState getState(){
+    public DepoSlides.DepositState getState() {
         return depositFSM;
     }//untested
-    public void setPowerManual(double power){
+
+    public void setPowerManual(double power) {
         this.manualPower = power;
     }
 
 
     public void update() {
-        if(pidRunning){
+        if(pidRunning) {
             this.targetLinSlidePosition = setTargetLinSlidePosition();
             this.linSlideController.update();
-        }else if(!pidRunning && passive){
+        }else if (!pidRunning && passive) {
             this.leftMotor.setPower(passivePower);
             this.rightMotor.setPower(passivePower);
-        }else if(manualMode) {
+        }else if (!pidRunning && !passive && manualMode) {
             this.leftMotor.setPower(manualPower);
             this.rightMotor.setPower(manualPower);
         }else{
@@ -148,5 +160,6 @@ public class DepoSlides{
         }
         this.leftMotor.update();
         this.rightMotor.update();
-    }
+        }
 }
+
