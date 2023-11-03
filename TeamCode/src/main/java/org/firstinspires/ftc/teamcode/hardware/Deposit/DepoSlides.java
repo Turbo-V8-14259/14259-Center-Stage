@@ -139,10 +139,10 @@ public class DepoSlides{
         }else if(!pidRunning && passive){
             this.leftMotor.setPower(passivePower);
             this.rightMotor.setPower(passivePower);
-        }else if(manualMode){
+        }else if(manualMode) {
             this.leftMotor.setPower(manualPower);
             this.rightMotor.setPower(manualPower);
-        else{
+        }else{
             this.leftMotor.setPower(0);
             this.rightMotor.setPower(0);
         }

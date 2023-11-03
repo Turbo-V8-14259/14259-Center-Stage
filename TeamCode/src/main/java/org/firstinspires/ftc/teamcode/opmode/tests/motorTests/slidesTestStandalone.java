@@ -5,9 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 @TeleOp
 public class slidesTestStandalone extends LinearOpMode {
-
     double power = 0;
-
     @Override
     public void runOpMode() throws InterruptedException {
         DcMotorEx slidesLeft = hardwareMap.get(DcMotorEx.class, "leftSlides");
