@@ -119,7 +119,7 @@ public class DepoSlides {
     }
     public DepoSlides.DepositState getState() {
         return depositFSM;
-    }//untested
+    }
     public void setPowerManual(double power) {
         this.manualPower = power;
     }
