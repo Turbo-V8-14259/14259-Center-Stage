@@ -134,8 +134,7 @@ public class DepoSlides {
             this.leftMotor.setPower(manualPower);
             this.rightMotor.setPower(manualPower);
         }else{
-            this.leftMotor.setPower(0);
-            this.rightMotor.setPower(0);
+            this.stop();
         }
         this.leftMotor.update();
         this.rightMotor.update();

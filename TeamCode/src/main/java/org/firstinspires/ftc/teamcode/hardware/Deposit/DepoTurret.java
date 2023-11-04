@@ -41,7 +41,7 @@ public class DepoTurret{
         this.angularEncoder = angularEncoder;
         this.angle = new axonEncoder(angularEncoder);
         this.servoController = new AnglePID(new AnglePID.Coefficients(Kp, Ki, Kd),
-                () -> this.updateAngle() - this.setTargetAngle(),
+                () -> this.updateAngle() - this.setTargetAngle(), //what the fu
 
                 factor -> this.turret.setPower(M.clamp(factor, -.5, .5)));
     }

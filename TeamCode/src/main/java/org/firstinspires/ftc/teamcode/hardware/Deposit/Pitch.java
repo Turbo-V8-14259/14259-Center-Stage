@@ -31,12 +31,12 @@ public class Pitch {
         this.pitchMotor.setUpperBound(Pitch.UPPER_BOUND);
         this.pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.pitchController = new PID(new PID.Coefficients(Kp, Ki, Kd),
-                () -> this.targetPitchPosition - this.pitchMotor.getCurrentPosition(),
+                () -> this.pitchMotor.getCurrentPosition() - this.targetPitchPosition,
                 factor -> this.pitchMotor.setPower(M.clamp(-factor, 0.5, -0.5)));
     }
 
     public void setDegrees(double deg) {
-        target = (M.normalize((deg - Pitch.INIT_DEGREES) * Pitch.DEGREES_TO_TICKS, Pitch.LOWER_BOUND, Pitch.UPPER_BOUND));
+        this.target = (M.normalize((deg - Pitch.INIT_DEGREES) * Pitch.DEGREES_TO_TICKS, Pitch.LOWER_BOUND, Pitch.UPPER_BOUND));
     }
     //"its not linear :nerd:" - Leo
 
@@ -67,19 +67,18 @@ public class Pitch {
         return this.pitchMotor.getCurrentPosition();
     }
 
-    public double setTargetPitchPosition() {
-        return target;
-    }
-
     public void setPowerManual(double power){
         this.manualPower = power;
     }
 
+    public double setTargetPitchPosition() {
+        return target;
+    }
 
     public void update() {
         if(manualMode){
             this.pitchMotor.setPower(manualPower);
-        }else {
+        }else{
             this.targetPitchPosition = setTargetPitchPosition();
             this.pitchController.update();
         }
