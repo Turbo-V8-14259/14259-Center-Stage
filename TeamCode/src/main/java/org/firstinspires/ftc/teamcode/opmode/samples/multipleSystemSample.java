@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 
 @TeleOp
 @Config
-public class multipleSystemTest extends LinearOpMode {
+public class multipleSystemSample extends LinearOpMode {
     DepoSlides slides;
     DepoTurret turret;
     stickyGamepad gamepada;
@@ -66,10 +66,6 @@ public class multipleSystemTest extends LinearOpMode {
             telemetry.addData("slides pos ", slides.getCurrentPosition());
             telemetry.addData("slides inch ", slides.getCurrentInches());
             telemetry.addData("target ", bothTarget);
-            telemetry.addData("a", gamepada.a);
-            telemetry.addData("araw", gamepad1.a);
-            telemetry.addData("b", gamepada.b);
-            telemetry.addData("braw",gamepad1.b);
             updateAll();
         }
 

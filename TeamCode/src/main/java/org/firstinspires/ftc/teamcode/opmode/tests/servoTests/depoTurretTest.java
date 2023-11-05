@@ -24,7 +24,6 @@ public class depoTurretTest extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
-
             turret.target = targetSet;
             turret.update();
             telemetry.addData("position", turret.updateAngle());

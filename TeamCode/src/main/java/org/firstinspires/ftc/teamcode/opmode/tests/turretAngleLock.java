@@ -38,7 +38,6 @@ public class turretAngleLock extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()){
             updateAll();
-
             if(gamepada.a && !a){ //locks on for the angles given at the moment
                 turret.angleLockSet(targetLockedAngle, IMUAngle);
                 turret.setState(DepoTurret.TurretState.ANGLE_LOCK);

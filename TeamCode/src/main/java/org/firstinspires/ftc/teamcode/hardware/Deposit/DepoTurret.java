@@ -36,6 +36,7 @@ public class DepoTurret{
     private axonEncoder angle;
 
     public boolean pidRunning = true;
+    private double offset = 100;
     public DepoTurret(CRServo turret, AnalogInput angularEncoder) {
         this.turret = turret;
         this.angularEncoder = angularEncoder;
@@ -52,7 +53,7 @@ public class DepoTurret{
         return turretFSM;
     }//untested
     public double updateAngle(){
-        currentAngle = angle.update();
+        currentAngle = angle.update() + offset;
         if(Math.abs(currentAngle - lastAngle) > 180){
             count += Math.signum(lastAngle - currentAngle);
         }
