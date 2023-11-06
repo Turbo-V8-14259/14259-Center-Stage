@@ -18,7 +18,7 @@ public class slidesTestStandalone extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()){
             power = gamepad1.left_trigger - gamepad1.right_trigger;
-//            slidesRight.setPower(power);
+            slidesRight.setPower(power);
             slidesLeft.setPower(power);
         }
     }
