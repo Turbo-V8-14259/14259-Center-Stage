@@ -9,7 +9,7 @@ public class DepoArm {
     public enum DepoArmState {
         INITIALIZE,
         SCORE,
-        ANGLE_LOCK,
+        CALCAULATE,
         STOPPED
     }
 
@@ -46,7 +46,7 @@ public class DepoArm {
                 break;
             case SCORE:
                 target = 1;
-            case ANGLE_LOCK:
+            case CALCAULATE:
                 break;
             case STOPPED:
                 break;

@@ -23,9 +23,11 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 @Config
 public final class TwoDeadWheelLocalizer implements Localizer {
     public static class Params {
-        public double parYTicks = 3.25 * ((.689 * 2 * M.PI) / 8192); // y position of the parallel encoder (in tick units) 3.25 to the back inches
-        public double perpXTicks = 6 * ((.689 * 2 * M.PI) / 8192); // x position of the perpendicular encoder (in tick units) 6 inches to the right
-
+//        public double parYTicks = 3.25 * ((.689 * 2 * M.PI) / 8192); // y position of the parallel encoder (in tick units) 3.25 to the back inches
+//        public double perpXTicks = 6 * ((.689 * 2 * M.PI) / 8192); // x position of the perpendicular encoder (in tick units) 6 inches to the right
+        public double parYTicks = 0; // y position of the parallel encoder (in tick units) 3.25 to the back inches
+        public double perpXTicks = 0; // x position of the perpendicular encoder (in tick units) 6 inches to the right
+//me when i dont know what im doing
     }
 
     public static Params PARAMS = new Params();
