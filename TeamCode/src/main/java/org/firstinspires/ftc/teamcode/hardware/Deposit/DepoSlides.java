@@ -15,6 +15,8 @@ public class DepoSlides {
         MIDDLE,
         DOWN,
         AUTO_EXTENSION,
+        INCREMENT_UP,
+        INCREMENT_DOWN,
         STOPPED
     }
     public DepositState depositFSM = DepositState.STOPPED;
@@ -27,7 +29,7 @@ public class DepoSlides {
     private double targetLinSlidePosition = 0;
     public double targetDepositInches = 0;
     public double target;
-    public int[] presetInches = {0, 15, 30, 45};
+    public int[] presetInches = {0, 15, 30, (int) this.maxTargetInches};
 
 
     public DcMotorBetter leftMotor;
@@ -41,6 +43,8 @@ public class DepoSlides {
     public double passivePower = 0.1;
     //this should contain a power that holds the slides up when its not moving; you probably need to use trig for this since the slides change angle.
     private double manualPower = 0;
+
+    public boolean isAtTarget = false;
 
     public DepoSlides(DcMotorBetter leftMotor, DcMotorBetter rightMotor) {
         this.leftMotor = leftMotor;
@@ -97,20 +101,28 @@ public class DepoSlides {
         this.depositFSM = state;
         switch (depositFSM) {
             case UP:
+                this.setInches(45);
                 this.pidRunning = true;
-                this.setInches(15);
                 break;
             case MIDDLE:
-                this.pidRunning = true;
-                this.targetDepositInches = (this.maxTargetInches / 2);
+                this.targetDepositInches = 15;
                 this.setInches(targetDepositInches);
+                this.pidRunning = true;
                 break;
             case DOWN:
-                this.pidRunning = true;
                 this.targetDepositInches = presetInches[0];
                 this.setInches(targetDepositInches);
+                this.pidRunning = true;
                 break;
             case AUTO_EXTENSION:
+                break;
+            case INCREMENT_UP:
+                this.setInches(targetDepositInches+5);
+                this.pidRunning = true;
+                break;
+            case INCREMENT_DOWN:
+                this.setInches(targetDepositInches-5);
+                this.pidRunning = true;
                 break;
             case STOPPED:
                 this.pidRunning = false;
@@ -139,6 +151,11 @@ public class DepoSlides {
         }
         this.leftMotor.update();
         this.rightMotor.update();
+        if (Math.abs(getCurrentPosition()-target) < 0.01){
+            isAtTarget = true;
+        }else{
+            isAtTarget = false;
         }
+    }
 }
 

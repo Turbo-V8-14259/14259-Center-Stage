@@ -36,13 +36,12 @@ public class multipleSystemSample extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()){
             if(gamepada.a){
-                bothTarget=1;
+                bothTarget = 1;
             }else if(gamepada.b){
-                bothTarget =3;
+                bothTarget = 3;
             }else if(gamepada.x){
                 bothTarget = 0;
             }
-
             if(bothTarget==1){
                 slides.setState(DepoSlides.DepositState.UP);
             }else if(bothTarget == 2){
@@ -66,6 +65,7 @@ public class multipleSystemSample extends LinearOpMode {
             telemetry.addData("slides pos ", slides.getCurrentPosition());
             telemetry.addData("slides inch ", slides.getCurrentInches());
             telemetry.addData("target ", bothTarget);
+            telemetry.addData("isAtTarg?: ", slides.isAtTarget);
             updateAll();
         }
 

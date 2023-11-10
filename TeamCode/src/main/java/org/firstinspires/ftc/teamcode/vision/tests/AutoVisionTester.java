@@ -72,7 +72,6 @@ public class AutoVisionTester extends LinearOpMode
                     detection = AprilTagPipeline.getSpecificTagData(aprilTag,3);
                 }
             }
-
             if(detection != null){
 
             }
@@ -83,6 +82,20 @@ public class AutoVisionTester extends LinearOpMode
             telemetry.update();
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private void initAprilTag() {
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
@@ -116,7 +129,6 @@ public class AutoVisionTester extends LinearOpMode
             }
         });
     }
-
     private void initAll(){
         initAprilTag();
         initPipeline();
