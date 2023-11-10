@@ -21,10 +21,6 @@ public class multipleSystemSample extends LinearOpMode {
     DepoTurret turret;
     stickyGamepad gamepada;
 
-
-    public static double bothTarget = 0;
-    double error;
-
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -36,37 +32,27 @@ public class multipleSystemSample extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()){
             if(gamepada.a){
-                bothTarget = 1;
-            }else if(gamepada.b){
-                bothTarget = 3;
-            }else if(gamepada.x){
-                bothTarget = 0;
-            }
-            if(bothTarget==1){
                 slides.setState(DepoSlides.DepositState.UP);
-            }else if(bothTarget == 2){
-                slides.setState(DepoSlides.DepositState.MIDDLE);
-            }else if(bothTarget==3){
+            }else if(gamepada.b){
                 slides.setState(DepoSlides.DepositState.DOWN);
-            }else if(bothTarget ==0){
+            }else if(gamepada.x){
                 slides.setState(DepoSlides.DepositState.STOPPED);
             }
 
-            error = Math.abs(slides.getCurrentPosition() - slides.target);
-            telemetry.addData("turret target", turret.target);
+            updateAll(); //order of operations bruv
 
             //basically acts at the end of the action of the error; in this case slides
-            if(error < 0.1){
-                turret.target = bothTarget * 100;
+            if(slides.getState()==DepoSlides.DepositState.UP&&slides.isAtTarget){
+                turret.setState(DepoTurret.TurretState.TELE_SCORING);
+            }else{
+                turret.setState(DepoTurret.TurretState.TRANSFER);
             }
 
-            telemetry.addData("slides state", slides.getState());
-            telemetry.addData("error",error);
-            telemetry.addData("slides pos ", slides.getCurrentPosition());
+            telemetry.addData("turret target", turret.target);
             telemetry.addData("slides inch ", slides.getCurrentInches());
-            telemetry.addData("target ", bothTarget);
             telemetry.addData("isAtTarg?: ", slides.isAtTarget);
-            updateAll();
+            telemetry.addData("slides state", slides.getState());
+            telemetry.addData("turret state", turret.getState());
         }
 
     }
