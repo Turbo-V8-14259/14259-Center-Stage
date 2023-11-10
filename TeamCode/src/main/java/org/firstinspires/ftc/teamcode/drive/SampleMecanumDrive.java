@@ -97,12 +97,14 @@ public class SampleMecanumDrive extends MecanumDrive {
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(parameters);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "FrontLeft");
-        leftRear = hardwareMap.get(DcMotorEx.class, "BackLeft");
-        rightRear = hardwareMap.get(DcMotorEx.class, "BackRight");
-        rightFront = hardwareMap.get(DcMotorEx.class, "FrontRight");
-        leftFront.setDirection(DcMotorEx.Direction.REVERSE);
-        leftRear.setDirection(DcMotorEx.Direction.REVERSE);
+        leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
+        leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
+        rightRear = hardwareMap.get(DcMotorEx.class, "RightBack");
+        rightFront = hardwareMap.get(DcMotorEx.class, "RightFront");
+
+        rightRear.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
