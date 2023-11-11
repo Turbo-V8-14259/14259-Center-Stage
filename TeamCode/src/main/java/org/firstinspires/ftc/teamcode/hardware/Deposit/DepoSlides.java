@@ -101,7 +101,7 @@ public class DepoSlides {
         this.depositFSM = state;
         switch (depositFSM) {
             case UP:
-                this.setInches(45);
+                this.setInches(30);
                 this.pidRunning = true;
                 break;
             case MIDDLE:
