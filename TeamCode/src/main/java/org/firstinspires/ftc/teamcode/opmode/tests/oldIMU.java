@@ -1,7 +1,11 @@
 package org.firstinspires.ftc.teamcode.opmode.tests;
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+@TeleOp
+@Config
 public class oldIMU extends LinearOpMode {
     private BNO055IMU imu;
     @Override
