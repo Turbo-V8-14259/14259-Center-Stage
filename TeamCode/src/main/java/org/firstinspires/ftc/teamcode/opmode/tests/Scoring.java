@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
@@ -22,6 +23,7 @@ public class Scoring extends LinearOpMode {
     LM1Turret turret;
     DepoArm arm;
     stickyGamepad gamepadOne;
+    ElapsedTime timer = new ElapsedTime();
 
     double a = 0;
 
@@ -47,6 +49,7 @@ public class Scoring extends LinearOpMode {
             if(gamepadOne.a){
                 a++;
             }
+
             if(a==0){
                 arm.setState(DepoArm.DepoArmState.TRANSFER);
             }else if(a==1){
@@ -58,9 +61,9 @@ public class Scoring extends LinearOpMode {
                 arm.setState(DepoArm.DepoArmState.SCORE);
             }else if(a==4){
                 turret.setState(LM1Turret.TurretState.INITIALIZE);
+                timer.reset();
             }
-
-            if(a>4){
+            if(timer.milliseconds()>200 && a==4){
                 a = 0;
             }
 
