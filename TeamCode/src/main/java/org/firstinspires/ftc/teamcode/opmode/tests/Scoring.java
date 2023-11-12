@@ -23,7 +23,7 @@ public class Scoring extends LinearOpMode {
     LM1Turret turret;
     DepoArm arm;
     stickyGamepad gamepadOne;
-    ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timer;
 
     double a = 0;
 
@@ -36,6 +36,7 @@ public class Scoring extends LinearOpMode {
         turret = new LM1Turret(new ServoMotorBetter(hardwareMap.get(Servo.class, "turret")));
         arm = new DepoArm(new ServoMotorBetter(hardwareMap.get(Servo.class, "arm")), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
         gamepadOne = new stickyGamepad(gamepad1);
+        timer = new ElapsedTime();
         waitForStart();
         while(opModeIsActive()){
             drive.setWeightedDrivePower(
