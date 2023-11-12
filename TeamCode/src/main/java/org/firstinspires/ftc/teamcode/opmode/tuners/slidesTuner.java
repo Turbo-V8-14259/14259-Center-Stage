@@ -20,8 +20,9 @@ public class slidesTuner extends LinearOpMode {
             slides.pidRunning = false;
             slides.passive = false;
             slides.manualMode = true;
-            slides.setPowerManual(gamepad1.left_trigger - gamepad1.right_stick_x);
+            slides.setPowerManual(gamepad1.left_trigger - gamepad1.right_trigger);
             telemetry.addData("Slides encoder position ", slides.leftMotor.getCurrentPositionRAW());
+            slides.update();
             telemetry.update();
         }
     }

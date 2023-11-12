@@ -17,14 +17,15 @@ public class DepoSlides {
         AUTO_EXTENSION,
         INCREMENT_UP,
         INCREMENT_DOWN,
+        INTERMEDIATE_INCRIMENT,
         STOPPED
     }
     public DepositState depositFSM = DepositState.STOPPED;
 
     public double maxTargetInches;
-    private static final double INCHES_TO_TICKS = 100; //number
+    private static final double INCHES_TO_TICKS = -91.228; //number
     private static final double LOWER_BOUND = 0; //number in ticks
-    private static final double UPPER_BOUND = 2600; //number in ticks
+    private static final double UPPER_BOUND = -3200; //number in ticks
     private static final double INIT_INCHES = 0;
     private double targetLinSlidePosition = 0;
     public double targetDepositInches = 0;
@@ -36,7 +37,7 @@ public class DepoSlides {
     private DcMotorBetter rightMotor;
     private PID linSlideController;
 
-    public static double Kp = 2, Ki = 0, Kd = 0;
+    public static double Kp = 10, Ki = 0.01, Kd = 0;
     public boolean pidRunning = true;
     public boolean passive = false;
     public boolean manualMode = false;
@@ -101,7 +102,8 @@ public class DepoSlides {
         this.depositFSM = state;
         switch (depositFSM) {
             case UP:
-                this.setInches(30);
+                this.targetDepositInches = 27;
+                this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
             case MIDDLE:
@@ -117,12 +119,16 @@ public class DepoSlides {
             case AUTO_EXTENSION:
                 break;
             case INCREMENT_UP:
-                this.setInches(targetDepositInches+5);
+                this.targetDepositInches+=5;
+                this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
             case INCREMENT_DOWN:
-                this.setInches(targetDepositInches-5);
+                this.targetDepositInches-=5;
+                this.setInches(targetDepositInches);
                 this.pidRunning = true;
+                break;
+            case INTERMEDIATE_INCRIMENT:
                 break;
             case STOPPED:
                 this.pidRunning = false;
