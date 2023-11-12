@@ -48,7 +48,7 @@ public class Scoring extends LinearOpMode {
                 a++;
             }
             if(a==0){
-                arm.setState(DepoArm.DepoArmState.INITIALIZE);
+                arm.setState(DepoArm.DepoArmState.TRANSFER);
             }else if(a==1){
                 turret.setState(LM1Turret.TurretState.INITIALIZE);
                 arm.setState(DepoArm.DepoArmState.INTERMEDIATE);

@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 public class DepoArm {
     public enum DepoArmState {
         INITIALIZE,
+        TRANSFER,
         SCORE,
         INTERMEDIATE,
         STOPPED
@@ -42,6 +43,9 @@ public class DepoArm {
         this.depoArmFSM = state;
         switch (depoArmFSM){
             case INITIALIZE:
+                target = 0;
+                break;
+            case TRANSFER:
                 target = 0;
                 break;
             case SCORE:
