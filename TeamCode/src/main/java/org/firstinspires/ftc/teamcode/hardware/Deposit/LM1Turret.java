@@ -15,10 +15,8 @@ public class LM1Turret {
 
     public TurretState turretFSM = TurretState.STOPPED;
 
-    private static final double LEFT_LOWER_BOUND = 0;
-    private static final double LEFT_UPPER_BOUND = 1;
-    private static final double RIGHT_LOWER_BOUND = 0;
-    private static final double RIGHT_UPPER_BOUND = 1;
+    private static final double LEFT_LOWER_BOUND = 1;
+    private static final double LEFT_UPPER_BOUND = .14;
 
     private ServoMotorBetter turret;
 
@@ -28,8 +26,6 @@ public class LM1Turret {
         this.turret = leftArm;
         this.turret.setLowerBound(LM1Turret.LEFT_LOWER_BOUND);
         this.turret.setUpperBound(LM1Turret.LEFT_UPPER_BOUND);
-
-
     }
     public LM1Turret.TurretState getState(){
         return turretFSM;
@@ -42,7 +38,7 @@ public class LM1Turret {
                 target = 0;
                 break;
             case SCORE:
-                target = 1;
+                target = 0.65;
             case CALCAULATE:
                 break;
             case STOPPED:

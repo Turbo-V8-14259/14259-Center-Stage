@@ -9,14 +9,14 @@ public class DepoArm {
     public enum DepoArmState {
         INITIALIZE,
         SCORE,
-        CALCAULATE,
+        INTERMEDIATE,
         STOPPED
     }
 
     public DepoArmState depoArmFSM = DepoArmState.STOPPED;
 
     private static final double LEFT_LOWER_BOUND = 0;
-    private static final double LEFT_UPPER_BOUND = 1;
+    private static final double LEFT_UPPER_BOUND = 0.5;
     private static final double RIGHT_LOWER_BOUND = 0;
     private static final double RIGHT_UPPER_BOUND = 1;
 
@@ -45,8 +45,10 @@ public class DepoArm {
                 target = 0;
                 break;
             case SCORE:
-                target = 1;
-            case CALCAULATE:
+                target = .2;
+                break;
+            case INTERMEDIATE:
+                target = 0.6;
                 break;
             case STOPPED:
                 break;
