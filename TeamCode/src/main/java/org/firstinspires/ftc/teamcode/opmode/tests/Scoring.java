@@ -189,10 +189,6 @@ public class Scoring extends LinearOpMode {
                     timeToggle=true;
                 }
             }
-            if(timer.milliseconds()+counter > 200 && a==4){
-                counter = timer.milliseconds();
-                a=0;
-            }
 
             if(gamepadOne.dpad_up){
                 intake.setState(Intake.IntakeState.INCRIMENT_UP);
