@@ -35,7 +35,7 @@ public class LM1Turret {
         this.turretFSM = state;
         switch (turretFSM){
             case INITIALIZE:
-                target = 0;
+                target = 0.01;
                 break;
             case SCORE:
                 target = 0.65;

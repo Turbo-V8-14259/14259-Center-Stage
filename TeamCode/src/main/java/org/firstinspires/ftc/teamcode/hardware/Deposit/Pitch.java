@@ -1,16 +1,28 @@
 package org.firstinspires.ftc.teamcode.hardware.Deposit;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
+
+@Config
 public class Pitch {
+    public enum PitchState {
+        INITIALIZE,
+        SCORE_MIDDLE,
+        CLIMB,
+        STOPPED
+    }
+
+    public PitchState pitchFSM = PitchState.STOPPED;
+
     public double target = 0;
     private static final double DEGREES_TO_TICKS = 0;
     private static final double LOWER_BOUND = 0;
-    private static final double UPPER_BOUND = 4000;
+    private static final double UPPER_BOUND = 3000;
     private static final double INIT_DEGREES = 0;
 
     private double targetPitchPosition = 0;
@@ -19,9 +31,9 @@ public class Pitch {
 
     public PID pitchController;
 
-    private double Kp = 0, Ki = 0, Kd = 0;
+    public static double Kp = 10, Ki = 0.03, Kd = 0;
 
-    public boolean manualMode = true;
+    public boolean manualMode = false;
 
     private double manualPower = 0;
 
@@ -32,7 +44,7 @@ public class Pitch {
         this.pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.pitchController = new PID(new PID.Coefficients(Kp, Ki, Kd),
                 () -> this.pitchMotor.getCurrentPosition() - this.targetPitchPosition,
-                factor -> this.pitchMotor.setPower(M.clamp(-factor, 0.5, -0.5)));
+                factor -> this.pitchMotor.setPower(M.clamp(-factor, 1, -1)));
     }
 
     public void setDegrees(double deg) {
@@ -73,6 +85,27 @@ public class Pitch {
 
     public double setTargetPitchPosition() {
         return target;
+    }
+
+    public Pitch.PitchState getState(){
+        return pitchFSM;
+    }
+
+    public void setState(PitchState state){
+        this.pitchFSM = state;
+        switch (pitchFSM){
+            case INITIALIZE:
+                target = 0;
+                break;
+            case SCORE_MIDDLE:
+                target = 0.2;
+                break;
+            case CLIMB:
+                target = 1;
+                break;
+            case STOPPED:
+                break;
+        }
     }
 
     public void update() {

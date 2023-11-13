@@ -20,6 +20,7 @@ public class pitchTuner extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()){
+            pitch.manualMode = true;
             pitch.setPowerManual(gamepad1.left_trigger - gamepad1.right_trigger);
             pitch.update();
             telemetry.addData("Pitch encoder position ", pitch.pitchMotor.getCurrentPositionRAW());
