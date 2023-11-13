@@ -118,7 +118,7 @@ public class Scoring extends LinearOpMode {
     LM1Turret turret;
     DepoArm arm;
     stickyGamepad gamepadOne;
-    ElapsedTime timer;
+    ElapsedTime timer = new ElapsedTime();
 
     double a = 0;
 
@@ -126,6 +126,7 @@ public class Scoring extends LinearOpMode {
 
     boolean timeToggle = true;
 
+    double counter = timer.milliseconds();
     @Override
     public void runOpMode() throws InterruptedException {
         drive = new SampleMecanumDrive(hardwareMap);
@@ -135,7 +136,7 @@ public class Scoring extends LinearOpMode {
         turret = new LM1Turret(new ServoMotorBetter(hardwareMap.get(Servo.class, "turret")));
         arm = new DepoArm(new ServoMotorBetter(hardwareMap.get(Servo.class, "arm")), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
         gamepadOne = new stickyGamepad(gamepad1);
-        timer = new ElapsedTime();
+
         waitForStart();
         while(opModeIsActive()){
             drive.setWeightedDrivePower(
@@ -187,6 +188,10 @@ public class Scoring extends LinearOpMode {
                     a=0;
                     timeToggle=true;
                 }
+            }
+            if(timer.milliseconds()+counter > 200 && a==4){
+                counter = timer.milliseconds();
+                a=0;
             }
 
             if(gamepadOne.dpad_up){
