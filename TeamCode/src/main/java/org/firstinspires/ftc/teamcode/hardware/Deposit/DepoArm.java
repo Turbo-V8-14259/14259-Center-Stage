@@ -10,6 +10,8 @@ public class DepoArm {
         INITIALIZE,
         TRANSFER,
         SCORE,
+        PITCH_AT_MID_INTERMEDIATE,
+        PITCH_AT_MID_SCORING,
         INTERMEDIATE,
         STOPPED
     }

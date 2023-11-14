@@ -9,6 +9,7 @@ public class LM1Turret {
     public enum TurretState {
         INITIALIZE,
         SCORE,
+        PITCH_MID,
         CALCAULATE,
         STOPPED
     }
