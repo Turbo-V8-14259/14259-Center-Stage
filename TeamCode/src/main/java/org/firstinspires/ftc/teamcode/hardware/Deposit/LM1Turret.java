@@ -23,9 +23,9 @@ public class LM1Turret {
     private static final double LEFT_LOWER_BOUND = 1;
     private static final double LEFT_UPPER_BOUND = .14;
 
-    private static final double LEFT_90_DEGREES = 0.7;
+    private static final double LEFT_90_DEGREES = 0.86;
 
-    private static final double RIGHT_90_DEGREES = 0.3;
+    private static final double RIGHT_90_DEGREES = 0.42;
     // temp number, will tune today
 
     private ServoMotorBetter turret;
@@ -42,14 +42,12 @@ public class LM1Turret {
     }
 
     public double calculateRotation(double robotA){
-        return robotA/180 * (LEFT_90_DEGREES - RIGHT_90_DEGREES) + RIGHT_90_DEGREES;
-        //insert bigbrain algorithm later
+        double calculatedAngle = (2*robotA/3.1415) * (LEFT_90_DEGREES - RIGHT_90_DEGREES) + 0.65;
+        return calculatedAngle > LEFT_90_DEGREES || calculatedAngle < RIGHT_90_DEGREES ? 0.65 : calculatedAngle;
+
     }
     public void autoLock(){
-        if(robotAngle > 180 || robotAngle < 0) target = 0.65;
-        else{
-            this.target = calculateRotation(robotAngle);
-        }
+
 
     }
     public void setState(TurretState state){
@@ -63,7 +61,7 @@ public class LM1Turret {
             case STOPPED:
                 break;
             case AUTOLOCK:
-                autoLock();
+                target = 0.3;
         }
     }
 
