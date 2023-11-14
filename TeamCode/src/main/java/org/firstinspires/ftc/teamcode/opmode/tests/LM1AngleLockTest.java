@@ -106,6 +106,7 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.LM1Turret;
 import org.firstinspires.ftc.teamcode.hardware.Intake.Intake;
 import org.firstinspires.ftc.teamcode.hardware.Sensors.Imu;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
+import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
 import java.sql.Time;
@@ -236,10 +237,10 @@ public class LM1AngleLockTest extends LinearOpMode {
 
     public void updateVariables(){
         adjustedAngle = drive.getPoseEstimate().getHeading() - boardAngle;
-        if(adjustedAngle > 3.1415){
-            adjustedAngle -= 2*3.1415;
-        }else if(adjustedAngle < -3.1415){
-            adjustedAngle += 2*3.1415;
+        if(adjustedAngle > M.PI){
+            adjustedAngle -= 2*M.PI;
+        }else if(adjustedAngle < -M.PI){
+            adjustedAngle += 2* M.PI;
         }
     }
 }
