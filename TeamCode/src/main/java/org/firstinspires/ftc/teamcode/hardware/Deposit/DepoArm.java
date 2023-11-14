@@ -41,6 +41,8 @@ public class DepoArm {
         return depoArmFSM;
     }
 
+
+
     public void setState(DepoArmState state){
         this.depoArmFSM = state;
         switch (depoArmFSM){

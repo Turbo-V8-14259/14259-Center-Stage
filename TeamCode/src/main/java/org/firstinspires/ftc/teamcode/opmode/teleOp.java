@@ -59,6 +59,7 @@ public class teleOp extends LinearOpMode {
                 slides.setState(DepoSlides.DepositState.INCREMENT_DOWN);
             }
 
+
             updateAll();
         }
     }
