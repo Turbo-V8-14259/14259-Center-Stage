@@ -10,7 +10,6 @@ public class LM1Turret {
         INITIALIZE,
         SCORE,
         PITCH_MID,
-        CALCAULATE,
         STOPPED,
 
         AUTOLOCK
@@ -61,13 +60,10 @@ public class LM1Turret {
                 break;
             case SCORE:
                 target = 0.65;
-            case CALCAULATE:
-                break;
             case STOPPED:
                 break;
             case AUTOLOCK:
                 autoLock();
-
         }
     }
 
