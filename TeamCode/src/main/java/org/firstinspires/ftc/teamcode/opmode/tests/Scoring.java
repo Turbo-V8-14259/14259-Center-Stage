@@ -243,7 +243,7 @@ public class Scoring extends LinearOpMode {
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
                     }
-                    if(timer.milliseconds()>TimeStamp + 500){
+                    if(timer.milliseconds()>TimeStamp + 100){
                         a=5;
                         timeToggle=true;
                     }
