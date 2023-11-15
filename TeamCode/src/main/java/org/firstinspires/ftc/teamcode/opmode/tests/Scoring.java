@@ -278,7 +278,8 @@ public class Scoring extends LinearOpMode {
             telemetry.addData("turret", turret.getState());
             telemetry.addData("arm", arm.getState());
             telemetry.addData("robot angle", drive.getPoseEstimate().getHeading());
-            telemetry.addData("height", height);
+            telemetry.addData("height", height); //2 is high, 1 is norm
+            telemetry.addData("a", a); //yuh
 //            drive.setPoseEstimate(new Pose2d(0,0,0)); sets the robot to 0,0,0 (last one is the heading)
 
             turret.update();
