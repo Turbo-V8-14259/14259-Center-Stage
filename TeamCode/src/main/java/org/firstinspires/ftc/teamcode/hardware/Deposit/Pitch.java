@@ -31,7 +31,7 @@ public class Pitch {
 
     public PID pitchController;
 
-    public static double Kp = 10, Ki = 0.03, Kd = 0;
+    public static double Kp = 11, Ki = 0.03, Kd = 0;
 
     public boolean manualMode = false;
 

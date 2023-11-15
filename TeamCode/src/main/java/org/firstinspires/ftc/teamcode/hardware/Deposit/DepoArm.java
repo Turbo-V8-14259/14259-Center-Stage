@@ -58,6 +58,12 @@ public class DepoArm {
             case INTERMEDIATE:
                 target = 0.6;
                 break;
+            case PITCH_AT_MID_INTERMEDIATE:
+                target = 0.8;
+                break;
+            case PITCH_AT_MID_SCORING:
+                target = .5;
+                break;
             case STOPPED:
                 break;
         }
