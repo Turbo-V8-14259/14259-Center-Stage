@@ -63,8 +63,8 @@
 
 package com.example.drivesim;
 
-import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
@@ -83,24 +83,35 @@ public class DriveSim {
     Pose2d sixthPosition = new Pose2d(5*mult[posNum][0]+x, -11.6*mult[posNum][1]+y, Math.toRadians(-180*mult[posNum][2]));
     Pose2d seventhPosition = new Pose2d(14*mult[posNum][0]+x, -16*mult[posNum][1]+y, Math.toRadians(-200*mult[posNum][2]));
 
-    public static void main(String[] args) {
-        MeepMeep meepMeep = new MeepMeep(800);
 
+
+
+    public static void main(String[] args) {
+        MeepMeep meepMeep = new MeepMeep(500);
+
+        int propID = 2;
+        Pose2d startPose = new Pose2d(-35, -65, Math.toRadians(-90));
+        Pose2d leftProp = new Pose2d(-35, -29, Math.toRadians(-180));
+        Pose2d rightProp = new Pose2d(-35, -29, Math.toRadians(0));
+        Pose2d centerProp = new Pose2d(-35, -16, Math.toRadians(-90));
+        Pose2d propDir[] = {leftProp, centerProp, rightProp};
+        Pose2d afterPropID = new Pose2d(-35, -11.6, Math.toRadians(-90));
+        Vector2d beforeYellow = new Vector2d(25, -11.6);
+        double depoAngle[] = {Math.toRadians(-165),  Math.toRadians(-180),Math.toRadians(-195) };
+        Pose2d yellowPixel = new Pose2d(35, -34, depoAngle[propID]);
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
-                .build();
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(startPose)
+                                .back(65-11.6)
+                                .splineToSplineHeading(propDir[propID], CalculateTangents.calculateTangent(new Vector2d(-35, -11.6), propDir[propID]))
+                                .splineToSplineHeading(afterPropID, CalculateTangents.calculateTangent(propDir[propID], afterPropID))
+                                .lineTo(beforeYellow)
+                                .splineToSplineHeading(yellowPixel, CalculateTangents.calculateTangent(beforeYellow, yellowPixel))
+                                .build());
 
-        myBot.runAction(myBot.getDrive().actionBuilder(new Pose2d(0, 0, 0))
-                .lineToX(30)
-                .turn(Math.toRadians(90))
-                .lineToY(30)
-                .turn(Math.toRadians(90))
-                .lineToX(0)
-                .turn(Math.toRadians(90))
-                .lineToY(0)
-                .turn(Math.toRadians(90))
-                .build());
+
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)
