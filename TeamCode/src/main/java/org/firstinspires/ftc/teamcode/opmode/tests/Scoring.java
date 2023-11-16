@@ -121,20 +121,26 @@ public class Scoring extends LinearOpMode {
     LM1Turret turret;
     DepoArm arm;
     stickyGamepad gamepadOne;
+    stickyGamepad gamepadTwo;
     ElapsedTime timer = new ElapsedTime();
 
     Pitch pitch;
 
     DepoSlides slides;
 
-    double a = 0;
+    int scoringState = 0;
 
     double TimeStamp = 0;
 
     boolean timeToggle = true;
 
     double height = 1;
+    // why the fuck is this a double ???
 
+    public int level = 0;  //6 levels
+    public int extension = 0; //6 levels
+    public boolean autoLockMode = false;
+    public boolean autoIntake = false;
     @Override
     public void runOpMode() throws InterruptedException {
         pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "Pitch")));
@@ -151,6 +157,7 @@ public class Scoring extends LinearOpMode {
         arm = new DepoArm(new ServoMotorBetter(hardwareMap.get(Servo.class, "arm")), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
 
         gamepadOne = new stickyGamepad(gamepad1);
+        gamepadTwo = new stickyGamepad(gamepad2);
 
         slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "rightSlides")));
 
@@ -164,122 +171,48 @@ public class Scoring extends LinearOpMode {
                     new Pose2d(
                             -gamepad1.left_stick_y,
                             -gamepad1.left_stick_x,
-                            gamepad1.right_stick_x * 0.5
+                            gamepad1.right_stick_x * 0.7
                     )
             );
-
-            if(gamepadOne.right_bumper){
-                height++;
-            }
-            if(height > 2){
-                height = 1; //makes this a toggle between 1 and 2
-            }
-            if(gamepadOne.a){
-                a++;
-            }
-            if(height == 1){
-                //low mode
-                if(a==0){
-                    arm.setState(DepoArm.DepoArmState.TRANSFER);
-                }else if(a==1){
-                    turret.setState(LM1Turret.TurretState.INITIALIZE);
-                    arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
-                    if(timeToggle){//timeToggle starts at true by default
-                        TimeStamp = timer.milliseconds();
-                        timeToggle = false;
-                    }
-                    if(timer.milliseconds()> TimeStamp + 500){
-                        a=2;
-                        timeToggle = true;
-                    }
-                }else if(a==2){
-                    turret.setState(LM1Turret.TurretState.SCORE);
-                }else if(a==3){
-                    arm.setState(DepoArm.DepoArmState.SCORE);
-                }else if(a==4){
-                    arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
-                    if(timeToggle){
-                        TimeStamp = timer.milliseconds();
-                        timeToggle = false;
-                    }
-                    if(timer.milliseconds()>TimeStamp + 500){
-                        a=5;
-                        timeToggle=true;
-                    }
-                }else if(a == 5){
-                    turret.setState(LM1Turret.TurretState.INITIALIZE);
-                    if(timeToggle){
-                        TimeStamp = timer.milliseconds();
-                        timeToggle = false;
-                    }
-                    if(timer.milliseconds()>TimeStamp + 500){
-                        a=0;
-                        timeToggle=true;
-                    }
-                }
-            } else if (height == 2) {
-                if(a==0){
-                    arm.setState(DepoArm.DepoArmState.TRANSFER);
-                    turret.setState(LM1Turret.TurretState.INITIALIZE);
-                }else if(a==1){
-                    pitch.setState(Pitch.PitchState.SCORE_MIDDLE);
-                    arm.setState(DepoArm.DepoArmState.PITCH_AT_MID_INTERMEDIATE);
-                    slides.setState(DepoSlides.DepositState.MIDDLE);
-                    if(timeToggle){
-                        TimeStamp = timer.milliseconds();
-                        timeToggle = false;
-                    }
-                    if(timer.milliseconds()> TimeStamp + 500){
-                        a=2;
-                        timeToggle = true;
-                    }
-                }else if(a==2){
-                    turret.setState(LM1Turret.TurretState.SCORE);
-                }else if(a==3){
-                    arm.setState(DepoArm.DepoArmState.PITCH_AT_MID_SCORING);
-                }else if(a==4){
-                    arm.setState(DepoArm.DepoArmState.PITCH_AT_MID_INTERMEDIATE);
-                    if(timeToggle){
-                        TimeStamp = timer.milliseconds();
-                        timeToggle = false;
-                    }
-                    if(timer.milliseconds()>TimeStamp + 100){
-                        a=5;
-                        timeToggle=true;
-                    }
-                }else if(a==5){
-                    turret.setState(LM1Turret.TurretState.INITIALIZE);
-                    if(timeToggle){
-                        TimeStamp = timer.milliseconds();
-                        timeToggle = false;
-                    }
-                    if(timer.milliseconds()>TimeStamp + 500){
-                        a=6;
-                        timeToggle=true;
-                    }
-                }else if(a==6){
-                    slides.setState(DepoSlides.DepositState.DOWN);
-                    pitch.setState(Pitch.PitchState.INITIALIZE);
-                    arm.setState(DepoArm.DepoArmState.TRANSFER);
-                }else if(a==7){
-                    a=0;
-                }
-            }
-
             if(gamepadOne.dpad_up){
-                intake.setState(Intake.IntakeState.INCRIMENT_UP);
+                level++;
             }else if(gamepadOne.dpad_down) {
-                intake.setState(Intake.IntakeState.INCRIMENT_DOWN);
+                level--;
             }
+            if(level > 5) level = 5;
+            else if(level < 0) level = 0;
+            if(gamepadOne.a){
+                scoringState++;
+            }
+            if(gamepadOne.dpad_right){
+                extension++;
+            }else if(gamepadOne.dpad_left) {
+                extension--;
+            }
+            if(extension > 5) level = 5;
+            else if(extension < 0) level = 0;
+            if(gamepadOne.right_bumper){
+                scoringState++;
+            }
+            if(gamepadOne.left_bumper){
+                autoIntake = !autoIntake;
+            }
+            updateVariable();
+            scoreStateMachine();
 
-
-            intake.setPower((gamepad1.left_trigger - gamepad1.right_trigger)*1);
+            if(autoIntake)intake.setPower(1);
+            else intake.setPower((gamepad1.left_trigger - gamepad1.right_trigger)*1);
 
             telemetry.addData("turret", turret.getState());
             telemetry.addData("arm", arm.getState());
             telemetry.addData("robot angle", drive.getPoseEstimate().getHeading());
             telemetry.addData("height", height); //2 is high, 1 is norm
-            telemetry.addData("a", a); //yuh
+            telemetry.addData("scoring State", scoringState); //yuh
+            telemetry.addData("level", level);
+            telemetry.addData("extension", extension);
+            telemetry.addData("pitch", pitch.getState());
+            telemetry.addData("slides", slides.getState());
+            telemetry.addData("slidesTarget", slides.getTargetInches());
 //            drive.setPoseEstimate(new Pose2d(0,0,0)); sets the robot to 0,0,0 (last one is the heading)
 
             turret.update();
@@ -292,5 +225,73 @@ public class Scoring extends LinearOpMode {
             slides.update();
         }
 
+
+
+    }
+    public void updateGamepadOne(){
+
+    }
+    public void scoreStateMachine(){
+        switch (scoringState){
+            case 0: //Init
+                slides.setState(DepoSlides.DepositState.DOWN);
+                pitch.setState(Pitch.PitchState.INITIALIZE);
+                arm.setState(DepoArm.DepoArmState.TRANSFER);
+                break;
+            case 1: //arm / pitch / slides up
+                pitch.setState(Pitch.PitchState.SCOREATLEVEL);
+                arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+                slides.setState(DepoSlides.DepositState.CALCULATED_UP);
+                if(timeToggle){//timeToggle starts at true by default
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds()> TimeStamp + 500){
+                    scoringState=2;
+                    timeToggle = true;
+                }
+                break;
+            case 2: // turret move
+                if(autoLockMode) turret.setState(LM1Turret.TurretState.AUTOLOCK);
+                else turret.setState(LM1Turret.TurretState.SCORE);
+                break;
+            case 3:
+                arm.setState(DepoArm.DepoArmState.SCORE);
+                break;
+            case 4: // raising ARM
+                arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+                if(timeToggle){
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds()>TimeStamp + 100){
+                    scoringState=5;
+                    timeToggle=true;
+                }
+                break;
+            case 5: //resetting turret
+                turret.setState(LM1Turret.TurretState.INITIALIZE);
+                pitch.setState(Pitch.PitchState.INITIALIZE);
+                slides.setState(DepoSlides.DepositState.DOWN);
+                if(timeToggle){
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds()>TimeStamp + 500){
+                    scoringState=6;
+                    timeToggle=true;
+                }
+                break;
+            default:
+                scoringState = 0;
+                break;
+
+        }
+    }
+    public void updateVariable(){
+        pitch.level = this.level;
+        arm.level = this.level;
+        slides.level = this.level;
+        slides.extension = this.extension;
     }
 }

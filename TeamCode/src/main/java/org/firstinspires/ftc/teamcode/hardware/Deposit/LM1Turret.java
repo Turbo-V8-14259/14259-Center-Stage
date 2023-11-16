@@ -61,7 +61,8 @@ public class LM1Turret {
             case STOPPED:
                 break;
             case AUTOLOCK:
-                target = 0.3;
+                target = calculateRotation(robotAngle);
+                break;
         }
     }
 

@@ -12,13 +12,13 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 public class DepoSlides {
     public enum DepositState {
         UP,
-        MIDDLE,
         DOWN,
-        AUTO_EXTENSION,
+        STOPPED,
+        INTERMEDIATE_INCRIMENT,
         INCREMENT_UP,
         INCREMENT_DOWN,
-        INTERMEDIATE_INCRIMENT,
-        STOPPED
+
+        CALCULATED_UP
     }
     public DepositState depositFSM = DepositState.STOPPED;
 
@@ -32,12 +32,18 @@ public class DepoSlides {
     public double target;
     public int[] presetInches = {0, 15, 30, (int) this.maxTargetInches};
 
+    public int level = 0;
+    public int extension = 0;
+    public double[] levels = {0,0.1,0.2,0.3,0.4,0.5};
+    public double[] extensions = {0,0.2,0.4,0.6,0.8,1};
+
 
     public DcMotorBetter leftMotor;
     private DcMotorBetter rightMotor;
     private PID linSlideController;
 
-    public static double Kp = 10, Ki = 0.01, Kd = 0;
+    public static double Kp = 10, Ki = 0.01, Kd = 0; //NICE PID COEFFICIENT BRO
+
     public boolean pidRunning = true;
     public boolean passive = false;
     public boolean manualMode = false;
@@ -106,33 +112,21 @@ public class DepoSlides {
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
-            case MIDDLE:
-                this.targetDepositInches = 15;
-                this.setInches(targetDepositInches);
-                this.pidRunning = true;
-                break;
             case DOWN:
-                this.targetDepositInches = presetInches[0];
+                this.targetDepositInches = 0;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
-                break;
-            case AUTO_EXTENSION:
-                break;
-            case INCREMENT_UP:
-                this.targetDepositInches+=5;
-                this.setInches(targetDepositInches);
-                this.pidRunning = true;
-                break;
-            case INCREMENT_DOWN:
-                this.targetDepositInches-=5;
-                this.setInches(targetDepositInches);
-                this.pidRunning = true;
-                break;
-            case INTERMEDIATE_INCRIMENT:
                 break;
             case STOPPED:
                 this.pidRunning = false;
                 this.passive = true;
+                break;
+            case INTERMEDIATE_INCRIMENT:
+                break;
+            case CALCULATED_UP:
+                this.targetDepositInches = calculateExtension();
+                this.setInches(targetDepositInches);
+                this.pidRunning = true;
                 break;
         }//untested
     }
@@ -162,6 +156,10 @@ public class DepoSlides {
         }else{
             isAtTarget = false;
         }
+    }
+    public double calculateExtension(){ //returns inches
+        double toInches =  (maxTargetInches*(levels[level])) + (maxTargetInches*(extensions[extension]));
+        return Math.min(toInches, maxTargetInches);
     }
 }
 
