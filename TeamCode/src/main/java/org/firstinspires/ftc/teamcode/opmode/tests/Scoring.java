@@ -174,46 +174,15 @@ public class Scoring extends LinearOpMode {
                             gamepad1.right_stick_x * 0.7
                     )
             );
-            if(gamepadOne.dpad_up){
-                level++;
-            }else if(gamepadOne.dpad_down) {
-                level--;
-            }
-            if(level > 5) level = 5;
-            else if(level < 0) level = 0;
-            if(gamepadOne.a){
-                scoringState++;
-            }
-            if(gamepadOne.dpad_right){
-                extension++;
-            }else if(gamepadOne.dpad_left) {
-                extension--;
-            }
-            if(extension > 5) level = 5;
-            else if(extension < 0) level = 0;
-            if(gamepadOne.right_bumper){
-                scoringState++;
-            }
-            if(gamepadOne.left_bumper){
-                autoIntake = !autoIntake;
-            }
-            updateVariable();
-            scoreStateMachine();
+            
+            updateGamepadOne();
+            updateVariables();
+            scoringStateMachine();
 
             if(autoIntake)intake.setPower(1);
             else intake.setPower((gamepad1.left_trigger - gamepad1.right_trigger)*1);
 
-            telemetry.addData("turret", turret.getState());
-            telemetry.addData("arm", arm.getState());
-            telemetry.addData("robot angle", drive.getPoseEstimate().getHeading());
-            telemetry.addData("height", height); //2 is high, 1 is norm
-            telemetry.addData("scoring State", scoringState); //yuh
-            telemetry.addData("level", level);
-            telemetry.addData("extension", extension);
-            telemetry.addData("pitch", pitch.getState());
-            telemetry.addData("slides", slides.getState());
-            telemetry.addData("slidesTarget", slides.getTargetInches());
-//            drive.setPoseEstimate(new Pose2d(0,0,0)); sets the robot to 0,0,0 (last one is the heading)
+            telemetryData();
 
             turret.update();
             arm.update();
@@ -224,14 +193,47 @@ public class Scoring extends LinearOpMode {
             pitch.update();
             slides.update();
         }
-
-
-
     }
+
+    public void telemetryData(){
+        telemetry.addData("turret", turret.getState());
+        telemetry.addData("arm", arm.getState());
+        telemetry.addData("robot angle", drive.getPoseEstimate().getHeading());
+        telemetry.addData("height", height); //2 is high, 1 is norm
+        telemetry.addData("scoring State", scoringState); //yuh
+        telemetry.addData("level", level);
+        telemetry.addData("extension", extension);
+        telemetry.addData("pitch", pitch.getState());
+        telemetry.addData("slides", slides.getState());
+        telemetry.addData("slidesTarget", slides.getTargetInches());
+    }
+
     public void updateGamepadOne(){
-
+        if(gamepadOne.dpad_up){
+            level++;
+        }else if(gamepadOne.dpad_down) {
+            level--;
+        }
+        if(level > 5) level = 5;
+        else if(level < 0) level = 0;
+        if(gamepadOne.a){
+            scoringState++;
+        }
+        if(gamepadOne.dpad_right){
+            extension++;
+        }else if(gamepadOne.dpad_left) {
+            extension--;
+        }
+        if(extension > 5) level = 5;
+        else if(extension < 0) level = 0;
+        if(gamepadOne.right_bumper){
+            scoringState++;
+        }
+        if(gamepadOne.left_bumper){
+            autoIntake = !autoIntake;
+        }
     }
-    public void scoreStateMachine(){
+    public void scoringStateMachine(){
         switch (scoringState){
             case 0: //Init
                 slides.setState(DepoSlides.DepositState.DOWN);
@@ -288,7 +290,7 @@ public class Scoring extends LinearOpMode {
 
         }
     }
-    public void updateVariable(){
+    public void updateVariables(){
         pitch.level = this.level;
         arm.level = this.level;
         slides.level = this.level;
