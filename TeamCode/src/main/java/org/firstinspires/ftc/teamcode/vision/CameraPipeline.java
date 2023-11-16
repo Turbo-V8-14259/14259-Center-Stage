@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.vision;
 
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -12,18 +11,19 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class CameraPipeline extends OpenCvPipeline
 {
+    public static String color = "BLUE";
     Telemetry telemetry;
 
     static final Rect LEFT_ROI = new Rect(
-            new Point(10, 0),
-            new Point(100, 200));
-    static final Rect MID_ROI = new Rect(
-            new Point(110, 0),
-            new Point(200, 200));
+            new Point(0, 100),
+            new Point(150, 225));
+    //    static final Rect MID_ROI = new Rect(
+//            new Point(110, 150),
+//            new Point(200, 225));
     static final Rect RIGHT_ROI = new Rect(
-            new Point(210, 0),
-            new Point(300, 200));
-    static double PERCENT_COLOR_THRESHOLD = 0.3;
+            new Point(150, 100),
+            new Point(300, 225));
+    static double PERCENT_COLOR_THRESHOLD = 0.22;
     String ObjectDirection;
     Mat mat = new Mat();
 
@@ -31,127 +31,188 @@ public class CameraPipeline extends OpenCvPipeline
         telemetry = t;
         ObjectDirection = s;
     }
-
+     public String getObjectDirection(){
+        return ObjectDirection;
+     }
     public Mat processFrame(Mat input)
     {
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV); //Uses HSV Colors
 
-//        Scalar lowHSVRed = new Scalar(0,100,20); // lower bound HSV for red 0 100 20
-//        Scalar highHSVRed = new Scalar(10, 255, 255); // higher bound HSV for red 10 255 255
+        Scalar lowHSVRed = new Scalar(0,100,20); // lower bound HSV for red 0 100 20
+        Scalar highHSVRed = new Scalar(10, 255, 255); // higher bound HSV for red 10 255 255
 
-        Scalar lowHSVBlue = new Scalar(110, 100, 20); // lower bound HSV for blue 110 100 20
+        Scalar lowHSVBlue = new Scalar(110, 50, 20); // lower bound HSV for blue 110 100 20
         Scalar highHSVBlue = new Scalar(130, 255, 255); // higher bound HSV for blue 130 255 255
 
         Mat thresh = new Mat();
 
-
         Mat left = mat.submat(LEFT_ROI);
         Mat right = mat.submat(RIGHT_ROI);
-        Mat mid = mat.submat(MID_ROI);
+        //Mat mid = mat.submat(MID_ROI);
+        if(color == "RED"){
+            Core.inRange(mat, lowHSVRed, highHSVRed, thresh);
+        }
+        else if (color == "BLUE") {
+            Core.inRange(mat, lowHSVBlue, highHSVBlue, thresh);
+        }
 
 
 
-        //Core.inRange(mat, lowHSVRed, highHSVRed, thresh);
-        Core.inRange(mat, lowHSVBlue, highHSVBlue, thresh);
+        Mat leftT = thresh.submat(LEFT_ROI);
+        Mat rightT = thresh.submat(RIGHT_ROI);
 
         double leftValue = Core.sumElems(left).val[0] / LEFT_ROI.area() / 255;
         double rightValue = Core.sumElems(right).val[0] / RIGHT_ROI.area() / 255;
-        double midValue = Core.sumElems(mid).val[0] / RIGHT_ROI.area() / 255;
+
+        double leftValThr = Core.sumElems(leftT).val[0] / LEFT_ROI.area();
+        double rightValThr = Core.sumElems(rightT).val[0] / LEFT_ROI.area();
+
+
+
+        double leftvalueRaw = Core.sumElems(left).val[0];
+        double rightvalueRaw = Core.sumElems(right).val[0];
+
+        double leftPer = Math.round(leftValue * 100) /*modifier*/;
+        double rightPer = Math.round(rightValue * 100);
+        //double midValue = Core.sumElems(mid).val[0] / RIGHT_ROI.area() / 255;
 
         left.release();
         right.release();
-        mid.release();
+        //mid.release();
 
-        telemetry.addData("Left raw value", Core.sumElems(left).val[0]);
-        telemetry.addData("Right raw value",  Core.sumElems(right).val[0]);
-        telemetry.addData("Mid raw value", Core.sumElems(mid).val[0]);
+//        telemetry.addData("Left raw value", leftvalueRaw);
+//        telemetry.addData("Right raw value",  rightvalueRaw);
 
-        telemetry.addData("Left percentage", Math.round(leftValue * 100) + "%");
-        telemetry.addData("Right percentage", Math.round(rightValue * 100) + "%");
-        telemetry.addData("Mid percentage", Math.round(midValue * 100) + "%");
+        telemetry.addData("Left value Thr", leftValThr);
+        telemetry.addData("Right value Thr",  rightValThr);
+
+        telemetry.addData("Left value", leftValue);
+        telemetry.addData("Right value",  rightValue);
+
+//        telemetry.addData("Left mean", Core.sumElems(left).val[1]);
+//        telemetry.addData("Right mean",  Core.sumElems(right).val[1]);
+        //telemetry.addData("Mid raw value", Core.sumElems(mid).val[0]);
+
+//        telemetry.addData("Left percentage",  leftPer+ "%");
+//        telemetry.addData("Right percentage",  rightPer+ "%");
+        //telemetry.addData("Mid percentage", Math.round(midValue * 100) + "%");
 
 
 
-        boolean objLeft = leftValue > PERCENT_COLOR_THRESHOLD;
-        boolean objRight = rightValue > PERCENT_COLOR_THRESHOLD;
-        boolean objMid = midValue > PERCENT_COLOR_THRESHOLD;
+        boolean objLeft = leftValThr > 20;
+        boolean objRight = rightValThr > 20;
 
-        if(objLeft && objRight){
-            if(leftValue > rightValue){
-                objLeft = true;
-                objRight = false;
-            }
-            else{
-                objLeft = false;
-                objRight = true;
-            }
-        }
-        if(objMid && objRight){
-            if(midValue > rightValue){
-                objMid = true;
-                objRight = false;
-            }
-            else{
-                objMid = false;
-                objRight = true;
-            }
-        }
-        if(objLeft && objMid){
-            if(leftValue > midValue){
-                objLeft = true;
-                objMid = false;
-            }
-            else{
-                objLeft = false;
-                objMid = true;
-            }
-        }
+//        if(Red){
+//            if(leftPer - 20 >= 3){
+//                objLeft = true;
+//            }
+//            if(rightValue == 26){
+//                objRight = true;
+//            }
+//        }
+        //boolean objMid = midValue > PERCENT_COLOR_THRESHOLD;
+
+//        if(objLeft && objRight){
+//            if(leftValue > rightValue){
+//                objLeft = true;
+//                objRight = false;
+//            }
+//            else{
+//                objLeft = false;
+//                objRight = true;
+//            }
+//        }
+//        if(objMid && objRight){
+//            if(midValue > rightValue){
+//                objMid = true;
+//                objRight = false;
+//            }
+//            else{
+//                objMid = false;
+//                objRight = true;
+//            }
+//        }
+//        if(objLeft && objMid){
+//            if(leftValue > midValue){
+//                objLeft = true;
+//                objMid = false;
+//            }
+//            else{
+//                objLeft = false;
+//                objMid = true;
+//            }
+//        }
+
+
+
+//        if(objLeft && objRight){
+//            if(leftValue > rightValue){
+//                objLeft = true;
+//                objRight = false;
+//            }
+//            else{
+//                objRight = true;
+//                objLeft = false;
+//            }
+//        }
+
+
+
         if(objLeft){
-            ObjectDirection = "LEFT";
+            if (color == "BLUE") {
+                ObjectDirection = "MIDDLE";
+            }
+            if (color == "RED") {
+                ObjectDirection = "LEFT";
+            }
+
             Imgproc.rectangle(
                     input, //mat
                     LEFT_ROI,
-                    new Scalar(0, 255, 0), 4);
+                    new Scalar(255, 255, 255), 4);
         }
         else if(objRight){
-            ObjectDirection = "RIGHT";
+            if (color == "BLUE") {
+                ObjectDirection = "RIGHT";
+            }
+            if (color == "RED") {
+                ObjectDirection = "MIDDLE";
+            }
             Imgproc.rectangle(
                     input, //mat
                     RIGHT_ROI,
-                    new Scalar(0, 255, 0), 4);
+                    new Scalar(255, 255, 255), 4);
         }
-        else if(objMid){
-            ObjectDirection = "MIDDLE";
-            Imgproc.rectangle(
-                    input, //mat
-                    MID_ROI,
-                    new Scalar(0, 255, 0), 4);
-        }
+//        else if(objMid){
+//            Imgproc.rectangle(
+//                    thresh, //mat
+//                    MID_ROI,
+//                    new Scalar(255, 255, 255), 4);
+//        }
         else{
-            ObjectDirection = "NONE";
+            ObjectDirection = "RIGHT";
         }
 
-        Mat screen = new Mat();
 
-
+        Imgproc.rectangle(
+                thresh,
+                LEFT_ROI,
+                new Scalar(255, 255, 255), 4);
+        Imgproc.rectangle(
+                thresh,
+                RIGHT_ROI,
+                new Scalar(255, 255, 255), 4);
 //        Imgproc.rectangle(
-//                mat,
-//                LEFT_ROI,
-//                new Scalar(0, 255, 0), 4);
-//        Imgproc.rectangle(
-//                mat,
-//                RIGHT_ROI,
-//                new Scalar(0, 255, 0), 4);
-//        Imgproc.rectangle(
-//                mat,
+//                thresh,
 //                MID_ROI,
-//                new Scalar(0, 255, 0), 4);
+//                new Scalar(255, 255, 255), 4);
 
         telemetry.addData("Location: ", ObjectDirection);
+        telemetry.update();
 
 
 
-        return input;
+        return thresh; //input
 
         /**
          * NOTE: to see how to get data from your pipeline to your OpMode as well as how
