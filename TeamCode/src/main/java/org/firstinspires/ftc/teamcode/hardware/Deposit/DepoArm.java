@@ -10,13 +10,15 @@ public class DepoArm {
         INITIALIZE,
         TRANSFER,
         SCORE,
-        PITCH_AT_MID_INTERMEDIATE,
-        PITCH_AT_MID_SCORING,
+
+        ABSOLUTE_INTERMEDIATE,
+
         INTERMEDIATE,
         STOPPED
     }
 
     public DepoArmState depoArmFSM = DepoArmState.STOPPED;
+
 
     private static final double LEFT_LOWER_BOUND = 0;
     private static final double LEFT_UPPER_BOUND = 0.5;
@@ -27,6 +29,9 @@ public class DepoArm {
     private ServoMotorBetter rightArm;
 
     public double target = 0;
+
+    public int level = 0;
+    public double[] levelOffset = {0,0.1,0.15,0.2,0.25,0.3,0.35};
 
     public DepoArm(ServoMotorBetter leftArm, ServoMotorBetter rightArm) {
         this.leftArm = leftArm;
@@ -56,14 +61,10 @@ public class DepoArm {
                 target = .35;
                 break;
             case INTERMEDIATE:
+                target = 0.6 - levelOffset[level];
+                break;
+            case ABSOLUTE_INTERMEDIATE:
                 target = 0.6;
-                break;
-            case PITCH_AT_MID_INTERMEDIATE:
-                target = 0.8;
-                break;
-            case PITCH_AT_MID_SCORING:
-                target = .5;
-                break;
             case STOPPED:
                 break;
         }

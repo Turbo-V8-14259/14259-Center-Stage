@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-import org.firstinspires.ftc.teamcode.CalculateTangents;
+import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 
 
 
