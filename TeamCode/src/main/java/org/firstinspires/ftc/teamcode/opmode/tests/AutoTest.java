@@ -17,7 +17,6 @@ public class AutoTest extends LinearOpMode {
 
     enum State{
         IDLE,
-        VISION_DETECT,
         BEFOREPROPID,
         PROPID,
         YELLOWPIXEL,
@@ -70,17 +69,16 @@ public class AutoTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        currentState = State.VISION_DETECT;
+        while(opModeInInit()){
+            String objectDirection = cameraPipeline.getObjectDirection();
+            updatePropID(objectDirection);
+        }
 
+        currentState = State.BEFOREPROPID;
         drive.followTrajectoryAsync(beforePropID);
 
         while(opModeIsActive()&&!isStopRequested()){
             switch(currentState){
-                case VISION_DETECT:
-                    currentState = State.BEFOREPROPID;
-                    String objectDirection = cameraPipeline.getObjectDirection();
-                    updatePropID(objectDirection);
-                    break;
                 case BEFOREPROPID:
                     if (!drive.isBusy()) {
                         currentState = State.PROPID;
