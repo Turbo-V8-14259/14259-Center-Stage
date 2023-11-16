@@ -83,23 +83,23 @@ public class Scoring extends LinearOpMode {
                     )
             );
 
+            if(autoIntake)intake.setPower(-0.8);
+            else intake.setPower((gamepad1.left_trigger - gamepad1.right_trigger)*1);
+
             updateGamepadOne();
             updateVariables();
             scoringStateMachine();
 
-            if(autoIntake)intake.setPower(-0.8);
-            else intake.setPower((gamepad1.left_trigger - gamepad1.right_trigger)*1);
-
-            telemetryData();
-
             turret.update();
             arm.update();
             gamepadOne.update();
-            telemetry.update();
             drive.update();
             intake.update();
             pitch.update();
             slides.update();
+
+            telemetryData();
+            telemetry.update();
         }
     }
 
