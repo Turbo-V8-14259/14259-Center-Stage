@@ -15,7 +15,7 @@ public class LM1Turret {
         AUTOLOCK
     }
 
-    private double robotAngle = 0;
+    public double robotAngle = 0;
 
 
     public TurretState turretFSM = TurretState.STOPPED;

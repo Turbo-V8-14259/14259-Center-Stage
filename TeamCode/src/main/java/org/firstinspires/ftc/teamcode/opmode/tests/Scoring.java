@@ -174,7 +174,7 @@ public class Scoring extends LinearOpMode {
                             gamepad1.right_stick_x * 0.7
                     )
             );
-            
+
             updateGamepadOne();
             updateVariables();
             scoringStateMachine();
@@ -254,7 +254,10 @@ public class Scoring extends LinearOpMode {
                 }
                 break;
             case 2: // turret move
-                if(autoLockMode) turret.setState(LM1Turret.TurretState.AUTOLOCK);
+                if(autoLockMode) {
+                    //turret.robotAngle = 
+                    turret.setState(LM1Turret.TurretState.AUTOLOCK);
+                }
                 else turret.setState(LM1Turret.TurretState.SCORE);
                 break;
             case 3:
@@ -287,7 +290,6 @@ public class Scoring extends LinearOpMode {
             default:
                 scoringState = 0;
                 break;
-
         }
     }
     public void updateVariables(){
