@@ -14,8 +14,13 @@ public class Pitch {
         INITIALIZE,
         SCORE_MIDDLE,
         CLIMB,
-        STOPPED
+        STOPPED,
+        SCOREATLEVEL
     }
+
+    public int level = 0;
+
+    public double[] levels = {0,0.1,0.2,0.3,0.4,0.5};
 
     public PitchState pitchFSM = PitchState.STOPPED;
 
@@ -104,6 +109,9 @@ public class Pitch {
                 target = 1;
                 break;
             case STOPPED:
+                break;
+            case SCOREATLEVEL:
+                target = levels[level];
                 break;
         }
     }

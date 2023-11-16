@@ -53,11 +53,11 @@ public class teleOp extends LinearOpMode {
                             -gamepad1.right_stick_x
                     )
             );
-            if(gamepadOne.dpad_up){
-                slides.setState(DepoSlides.DepositState.INCREMENT_UP);
-            }else if(gamepadOne.dpad_down){
-                slides.setState(DepoSlides.DepositState.INCREMENT_DOWN);
-            }
+//            if(gamepadOne.dpad_up){
+//                slides.setState(DepoSlides.DepositState.INCREMENT_UP);
+//            }else if(gamepadOne.dpad_down){
+//                slides.setState(DepoSlides.DepositState.INCREMENT_DOWN);
+//            }
 
 
             updateAll();
