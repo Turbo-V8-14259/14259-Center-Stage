@@ -20,7 +20,7 @@ public class Pitch {
 
     public int level = 0;
 
-    public double[] levels = {0,0.1,0.2,0.3,0.4,0.5};
+    public double[] levels = {0,0.25,0.3,0.45,0.6,0.7};
 
     public PitchState pitchFSM = PitchState.STOPPED;
 

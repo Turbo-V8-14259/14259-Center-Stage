@@ -22,7 +22,7 @@ public class DepoSlides {
     }
     public DepositState depositFSM = DepositState.STOPPED;
 
-    public double maxTargetInches;
+    public double maxTargetInches = 35;
     private static final double INCHES_TO_TICKS = -91.228; //number
     private static final double LOWER_BOUND = 0; //number in ticks
     private static final double UPPER_BOUND = -3200; //number in ticks

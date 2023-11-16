@@ -107,6 +107,7 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.LM1Turret;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.Pitch;
 import org.firstinspires.ftc.teamcode.hardware.Intake.Intake;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
+import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
@@ -133,6 +134,8 @@ public class Scoring extends LinearOpMode {
     double TimeStamp = 0;
 
     boolean timeToggle = true;
+    double adjustedAngle = 0;
+    double boardAngle = 0;
 
     double height = 1;
     // why the fuck is this a double ???
@@ -179,7 +182,7 @@ public class Scoring extends LinearOpMode {
             updateVariables();
             scoringStateMachine();
 
-            if(autoIntake)intake.setPower(1);
+            if(autoIntake)intake.setPower(-0.8);
             else intake.setPower((gamepad1.left_trigger - gamepad1.right_trigger)*1);
 
             telemetryData();
@@ -205,27 +208,28 @@ public class Scoring extends LinearOpMode {
         telemetry.addData("extension", extension);
         telemetry.addData("pitch", pitch.getState());
         telemetry.addData("slides", slides.getState());
-        telemetry.addData("slidesTarget", slides.getTargetInches());
+        telemetry.addData("slidesTarget", slides.getCurrentPosition());
+        telemetry.addData("adjusted angle", adjustedAngle);
+        telemetry.addData("auto lock Mode", autoLockMode);
     }
 
     public void updateGamepadOne(){
+        if(gamepadOne.y){
+            autoLockMode = !autoLockMode;
+        }
+        if(gamepadOne.right_stick_button) boardAngle = drive.getPoseEstimate().getHeading();
         if(gamepadOne.dpad_up){
             level++;
-        }else if(gamepadOne.dpad_down) {
+        }
+        if(gamepadOne.dpad_down) {
             level--;
         }
         if(level > 5) level = 5;
-        else if(level < 0) level = 0;
-        if(gamepadOne.a){
-            scoringState++;
-        }
-        if(gamepadOne.dpad_right){
-            extension++;
-        }else if(gamepadOne.dpad_left) {
-            extension--;
-        }
-        if(extension > 5) level = 5;
-        else if(extension < 0) level = 0;
+        if(level < 0) level = 0;
+        if(gamepadOne.dpad_right)extension++;
+        if(gamepadOne.dpad_left) extension--;
+        if(extension > 5) extension = 5;
+        if(extension < 0) extension = 0;
         if(gamepadOne.right_bumper){
             scoringState++;
         }
@@ -243,7 +247,7 @@ public class Scoring extends LinearOpMode {
             case 1: //arm / pitch / slides up
                 pitch.setState(Pitch.PitchState.SCOREATLEVEL);
                 arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
-                slides.setState(DepoSlides.DepositState.CALCULATED_UP);
+
                 if(timeToggle){//timeToggle starts at true by default
                     TimeStamp = timer.milliseconds();
                     timeToggle = false;
@@ -254,11 +258,21 @@ public class Scoring extends LinearOpMode {
                 }
                 break;
             case 2: // turret move
+                slides.setState(DepoSlides.DepositState.CALCULATED_UP);
                 if(autoLockMode) {
                     //turret.robotAngle =
                     turret.setState(LM1Turret.TurretState.AUTOLOCK);
                 }
                 else turret.setState(LM1Turret.TurretState.SCORE);
+                if(timeToggle){//timeToggle starts at true by default
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds()> TimeStamp + 300){
+                    arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
+                    timeToggle = true;
+                }
+
                 break;
             case 3:
                 arm.setState(DepoArm.DepoArmState.SCORE);
@@ -276,16 +290,20 @@ public class Scoring extends LinearOpMode {
                 break;
             case 5: //resetting turret
                 turret.setState(LM1Turret.TurretState.INITIALIZE);
-                pitch.setState(Pitch.PitchState.INITIALIZE);
                 slides.setState(DepoSlides.DepositState.DOWN);
+                if(slides.getCurrentPosition() > 0.2){
+                    break;
+                }
+                pitch.setState(Pitch.PitchState.INITIALIZE);
                 if(timeToggle){
                     TimeStamp = timer.milliseconds();
                     timeToggle = false;
                 }
                 if(timer.milliseconds()>TimeStamp + 500){
-                    scoringState=6;
+                    scoringState=0;
                     timeToggle=true;
                 }
+
                 break;
             default:
                 scoringState = 0;
@@ -293,6 +311,13 @@ public class Scoring extends LinearOpMode {
         }
     }
     public void updateVariables(){
+        adjustedAngle = drive.getPoseEstimate().getHeading() - boardAngle;
+        if(adjustedAngle > M.PI){
+            adjustedAngle -= 2*M.PI;
+        }else if(adjustedAngle < -M.PI){
+            adjustedAngle += 2* M.PI;
+        }
+        turret.robotAngle = adjustedAngle;
         pitch.level = this.level;
         arm.level = this.level;
         slides.level = this.level;
