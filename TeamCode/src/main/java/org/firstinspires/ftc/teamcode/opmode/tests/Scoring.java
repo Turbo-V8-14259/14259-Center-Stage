@@ -1,96 +1,3 @@
-//package org.firstinspires.ftc.teamcode.opmode.tests;
-//
-//import com.acmerobotics.roadrunner.geometry.Pose2d;
-//import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-//import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import com.qualcomm.robotcore.hardware.DcMotorEx;
-//import com.qualcomm.robotcore.hardware.Servo;
-//import com.qualcomm.robotcore.util.ElapsedTime;
-//
-//import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
-//import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
-//import org.firstinspires.ftc.teamcode.hardware.Deposit.LM1Turret;
-//import org.firstinspires.ftc.teamcode.hardware.Intake.Intake;
-//import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
-//import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
-//
-//
-//@TeleOp
-//public class Scoring extends LinearOpMode {
-//    SampleMecanumDrive drive;
-//    Intake intake;
-//
-//    LM1Turret turret;
-//    DepoArm arm;
-//    stickyGamepad gamepadOne;
-//    ElapsedTime timer;
-//
-//    double a = 0;
-//
-//    double TimeStamp = 0;
-//
-//    @Override
-//    public void runOpMode() throws InterruptedException {
-//        drive = new SampleMecanumDrive(hardwareMap);
-//        intake = new Intake(hardwareMap.get(DcMotorEx.class, "Intake"), new ServoMotorBetter(hardwareMap.get(Servo.class, "intakeArm")));
-//        intake.setState(Intake.IntakeState.INITIALIZE);
-//        intake.update();
-//        turret = new LM1Turret(new ServoMotorBetter(hardwareMap.get(Servo.class, "turret")));
-//        arm = new DepoArm(new ServoMotorBetter(hardwareMap.get(Servo.class, "arm")), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
-//        gamepadOne = new stickyGamepad(gamepad1);
-//        timer = new ElapsedTime();
-//        waitForStart();
-//        while(opModeIsActive()){
-//            drive.setWeightedDrivePower(
-//                    new Pose2d(
-//                            -gamepad1.left_stick_y,
-//                            -gamepad1.left_stick_x,
-//                            gamepad1.right_stick_x
-//                    )
-//            );
-//
-//            if(gamepadOne.a){
-//                a++;
-//            }
-//
-//            if(a==0){
-//                arm.setState(DepoArm.DepoArmState.TRANSFER);
-//            }else if(a==1){
-//                turret.setState(LM1Turret.TurretState.INITIALIZE);
-//                arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
-//            }else if(a==2){
-//                turret.setState(LM1Turret.TurretState.SCORE);
-//            }else if(a==3){
-//                arm.setState(DepoArm.DepoArmState.SCORE);
-//            }else if(a==4){
-//                arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
-//                turret.setState(LM1Turret.TurretState.INITIALIZE);
-//
-//            }
-//            if(a > 4){
-//                a = 0;
-//            }
-//
-//            if(gamepadOne.dpad_up){
-//                intake.setState(Intake.IntakeState.INCRIMENT_UP);
-//            }else if(gamepadOne.dpad_down) {
-//                intake.setState(Intake.IntakeState.INCRIMENT_DOWN);
-//            }
-//            intake.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
-//
-//            telemetry.addData("turret", turret.getState());
-//            telemetry.addData("arm", arm.getState());
-//
-//            turret.update();
-//            arm.update();
-//            gamepadOne.update();
-//            telemetry.update();
-//            drive.update();
-//            intake.update();
-//        }
-//
-//    }
-//}
 package org.firstinspires.ftc.teamcode.opmode.tests;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -100,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
@@ -110,9 +18,6 @@ import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
-
-import java.sql.Time;
-
 
 @TeleOp
 public class Scoring extends LinearOpMode {
@@ -203,7 +108,7 @@ public class Scoring extends LinearOpMode {
         telemetry.addData("arm", arm.getState());
         telemetry.addData("robot angle", drive.getPoseEstimate().getHeading());
         telemetry.addData("height", height); //2 is high, 1 is norm
-        telemetry.addData("scoring State", scoringState); //yuh
+        telemetry.addData("scoring State", scoringState);
         telemetry.addData("level", level);
         telemetry.addData("extension", extension);
         telemetry.addData("pitch", pitch.getState());
@@ -211,31 +116,27 @@ public class Scoring extends LinearOpMode {
         telemetry.addData("slidesTarget", slides.getCurrentPosition());
         telemetry.addData("adjusted angle", adjustedAngle);
         telemetry.addData("auto lock Mode", autoLockMode);
+        telemetry.addData("AMPS(not including drive)", slides.leftMotor.getCurrentAMPS() + slides.rightMotor.getCurrentAMPS() + intake.intakeMotor.getCurrent(CurrentUnit.AMPS) + pitch.pitchMotor.getCurrentAMPS());
     }
 
     public void updateGamepadOne(){
-        if(gamepadOne.y){
-            autoLockMode = !autoLockMode;
-        }
+        if(gamepadOne.y) autoLockMode = !autoLockMode;
         if(gamepadOne.right_stick_button) boardAngle = drive.getPoseEstimate().getHeading();
-        if(gamepadOne.dpad_up){
-            level++;
-        }
-        if(gamepadOne.dpad_down) {
-            level--;
-        }
+
+        if(gamepadOne.dpad_up) level++;
+        if(gamepadOne.dpad_down) level--;
+
         if(level > 5) level = 5;
         if(level < 0) level = 0;
-        if(gamepadOne.dpad_right)extension++;
+
+        if(gamepadOne.dpad_right) extension++;
         if(gamepadOne.dpad_left) extension--;
         if(extension > 5) extension = 5;
         if(extension < 0) extension = 0;
-        if(gamepadOne.right_bumper){
-            scoringState++;
-        }
-        if(gamepadOne.left_bumper){
-            autoIntake = !autoIntake;
-        }
+
+        if(gamepadOne.right_bumper) scoringState++;
+
+        if(gamepadOne.left_bumper) autoIntake = !autoIntake;
     }
     public void scoringStateMachine(){
         switch (scoringState){
@@ -311,13 +212,15 @@ public class Scoring extends LinearOpMode {
         }
     }
     public void updateVariables(){
-        adjustedAngle = drive.getPoseEstimate().getHeading() - boardAngle;
-        if(adjustedAngle > M.PI){
-            adjustedAngle -= 2*M.PI;
-        }else if(adjustedAngle < -M.PI){
-            adjustedAngle += 2* M.PI;
+        if(autoLockMode){ //only update this if in auto lock mode, otherwise its not needed
+            adjustedAngle = drive.getPoseEstimate().getHeading() - boardAngle;
+            if(adjustedAngle > M.PI){
+                adjustedAngle -= 2*M.PI;
+            }else if(adjustedAngle < -M.PI){
+                adjustedAngle += 2* M.PI;
+            }
+            turret.robotAngle = adjustedAngle;
         }
-        turret.robotAngle = adjustedAngle;
         pitch.level = this.level;
         arm.level = this.level;
         slides.level = this.level;
