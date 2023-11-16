@@ -8,13 +8,12 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 
-@TeleOp
+@TeleOp(name = "Slides reset and manual")
 public class slidesTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         DepoSlides slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "rightSlides")));
         slides.stopAndResetEncoder();
-        stickyGamepad stickyPad = new stickyGamepad(gamepad1);
         waitForStart();
         while(opModeIsActive()){
             slides.pidRunning = false;

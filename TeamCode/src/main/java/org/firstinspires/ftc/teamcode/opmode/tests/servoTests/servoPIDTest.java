@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.opmode.tests.servoTests;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.AnglePID;
 import org.firstinspires.ftc.teamcode.hardware.Sensors.axonEncoder;
 @TeleOp
 @Config
+@Disabled
 public class servoPIDTest extends LinearOpMode {
     private axonEncoder angle;
     private AnalogInput angularEncoder;

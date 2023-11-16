@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.Pitch;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 
-@TeleOp
+@TeleOp(name = "Pitch reset and manual")
 public class pitchTuner extends LinearOpMode {
 
     @Override

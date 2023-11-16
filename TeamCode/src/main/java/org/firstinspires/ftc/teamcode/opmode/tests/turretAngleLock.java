@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.tests;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.hardware.Sensors.Imu;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 @Config
 @TeleOp
+@Disabled
 public class turretAngleLock extends LinearOpMode {
 
     DepoTurret turret;

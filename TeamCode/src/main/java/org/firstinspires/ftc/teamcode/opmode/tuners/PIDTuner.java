@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.tuners;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -18,6 +19,8 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
 @Config
 @TeleOp
+@Disabled
+
 public class PIDTuner extends LinearOpMode {
     public static double setTarget = 0;
     Pitch pitch;

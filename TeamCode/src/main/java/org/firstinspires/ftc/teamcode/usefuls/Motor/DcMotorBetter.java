@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.usefuls.Motor;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 
 public class DcMotorBetter implements Motor {
@@ -76,6 +77,10 @@ public class DcMotorBetter implements Motor {
     }
     public double getCurrentPositionRAW(){
         return this.dcMotorEx.getCurrentPosition();
+    }
+
+    public double getCurrentAMPS(){
+        return this.dcMotorEx.getCurrent(CurrentUnit.AMPS);
     }
 
     public DcMotorEx.RunMode getMode() {

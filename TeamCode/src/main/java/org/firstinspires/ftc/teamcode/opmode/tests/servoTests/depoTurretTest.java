@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.opmode.tests.servoTests;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -13,6 +14,8 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoTurret;
 
 @Config
 @TeleOp
+@Disabled
+
 public class depoTurretTest extends LinearOpMode {
     public static double targetSet = 180;
     private DepoTurret turret;

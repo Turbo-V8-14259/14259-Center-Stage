@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode.tests.motorTests;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -13,6 +14,8 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 
 @TeleOp
 @Config
+@Disabled
+
 public class slidesOpmode extends LinearOpMode {
     DepoSlides slides;
     stickyGamepad gamepada;
