@@ -6,10 +6,10 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.CalculateTangents;
 
-import java.lang.reflect.Array;
 
 
 @Autonomous
@@ -17,6 +17,7 @@ public class AutoTest extends LinearOpMode {
 
     enum State{
         IDLE,
+        VISION_DETECT,
         BEFOREPROPID,
         PROPID,
         YELLOWPIXEL,
@@ -27,20 +28,23 @@ public class AutoTest extends LinearOpMode {
     }
 
     SampleMecanumDrive drive;
-
+    CameraPipeline cameraPipeline;
     State currentState = State.IDLE;
 
+    int propID;
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
-        int propID = 0;//a number between 0 and 2 that identifies which direction the prop is in
+        cameraPipeline = new CameraPipeline(telemetry, "");
+
+        propID = 0;//a number between 0 and 2 that identifies which direction the prop is in
 
         Pose2d startPose = new Pose2d(-35, -65, Math.toRadians(-90)); //default position
 
         Pose2d leftProp = new Pose2d(-35, -29, Math.toRadians(-180));
         Pose2d rightProp = new Pose2d(-35, -29, Math.toRadians(0));
-        Pose2d centerProp = new Pose2d(-35, -16, Math.toRadians(-90));
-        Pose2d propDir[] = {leftProp, centerProp, rightProp};
+        Pose2d middleProp = new Pose2d(-35, -16, Math.toRadians(-90));
+        Pose2d propDir[] = {leftProp, middleProp, rightProp};
         Pose2d afterPropID = new Pose2d(-35, -11.6, Math.toRadians(-90));
         Vector2d beforeYellow = new Vector2d(25, -11.6);
         double depoAngle[] = {Math.toRadians(-165),  Math.toRadians(-180),Math.toRadians(-195) };
@@ -66,12 +70,17 @@ public class AutoTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        currentState = State.BEFOREPROPID;
+        currentState = State.VISION_DETECT;
 
         drive.followTrajectoryAsync(beforePropID);
 
         while(opModeIsActive()&&!isStopRequested()){
             switch(currentState){
+                case VISION_DETECT:
+                    currentState = State.BEFOREPROPID;
+                    String objectDirection = cameraPipeline.getObjectDirection();
+                    updatePropID(objectDirection);
+                    break;
                 case BEFOREPROPID:
                     if (!drive.isBusy()) {
                         currentState = State.PROPID;
@@ -81,7 +90,6 @@ public class AutoTest extends LinearOpMode {
                 case PROPID:
                     if(!drive.isBusy()){
                         currentState = State.YELLOWPIXEL;
-                        //vision shit here
                     }
                     break;
                 case YELLOWPIXEL:
@@ -102,6 +110,23 @@ public class AutoTest extends LinearOpMode {
         }
 
 
+    }
+    public void updatePropID(String objDir){
+        if(objDir == "LEFT"){
+            propID = 0;
+            telemetry.addData("Direction", "Left");
+        }
+        else if(objDir =="MIDDLE"){
+            propID = 1;
+            telemetry.addData("Direction", "Middle");
+        }
+        else if(objDir == "Right"){
+            propID = 2;
+            telemetry.addData("Direction", "Right");
+        }
+        else{
+            telemetry.addData("Direction", "Unknown Direction");
+        }
     }
 
 }
