@@ -39,7 +39,7 @@ public class DepoSlides {
 
 
     public DcMotorBetter leftMotor;
-    private DcMotorBetter rightMotor;
+    public DcMotorBetter rightMotor;
     private PID linSlideController;
 
     public static double Kp = 10, Ki = 0.01, Kd = 0; //NICE PID COEFFICIENT BRO

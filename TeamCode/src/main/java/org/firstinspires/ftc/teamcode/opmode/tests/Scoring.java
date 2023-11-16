@@ -100,6 +100,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
@@ -206,6 +207,11 @@ public class Scoring extends LinearOpMode {
         telemetry.addData("pitch", pitch.getState());
         telemetry.addData("slides", slides.getState());
         telemetry.addData("slidesTarget", slides.getTargetInches());
+        telemetry.addData("intake amps", intake.intakeMotor.getCurrent(CurrentUnit.AMPS));
+        telemetry.addData("slides amps (summed)", slides.leftMotor.getCurrentAMPS() + slides.rightMotor.getCurrentAMPS());
+        telemetry.addData("pitch amps", pitch.pitchMotor.getCurrentAMPS());
+        telemetry.addData("All DcMotor AMPS summed", slides.leftMotor.getCurrentAMPS() + slides.rightMotor.getCurrentAMPS() + pitch.pitchMotor.getCurrentAMPS() + intake.intakeMotor.getCurrent(CurrentUnit.AMPS));
+
     }
 
     public void updateGamepadOne(){
