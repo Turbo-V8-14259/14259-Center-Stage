@@ -255,7 +255,7 @@ public class Scoring extends LinearOpMode {
                 break;
             case 2: // turret move
                 if(autoLockMode) {
-                    //turret.robotAngle = 
+                    //turret.robotAngle =
                     turret.setState(LM1Turret.TurretState.AUTOLOCK);
                 }
                 else turret.setState(LM1Turret.TurretState.SCORE);
