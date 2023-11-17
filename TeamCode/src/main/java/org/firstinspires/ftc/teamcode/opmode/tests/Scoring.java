@@ -34,16 +34,15 @@ public class Scoring extends LinearOpMode {
 
     DepoSlides slides;
 
-    int scoringState = 0;
-
     double TimeStamp = 0;
 
     boolean timeToggle = true;
     double adjustedAngle = 0;
     double boardAngle = 0;
 
-    double height = 1;
-    // why the fuck is this a double ???
+    int height = 1;
+    int scoringState = 0;
+
 
     public int level = 0;  //6 levels
     public int extension = 0; //6 levels
