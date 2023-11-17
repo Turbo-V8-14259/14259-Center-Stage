@@ -86,12 +86,14 @@ public class Scoring extends LinearOpMode {
             else intake.setPower((gamepad1.left_trigger - gamepad1.right_trigger)*1);
 
             updateGamepadOne();
+            updateGamepadTwo();
             updateVariables();
             scoringStateMachine();
 
             turret.update();
             arm.update();
             gamepadOne.update();
+            gamepadTwo.update();
             drive.update();
             intake.update();
             pitch.update();
@@ -210,8 +212,25 @@ public class Scoring extends LinearOpMode {
                 break;
         }
     }
+    public void updateGamepadTwo(){
+        if(gamepadTwo.dpad_up) level++;
+        if(gamepadTwo.dpad_down) level--;
+
+        if(level > 5) level = 5;
+        if(level < 0) level = 0;
+
+        if(gamepadTwo.dpad_right) extension++;
+        if(gamepadTwo.dpad_left) extension--;
+        if(extension > 5) extension = 5;
+        if(extension < 0) extension = 0;
+
+        if(gamepadTwo.x){
+            level = 0;
+            extension = 0;
+        }
+    }
     public void updateVariables(){
-        if(autoLockMode){ //only update this if in auto lock mode, otherwise its not needed
+        if(autoLockMode){ //only update this if in auto lock mode, otherwise its not needed THANKS DAD
             adjustedAngle = drive.getPoseEstimate().getHeading() - boardAngle;
             if(adjustedAngle > M.PI){
                 adjustedAngle -= 2*M.PI;
