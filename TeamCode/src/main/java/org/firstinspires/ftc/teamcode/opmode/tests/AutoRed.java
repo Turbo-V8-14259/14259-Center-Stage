@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmode.tests;
 
 
+import static org.firstinspires.ftc.teamcode.vision.Red.Location.LEFT;
+import static org.firstinspires.ftc.teamcode.vision.Red.Location.MIDDLE;
+import static org.firstinspires.ftc.teamcode.vision.Red.Location.RIGHT;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -10,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.LM1Turret;
@@ -22,9 +27,35 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.Pitch;
 
+import android.graphics.Canvas;
+
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.teamcode.vision.Red;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.VisionProcessor;
+import org.opencv.core.Core;
+import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.imgproc.Imgproc;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+
 
 @Autonomous(name = "red autonomy")
 public class AutoRed extends LinearOpMode {
+
+    private Red.Location location = MIDDLE;
+    private Red redPropProcessor;
+    private VisionPortal visionPortal;
 
     int randomization = 2;
     //0 means left, 1 means middle, 2 means right.
@@ -162,10 +193,21 @@ public class AutoRed extends LinearOpMode {
                                 .build();
 
 
+        redPropProcessor = new Red(telemetry);
+        visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
 
 
-        waitForStart();
-        if (isStopRequested()) return;
+        while (!isStarted()) {
+            location = redPropProcessor.getLocation();
+            if(location==LEFT){
+                randomization = 0;
+            }else if(location==MIDDLE){
+                randomization = 1;
+            }else if(location==RIGHT){
+                randomization = 2;
+            }
+            telemetry.update();
+        }
         while (opModeIsActive() && !isStopRequested()) {
             drive.followTrajectory(beforePropID);
             if(randomization == 1){ //MIDDLE

@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.LM1Turret;
@@ -17,14 +18,33 @@ import org.firstinspires.ftc.teamcode.hardware.Intake.Intake;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
+import org.firstinspires.ftc.teamcode.vision.Blue;
 import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.Pitch;
+import org.firstinspires.ftc.teamcode.vision.Blue;
+import org.firstinspires.ftc.vision.VisionPortal;
+
+import static org.firstinspires.ftc.teamcode.vision.Blue.Location.LEFT;
+import static org.firstinspires.ftc.teamcode.vision.Blue.Location.MIDDLE;
+import static org.firstinspires.ftc.teamcode.vision.Blue.Location.RIGHT;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.vision.Blue;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 
 @Autonomous(name = "blue autonomy")
 public class AutoBlue extends LinearOpMode {
+
+    private Blue.Location location = Blue.Location.MIDDLE;
+    private Blue bluePropProcessor;
+    private VisionPortal visionPortal;
+
 
     int randomization = 2;
     //0 means left, 1 means middle, 2 means right.
@@ -52,26 +72,26 @@ public class AutoBlue extends LinearOpMode {
         slides.pidRunning = true;
         slides.manualMode = false;
 
-        Pose2d startPose = new Pose2d(-35, -65, Math.toRadians(-90)); //default position
-        Pose2d initialLine = new Pose2d(-35, -15, Math.toRadians(-90));
-        Pose2d leftProp = new Pose2d(-42, -32, Math.toRadians(-90));
-        Pose2d leftPropIntermediate = new Pose2d(-42, -5, Math.toRadians(-90));
-        Pose2d stackPos = new Pose2d(-45, -17, Math.toRadians(-180));
-        Pose2d toStack = new Pose2d(-52, -17, Math.toRadians(-180));
-        Pose2d toStackMore = new Pose2d(-53, -18, Math.toRadians(-180));
+        Pose2d startPose = new Pose2d(-35, 65, Math.toRadians(90)); //default position
+        Pose2d initialLine = new Pose2d(-35, 15, Math.toRadians(90));
+        Pose2d leftProp = new Pose2d(-42, 32, Math.toRadians(90));
+        Pose2d leftPropIntermediate = new Pose2d(-42, 5, Math.toRadians(90));
+        Pose2d stackPos = new Pose2d(-45, 17, Math.toRadians(180));
+        Pose2d toStack = new Pose2d(-52, 17, Math.toRadians(180));
+        Pose2d toStackMore = new Pose2d(-53, 18, Math.toRadians(180));
 
 
-        Pose2d runToBoardPos = new Pose2d(45, -18, Math.toRadians(-180));
-        Pose2d middleStrafe = new Pose2d(59, -41, Math.toRadians(-180));
-        Pose2d rightProp = new Pose2d(-32, -40, Math.toRadians(0)); //rn
-        Pose2d rightPropIntermediate = new Pose2d(-28, -40, Math.toRadians(0)); //rn
-        Pose2d rightPropIntermediate2 = new Pose2d(-40, -40, Math.toRadians(0)); //rn
+        Pose2d runToBoardPos = new Pose2d(45, 18, Math.toRadians(180));
+        Pose2d middleStrafe = new Pose2d(59, 41, Math.toRadians(180));
+        Pose2d rightProp = new Pose2d(-32, 40, Math.toRadians(0)); //rn
+        Pose2d rightPropIntermediate = new Pose2d(-28, 40, Math.toRadians(0)); //rn
+        Pose2d rightPropIntermediate2 = new Pose2d(-40, 40, Math.toRadians(0)); //rn
 
-        Pose2d middleProp = new Pose2d(-30, -21, Math.toRadians(-90));
-        Pose2d middlePropIntermediate = new Pose2d(-35,-5, Math.toRadians(-90));
-        Pose2d leftStrafe = new Pose2d(59, -36, Math.toRadians(-180));
+        Pose2d middleProp = new Pose2d(-30, 21, Math.toRadians(90));
+        Pose2d middlePropIntermediate = new Pose2d(-35,5, Math.toRadians(90));
+        Pose2d leftStrafe = new Pose2d(59, 36, Math.toRadians(180));
 
-        Pose2d rightStrafe = new Pose2d(59, -47, Math.toRadians(-180));
+        Pose2d rightStrafe = new Pose2d(59, 47, Math.toRadians(180));
 
         drive.setPoseEstimate(startPose);
 
@@ -161,15 +181,21 @@ public class AutoBlue extends LinearOpMode {
                 .lineToLinearHeading(rightStrafe)
                 .build();
 
+        bluePropProcessor = new Blue(telemetry);
+        visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor);
 
-
-
-        waitForStart();
-
-        while(opModeInInit()){
-
+        while (!isStarted()) {
+            location = bluePropProcessor.getLocation();
+            if (location==LEFT){
+                randomization = 2;
+            } else if (location==MIDDLE){
+                randomization = 1;
+            } else if (location==RIGHT){
+                randomization = 0;
+            }
+            telemetry.update();
         }
-        if (isStopRequested()) return;
+
         while (opModeIsActive() && !isStopRequested()) {
             drive.followTrajectory(beforePropID);
             if(randomization == 1){ //MIDDLE
