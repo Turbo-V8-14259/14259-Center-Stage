@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.vision.tests;
 import static org.firstinspires.ftc.teamcode.vision.Blue.Location.MIDDLE;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.vision.Blue;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name="VisionOpBlue")
+@Disabled
 public class BlueOp extends LinearOpMode {
     private Blue.Location location = MIDDLE;
     private Blue bluePropProcessor;
