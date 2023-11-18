@@ -106,7 +106,7 @@ public class Pitch {
                 target = 0.2;
                 break;
             case CLIMB:
-                target = 1;
+                target = 1.2;
                 break;
             case STOPPED:
                 break;

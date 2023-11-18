@@ -42,7 +42,7 @@ public class DepoSlides {
     public DcMotorBetter rightMotor;
     private PID linSlideController;
 
-    public static double Kp = 10, Ki = 0.01, Kd = 0; //NICE PID COEFFICIENT BRO
+    public static double Kp = 15, Ki = 0.01, Kd = 0; //NICE PID COEFFICIENT BRO
 
     public boolean pidRunning = true;
     public boolean passive = false;
@@ -65,7 +65,7 @@ public class DepoSlides {
         this.rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.rightMotor.setDirection(DcMotor.Direction.REVERSE);
         this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
-                () -> this.leftMotor.getCurrentPosition() - this.targetLinSlidePosition,
+                () -> (this.leftMotor.getCurrentPosition()*-1) - this.targetLinSlidePosition,
                 factor -> {
                     this.leftMotor.setPower(M.clamp(-factor, 1, -1));
                     this.rightMotor.setPower(M.clamp(-factor, 1, -1));

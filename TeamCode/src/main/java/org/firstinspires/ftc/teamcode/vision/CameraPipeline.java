@@ -11,7 +11,10 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class CameraPipeline extends OpenCvPipeline
 {
+//    public static String color = "BLUE";
     public static String color = "BLUE";
+
+
     Telemetry telemetry;
 
     static final Rect LEFT_ROI = new Rect(
@@ -31,9 +34,7 @@ public class CameraPipeline extends OpenCvPipeline
         telemetry = t;
         ObjectDirection = s;
     }
-     public String getObjectDirection(){
-        return ObjectDirection;
-     }
+
     public Mat processFrame(Mat input)
     {
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV); //Uses HSV Colors
@@ -49,6 +50,7 @@ public class CameraPipeline extends OpenCvPipeline
         Mat left = mat.submat(LEFT_ROI);
         Mat right = mat.submat(RIGHT_ROI);
         //Mat mid = mat.submat(MID_ROI);
+
         if(color == "RED"){
             Core.inRange(mat, lowHSVRed, highHSVRed, thresh);
         }
@@ -80,27 +82,16 @@ public class CameraPipeline extends OpenCvPipeline
         right.release();
         //mid.release();
 
-//        telemetry.addData("Left raw value", leftvalueRaw);
-//        telemetry.addData("Right raw value",  rightvalueRaw);
-
         telemetry.addData("Left value Thr", leftValThr);
         telemetry.addData("Right value Thr",  rightValThr);
 
         telemetry.addData("Left value", leftValue);
         telemetry.addData("Right value",  rightValue);
 
-//        telemetry.addData("Left mean", Core.sumElems(left).val[1]);
-//        telemetry.addData("Right mean",  Core.sumElems(right).val[1]);
-        //telemetry.addData("Mid raw value", Core.sumElems(mid).val[0]);
-
-//        telemetry.addData("Left percentage",  leftPer+ "%");
-//        telemetry.addData("Right percentage",  rightPer+ "%");
-        //telemetry.addData("Mid percentage", Math.round(midValue * 100) + "%");
 
 
-
-        boolean objLeft = leftValThr > 20;
-        boolean objRight = rightValThr > 20;
+        boolean objLeft = leftValThr > 5;
+        boolean objRight = rightValThr > 5;
 
 //        if(Red){
 //            if(leftPer - 20 >= 3){
@@ -190,18 +181,22 @@ public class CameraPipeline extends OpenCvPipeline
 //                    new Scalar(255, 255, 255), 4);
 //        }
         else{
-            ObjectDirection = "RIGHT";
+            if(color == "BLUE"){
+                ObjectDirection = "LEFT";
+            }else if(color =="RED"){
+                ObjectDirection = "RIGHT";
+            }
         }
 
 
-        Imgproc.rectangle(
-                thresh,
-                LEFT_ROI,
-                new Scalar(255, 255, 255), 4);
-        Imgproc.rectangle(
-                thresh,
-                RIGHT_ROI,
-                new Scalar(255, 255, 255), 4);
+//        Imgproc.rectangle(
+//                thresh,
+//                LEFT_ROI,
+//                new Scalar(255, 255, 255), 4);
+//        Imgproc.rectangle(
+//                thresh,
+//                RIGHT_ROI,
+//                new Scalar(255, 255, 255), 4);
 //        Imgproc.rectangle(
 //                thresh,
 //                MID_ROI,

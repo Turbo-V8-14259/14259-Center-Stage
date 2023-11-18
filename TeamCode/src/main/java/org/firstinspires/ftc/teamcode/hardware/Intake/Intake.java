@@ -14,6 +14,7 @@ public class Intake{
         UP,
         INCRIMENT_UP,
         INCRIMENT_DOWN,
+        AUTO_HIGH,
 
         STOPPED
     }
@@ -61,6 +62,8 @@ public class Intake{
                 break;
             case INCRIMENT_DOWN:
                 target-=.05;
+            case AUTO_HIGH:
+                target = .3;
             case STOPPED:
                 break;
         }
