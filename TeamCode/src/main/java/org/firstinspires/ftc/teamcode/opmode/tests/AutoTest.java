@@ -32,8 +32,9 @@ public class AutoTest extends LinearOpMode {
         PROPID,
         YELLOWPIXEL,
         INTAKE,
-        DEPOSIT,
-
+        DEPOSITYELLOW,
+        STACK,
+        DEPOSITNORMAL
 
     }
 
@@ -45,13 +46,16 @@ public class AutoTest extends LinearOpMode {
 
     LM1Turret turret;
     DepoArm arm;
-    ElapsedTime timer = new ElapsedTime();
     Pitch pitch;
-
+    int scoringState;
+    boolean timeToggle;
+    ElapsedTime timer;
+    double TimeStamp;
     DepoSlides slides;
+    boolean afterYellow; //initialised to false
     int propID;
     @Override
-    public void runOpMode(){
+    public void runOpMode() throws InterruptedException{
         drive = new SampleMecanumDrive(hardwareMap);
         cameraPipeline = new CameraPipeline(telemetry, "");
         intake = new Intake(hardwareMap.get(DcMotorEx.class, "Intake"), new ServoMotorBetter(hardwareMap.get(Servo.class, "intakeArm")));
@@ -64,6 +68,7 @@ public class AutoTest extends LinearOpMode {
 
         slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "rightSlides")));
 
+        timer = new ElapsedTime();
         slides.passive = false;
         slides.pidRunning = true;
         slides.manualMode = false;
@@ -80,6 +85,8 @@ public class AutoTest extends LinearOpMode {
         Vector2d beforeYellow = new Vector2d(25, -11.6);
         double depoAngle[] = {Math.toRadians(-165),  Math.toRadians(-180),Math.toRadians(-195) };
         Pose2d yellowPixel = new Pose2d(35, -34, depoAngle[propID]);
+        Pose2d stackIntermdiate = new Pose2d(25, -11.6, Math.toRadians(180));
+        Vector2d stack = new Vector2d(-55, -11.6);
 
         drive.setPoseEstimate(startPose); //used when start isnt default (0, 0, 0)
 
@@ -95,6 +102,20 @@ public class AutoTest extends LinearOpMode {
                 .splineToSplineHeading(afterPropID, CalculateTangents.calculateTangent(propDir[propID], afterPropID))
                 .lineTo(beforeYellow)
                 .splineToSplineHeading(yellowPixel, CalculateTangents.calculateTangent(beforeYellow, yellowPixel))
+                .build();
+
+        Trajectory toStack = drive.trajectoryBuilder(depositYellow.end())
+                .splineToSplineHeading(stackIntermdiate, CalculateTangents.calculateTangent(stackIntermdiate, yellowPixel))
+                .lineTo(stack)
+                .build();
+
+        Trajectory score = drive.trajectoryBuilder(toStack.end())
+                .lineTo(beforeYellow)
+                .splineToSplineHeading(yellowPixel, CalculateTangents.calculateTangent(beforeYellow, yellowPixel))
+                .build();
+        Trajectory toStack2 = drive.trajectoryBuilder(score.end())
+                .splineToSplineHeading(stackIntermdiate, CalculateTangents.calculateTangent(stackIntermdiate, yellowPixel))
+                .lineTo(stack)
                 .build();
 
         waitForStart();
@@ -124,22 +145,109 @@ public class AutoTest extends LinearOpMode {
                     break;
                 case YELLOWPIXEL:
                     if(!drive.isBusy()){
-                        currentState = State.DEPOSIT;
+                        currentState = State.DEPOSITYELLOW;
                         drive.followTrajectoryAsync(depositYellow);
                     }
                     break;
-                case DEPOSIT:
+                case DEPOSITYELLOW:
                     if(!drive.isBusy()){
-                        //next state
-                        //robot deposits the yellow pixel here
+                        currentState = State.STACK;
+                        scoring();
                     }
-
+                    break;
+                case STACK:
+                    if(!drive.isBusy()){
+                        currentState = State.DEPOSITNORMAL;
+                        if(afterYellow){
+                            drive.followTrajectoryAsync(toStack2);
+                        }else{
+                            drive.followTrajectoryAsync(toStack);
+                            afterYellow = true;
+                        }
+                    }
+                    break;
+                case DEPOSITNORMAL:
+                    if(!drive.isBusy()){
+                        currentState = State.STACK;
+                        drive.followTrajectoryAsync(score);
+                        scoring();
+                    }
+                    break;
             }
 
             drive.update();
         }
 
 
+    }
+    public void scoring(){
+        switch (scoringState){
+            case 0: //Init
+                slides.setState(DepoSlides.DepositState.DOWN);
+                pitch.setState(Pitch.PitchState.INITIALIZE);
+                arm.setState(DepoArm.DepoArmState.TRANSFER);
+                break;
+            case 1: //arm / pitch / slides up
+                pitch.setState(Pitch.PitchState.SCOREATLEVEL);
+                arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+
+                if(timeToggle){//timeToggle starts at true by default
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds()> TimeStamp + 500){
+                    scoringState=2;
+                    timeToggle = true;
+                }
+                break;
+            case 2: // turret move
+                slides.setState(DepoSlides.DepositState.CALCULATED_UP);
+                turret.setState(LM1Turret.TurretState.SCORE);
+                if(timeToggle){//timeToggle starts at true by default
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds()> TimeStamp + 300){
+                    arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
+                    timeToggle = true;
+                }
+
+                break;
+            case 3:
+                arm.setState(DepoArm.DepoArmState.SCORE);
+                break;
+            case 4: // raising ARM
+                arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+                if(timeToggle){
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds()>TimeStamp + 100){
+                    scoringState=5;
+                    timeToggle=true;
+                }
+                break;
+            case 5: //resetting turret
+                turret.setState(LM1Turret.TurretState.INITIALIZE);
+                slides.setState(DepoSlides.DepositState.DOWN);
+                if(slides.getCurrentPosition() > 0.2){
+                    break;
+                }
+                pitch.setState(Pitch.PitchState.INITIALIZE);
+                if(timeToggle){
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds()>TimeStamp + 500){
+                    scoringState=0;
+                    timeToggle=true;
+                }
+
+                break;
+            default:
+                scoringState = 0;
+                break;
+        }
     }
     public void updatePropID(String objDir){
         if(objDir == "LEFT"){

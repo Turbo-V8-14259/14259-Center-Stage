@@ -99,6 +99,9 @@ public class DriveSim {
         Vector2d beforeYellow = new Vector2d(25, -11.6);
         double depoAngle[] = {Math.toRadians(-165),  Math.toRadians(-180),Math.toRadians(-195) };
         Pose2d yellowPixel = new Pose2d(35, -34, depoAngle[propID]);
+
+        Pose2d stackIntermdiate = new Pose2d(25, -11.6, Math.toRadians(180));
+        Vector2d stack = new Vector2d(-55, -11.6);
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
@@ -109,6 +112,10 @@ public class DriveSim {
                                 .splineToSplineHeading(afterPropID, CalculateTangents.calculateTangent(propDir[propID], afterPropID))
                                 .lineTo(beforeYellow)
                                 .splineToSplineHeading(yellowPixel, CalculateTangents.calculateTangent(beforeYellow, yellowPixel))
+                                .splineToSplineHeading(stackIntermdiate, CalculateTangents.calculateTangent(stackIntermdiate, yellowPixel))
+                                .lineTo(stack)
+                                .lineTo(beforeYellow)
+                        .splineToSplineHeading(yellowPixel, CalculateTangents.calculateTangent(beforeYellow, yellowPixel))
                                 .build());
 
 
