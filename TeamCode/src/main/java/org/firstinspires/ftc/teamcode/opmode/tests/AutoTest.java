@@ -1,15 +1,26 @@
 package org.firstinspires.ftc.teamcode.opmode.tests;
 
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
+import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
+import org.firstinspires.ftc.teamcode.hardware.Deposit.LM1Turret;
+import org.firstinspires.ftc.teamcode.hardware.Intake.Intake;
+import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
+import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
+import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
-
+import org.firstinspires.ftc.teamcode.hardware.Deposit.Pitch;
 
 
 @Autonomous
@@ -30,12 +41,33 @@ public class AutoTest extends LinearOpMode {
     CameraPipeline cameraPipeline;
     State currentState = State.IDLE;
 
+    Intake intake;
+
+    LM1Turret turret;
+    DepoArm arm;
+    ElapsedTime timer = new ElapsedTime();
+    Pitch pitch;
+
+    DepoSlides slides;
     int propID;
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
         cameraPipeline = new CameraPipeline(telemetry, "");
+        intake = new Intake(hardwareMap.get(DcMotorEx.class, "Intake"), new ServoMotorBetter(hardwareMap.get(Servo.class, "intakeArm")));
+        intake.setState(Intake.IntakeState.INITIALIZE);
+        intake.update();
 
+        turret = new LM1Turret(new ServoMotorBetter(hardwareMap.get(Servo.class, "turret")));
+
+        arm = new DepoArm(new ServoMotorBetter(hardwareMap.get(Servo.class, "arm")), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
+
+        slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "rightSlides")));
+
+        slides.passive = false;
+        slides.pidRunning = true;
+        slides.manualMode = false;
+        
         propID = 0;//a number between 0 and 2 that identifies which direction the prop is in
 
         Pose2d startPose = new Pose2d(-35, -65, Math.toRadians(-90)); //default position
