@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.tests;
+package org.firstinspires.ftc.teamcode.opmode.centerstage;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -174,16 +174,17 @@ public class Scoring extends LinearOpMode {
 
         if(gamepadOne.dpad_right) {
             extension++;
-            gamepad1.rumble(200);
+            gamepad1.rumble(100);
         }
         if(gamepadOne.dpad_left) {
             extension--;
-            gamepad1.rumble(200);
+            gamepad1.rumble(100);
         }
         if(extension > 5) extension = 5;
         if(extension < 0) extension = 0;
 
         if(gamepadOne.right_bumper) scoringState++;
+
 
 
 
@@ -255,7 +256,7 @@ public class Scoring extends LinearOpMode {
             case 5: //resetting turret
                 turret.setState(LM1Turret.TurretState.INITIALIZE);
                 slides.setState(DepoSlides.DepositState.DOWN);
-                if(slides.getCurrentPosition() > 0.2){
+                if(-slides.getCurrentPosition() > 0.2){
                     break;
                 }
                 pitch.setState(Pitch.PitchState.INITIALIZE);
