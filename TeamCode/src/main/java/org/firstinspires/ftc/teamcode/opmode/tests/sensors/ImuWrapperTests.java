@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.tests;
+package org.firstinspires.ftc.teamcode.opmode.tests.sensors;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;

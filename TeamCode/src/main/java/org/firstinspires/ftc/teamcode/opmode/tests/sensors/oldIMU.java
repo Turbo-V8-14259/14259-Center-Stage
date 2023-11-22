@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.tests;
+package org.firstinspires.ftc.teamcode.opmode.tests.sensors;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;

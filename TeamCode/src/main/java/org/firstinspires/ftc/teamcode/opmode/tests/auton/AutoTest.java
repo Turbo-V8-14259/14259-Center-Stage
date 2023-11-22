@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.tests;
+package org.firstinspires.ftc.teamcode.opmode.tests.auton;
 
 import static java.lang.Thread.sleep;
 

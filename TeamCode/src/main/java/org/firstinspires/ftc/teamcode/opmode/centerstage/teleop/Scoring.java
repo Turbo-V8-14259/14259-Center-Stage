@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.centerstage;
+package org.firstinspires.ftc.teamcode.opmode.centerstage.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
