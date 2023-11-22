@@ -88,34 +88,35 @@ public class DriveSim {
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(500);
+        Pose2d startPose = new Pose2d(-35, 65, Math.toRadians(90)); //default position
+        Pose2d initialLine = new Pose2d(-35, 15, Math.toRadians(90));
+        Pose2d leftProp = new Pose2d(-42, 32, Math.toRadians(90));
+        Pose2d leftPropIntermediate = new Pose2d(-42, 5, Math.toRadians(90));
+        Pose2d stackPos = new Pose2d(-45, 17, Math.toRadians(180));
+        Pose2d toStack = new Pose2d(-52, 17, Math.toRadians(180));
+        Pose2d toStackMore = new Pose2d(-53, 18, Math.toRadians(180));
+        Pose2d runToBoardPos = new Pose2d(45, 18, Math.toRadians(180));
+        Pose2d leftStrafe = new Pose2d(59, 36, Math.toRadians(180));
+        Pose2d middleStrafe = new Pose2d(59, 41, Math.toRadians(180));
+        Pose2d rightProp = new Pose2d(-32, 40, Math.toRadians(0)); //rn
+        Pose2d rightPropIntermediate = new Pose2d(-28, 40, Math.toRadians(0)); //rn
+        Pose2d rightPropIntermediate2 = new Pose2d(-40, 40, Math.toRadians(0)); //rn
 
-        int propID = 2;
-        Pose2d startPose = new Pose2d(-35, -65, Math.toRadians(-90));
-        Pose2d leftProp = new Pose2d(-35, -29, Math.toRadians(-180));
-        Pose2d rightProp = new Pose2d(-35, -29, Math.toRadians(0));
-        Pose2d centerProp = new Pose2d(-35, -16, Math.toRadians(-90));
-        Pose2d propDir[] = {leftProp, centerProp, rightProp};
-        Pose2d afterPropID = new Pose2d(-35, -11.6, Math.toRadians(-90));
-        Vector2d beforeYellow = new Vector2d(25, -11.6);
-        double depoAngle[] = {Math.toRadians(-165),  Math.toRadians(-180),Math.toRadians(-195) };
-        Pose2d yellowPixel = new Pose2d(35, -34, depoAngle[propID]);
+        Pose2d middleProp = new Pose2d(-30, 21, Math.toRadians(90));
+        Pose2d middlePropIntermediate = new Pose2d(-35,5, Math.toRadians(90));
+        Pose2d rightStrafe = new Pose2d(59, 47, Math.toRadians(180));
 
-        Pose2d stackIntermdiate = new Pose2d(25, -11.6, Math.toRadians(180));
-        Vector2d stack = new Vector2d(-55, -11.6);
+        Pose2d startyPose = new Pose2d(0, 0, Math.toRadians(-90));
+        Pose2d middlePose = new Pose2d(0, 12, Math.toRadians(0));
+        Vector2d endPose = new Vector2d(12, 12);
+
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPose)
-                                .back(65-11.6)
-                                .splineToSplineHeading(propDir[propID], CalculateTangents.calculateTangent(new Vector2d(-35, -11.6), propDir[propID]))
-                                .splineToSplineHeading(afterPropID, CalculateTangents.calculateTangent(propDir[propID], afterPropID))
-                                .lineTo(beforeYellow)
-                                .splineToSplineHeading(yellowPixel, CalculateTangents.calculateTangent(beforeYellow, yellowPixel))
-                                .splineToSplineHeading(stackIntermdiate, CalculateTangents.calculateTangent(stackIntermdiate, yellowPixel))
-                                .lineTo(stack)
-                                .lineTo(beforeYellow)
-                        .splineToSplineHeading(yellowPixel, CalculateTangents.calculateTangent(beforeYellow, yellowPixel))
+                        drive.trajectorySequenceBuilder(startyPose)
+                                .splineToLinearHeading(middlePose, CalculateTangents.calculateTangent(startPose, middlePose))
+                                .splineTo(endPose, CalculateTangents.calculateTangent(middlePose, endPose))
                                 .build());
 
 
