@@ -1,7 +1,4 @@
-TLDR: FTC > VEX 
-
-
-
+## 14259 Turbo V8 CenterStage
 
 ## NOTICE
 
