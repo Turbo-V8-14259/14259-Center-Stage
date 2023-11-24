@@ -154,6 +154,7 @@ public class Red implements VisionProcessor {
             location = Location.MIDDLE;
             telemetry.addData("Position:", " Mid");
         }else{
+            //here
             location = Location.RIGHT;
             telemetry.addData("Position:", " Right");
         }
