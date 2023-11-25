@@ -49,13 +49,22 @@ public class AutoLinearOp extends LinearOpMode {
 
     State currentstate = State.IDLE;
 
-    Pose2d startPose = new Pose2d(-35, 65, Math.toRadians(90));
+    Pose2d startPose = new Pose2d(-35, 65, Math.toRadians(-90));
     Pose2d initialLine = new Pose2d(-35, -15, Math.toRadians(-90));
 
     Pose2d leftProp = new Pose2d(-42, -32, Math.toRadians(-90));
     Pose2d rightProp = new Pose2d(-32, -40, Math.toRadians(0));
     Pose2d middleProp = new Pose2d(-30, -21, Math.toRadians(-90));
     Pose2d prop[] = {leftProp, middleProp, rightProp};
+    Pose2d toStack = new Pose2d(-52, -17, Math.toRadians(-180));
+    Pose2d middleStrafe = new Pose2d(59, -41, Math.toRadians(-180));
+    Pose2d leftStrafe = new Pose2d(59, -36, Math.toRadians(-180));
+
+    Pose2d rightStrafe = new Pose2d(59, -47, Math.toRadians(-180));
+
+    Pose2d board[] = {leftStrafe, middleStrafe, rightStrafe};
+
+    Pose2d runToBoardPos = new Pose2d(45, -18, Math.toRadians(-180));
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -83,7 +92,12 @@ public class AutoLinearOp extends LinearOpMode {
         Trajectory trajectory2 = drive.trajectoryBuilder(trajectory1.end())
                 .lineToLinearHeading(prop[randomization])
                 .build();
-
+        Trajectory trajectory3 = drive.trajectoryBuilder(trajectory2.end())
+                .lineToLinearHeading(initialLine)
+                .lineToLinearHeading(toStack)
+                .build();
+        Trajectory trajectory4 = drive.trajectoryBuilder(trajectory3.end())
+                .
         redPropProcessor = new Red(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
 
@@ -110,9 +124,25 @@ public class AutoLinearOp extends LinearOpMode {
                     }
                 case TEAMPROP:
                     if(!drive.isBusy()) {
+                        currentstate = State.STACK;
                         intake.setState(Intake.IntakeState.AUTO_HIGH);
                         intake.update();
                         sleep(500);
+                        drive.followTrajectory(trajectory3);
+                    }
+                case STACK:
+                    if(!drive.isBusy()){
+                        currentstate = State.BOARD;
+                        intake.setPower(-.5);
+                        intake.setState(Intake.IntakeState.AUTO_STACK_DROPPED);
+                        intake.update();
+
+                        sleep(500);
+                        drive.followTrajectory();
+                    }
+                case BOARD:
+                    if(!drive.isBusy()){
+
                     }
             }
         }
