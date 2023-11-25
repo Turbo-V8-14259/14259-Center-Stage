@@ -97,7 +97,9 @@ public class AutoLinearOp extends LinearOpMode {
                 .lineToLinearHeading(toStack)
                 .build();
         Trajectory trajectory4 = drive.trajectoryBuilder(trajectory3.end())
-                .
+                .lineToLinearHeading(runToBoardPos)
+                .lineToLinearHeading(board[randomization])
+                .build();
         redPropProcessor = new Red(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
 
@@ -138,15 +140,34 @@ public class AutoLinearOp extends LinearOpMode {
                         intake.update();
 
                         sleep(500);
-                        drive.followTrajectory();
+                        drive.followTrajectory(trajectory4);
                     }
                 case BOARD:
                     if(!drive.isBusy()){
-
+                        score();
                     }
             }
         }
 
 
+    }
+    public void score(){
+        arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
+        arm.update();
+        sleep(700);
+        turret.setState(LM1Turret.TurretState.SCORE);
+        turret.update();
+        sleep(700);
+        arm.setState(DepoArm.DepoArmState.SCORE);
+        arm.update();
+        sleep(700);
+        arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
+        arm.update();
+        sleep(700);
+        turret.setState(LM1Turret.TurretState.INITIALIZE);
+        turret.update();
+        sleep(700);
+        arm.setState(DepoArm.DepoArmState.INITIALIZE);
+        arm.update();
     }
 }
