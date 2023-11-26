@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
@@ -28,8 +30,9 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 
 public class AutoLinearOp extends OpMode {
 
-    enum State{
+    enum State {
         IDLE,
+        TOINTAKE,
         GROUNDPL,
         PRELOAD,
         TEAMPROP,
@@ -42,14 +45,16 @@ public class AutoLinearOp extends OpMode {
     int randomization = 0;
     //0 means left, 1 means middle, 2 means right.
     SampleMecanumDrive drive;
-
+    boolean timeToggle = true;
+    double timeStamp = 0;
     Intake intake;
 
+    ElapsedTime timer = new ElapsedTime();
     LM1Turret turret;
     DepoArm arm;
     DepoSlides slides;
 
-    State currentstate = State.IDLE;
+    State currentstate;
 
 
     //First Diverge
@@ -57,10 +62,18 @@ public class AutoLinearOp extends OpMode {
     Pose2d startPose = new Pose2d(-35, -65, Math.toRadians(-90));
 
     Pose2d leftProp = new Pose2d(-42, -32, Math.toRadians(-90));
+    Pose2d leftPropIP = new Pose2d(-42, -17, Math.toRadians(-90));
     Pose2d toStack = new Pose2d(-52, -17, Math.toRadians(-180));
 
+    Pose2d toStackMore = new Pose2d(-53, -18, Math.toRadians(-180));
+    Pose2d runToBoardPos = new Pose2d(45, -18, Math.toRadians(-180));
+
     Trajectory toLeftStack;
+    Trajectory LeftBackFiveInches;
     Trajectory toLeftProp;
+    Trajectory pickUpStack;
+    Trajectory ScoreLeft;
+
 
     @Override
     public void init() {
@@ -84,56 +97,76 @@ public class AutoLinearOp extends OpMode {
 
         toLeftProp = drive.trajectoryBuilder(startPose)
                 .lineToLinearHeading(leftProp)
+                .build();
+
+        LeftBackFiveInches = drive.trajectoryBuilder(toLeftProp.end())
+                .lineToLinearHeading(leftPropIP)
                 .addDisplacementMarker(() -> drive.followTrajectoryAsync(toLeftStack))
                 .build();
-
-        toLeftStack = drive.trajectoryBuilder(toLeftProp.end())
-                .forward(-5)
-                .splineToLinearHeading(toStack, CalculateTangents.calculateTangent(leftProp, toStack))
+        toLeftStack = drive.trajectoryBuilder(LeftBackFiveInches.end())
+                .splineToLinearHeading(toStack, CalculateTangents.calculateTangent(leftPropIP, toStack))
+                .build();
+        pickUpStack = drive.trajectoryBuilder(toLeftStack.end())
+                .lineToLinearHeading(toStackMore)
+                .addDisplacementMarker(() -> drive.followTrajectoryAsync(ScoreLeft))
+                .build();
+        ScoreLeft = drive.trajectoryBuilder(pickUpStack.end())
+                .lineToLinearHeading(runToBoardPos)
                 .build();
 
-        currentstate = State.TRAVEL;
+
+        currentstate = State.GROUNDPL;
 
 
         drive.followTrajectoryAsync(toLeftProp);
-            /*switch(currentstate){
-                case TRAVEL:
-                    if(!drive.isBusy()){
-                        currentstate = State.TEAMPROP;
-                    }
-                case TEAMPROP:
-                    if(!drive.isBusy()) {
-                        currentstate = State.STACK;
-
-                    }
-                case STACK:
-                    if(!drive.isBusy()){
-                        currentstate = State.BOARD;
-
-                    }
-                case BOARD:
-                    if(!drive.isBusy()){
-                        score();
-                    }
-            }*/
-
-
-
-
     }
 
     @Override
 
     public void loop() {
-        switch(currentstate){
+        switch (currentstate) {
             case GROUNDPL:
+                if (!drive.isBusy()) {
 
+                    intake.setState(Intake.IntakeState.AUTO_HIGH);
+
+                    if (timeToggle) {//timeToggle starts at true by default
+                        timeStamp = timer.milliseconds();
+                        timeToggle = false;
+                    }
+                    if (timer.milliseconds() > timeStamp + 500) {
+                        currentstate = State.TOINTAKE;
+                        drive.followTrajectoryAsync(LeftBackFiveInches);
+                        timeToggle = true;
+                    }
+                }
+            case TOINTAKE:
+                if (timeToggle) {//timeToggle starts at true by default
+                    timeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if (timer.milliseconds() > timeStamp + 500) {
+                    timeToggle = true;
+                    if (!drive.isBusy()) {
+                        currentstate = State.INTAKE;
+                    }
+                }
+
+            case INTAKE:
+                if(!drive.isBusy()) {
+                    intake.setPower(-0.5);
+                    drive.followTrajectoryAsync(pickUpStack);
+                }
         }
 
 
+        intake.update();
         drive.update();
         telemetry.addData("Robot Angle", drive.getPoseEstimate().getHeading());
+        telemetry.addData("state: ", currentstate);
     }
+}
+
 
 //    public void score(){
 //        arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
@@ -154,4 +187,4 @@ public class AutoLinearOp extends OpMode {
 //        arm.setState(DepoArm.DepoArmState.INITIALIZE);
 //        arm.update();
 //    }
-}
+

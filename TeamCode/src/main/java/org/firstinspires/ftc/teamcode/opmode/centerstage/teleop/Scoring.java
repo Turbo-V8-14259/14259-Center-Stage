@@ -40,7 +40,7 @@ public class Scoring extends LinearOpMode {
     int ledState = 0;
 
 
-    double TimeStamp = 0;
+    double TimeStamp = 0; // why the fuck is this ...
 
     int climbSafe = 0;
 
