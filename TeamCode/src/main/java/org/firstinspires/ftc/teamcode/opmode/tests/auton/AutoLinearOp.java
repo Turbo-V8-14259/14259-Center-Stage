@@ -7,7 +7,7 @@ import static org.firstinspires.ftc.teamcode.vision.Red.Location.RIGHT;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -25,7 +25,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 
 @Autonomous
-public class AutoLinearOp extends LinearOpMode {
+public class AutoLinearOp extends OpMode {
 
     enum State{
         IDLE,
@@ -59,7 +59,7 @@ public class AutoLinearOp extends LinearOpMode {
     Trajectory trajectory2;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void init() {
 
         drive = new SampleMecanumDrive(hardwareMap);
         intake = new Intake(hardwareMap.get(DcMotorEx.class, "Intake"), new ServoMotorBetter(hardwareMap.get(Servo.class, "intakeArm")));
@@ -79,28 +79,23 @@ public class AutoLinearOp extends LinearOpMode {
         drive.setPoseEstimate(startPose);
 
         trajectory1 = drive.trajectoryBuilder(startPose)
-        .lineToLinearHeading(leftProp)
-        .addDisplacementMarker(() -> drive.followTrajectoryAsync(trajectory2))
-        .build();
+                .lineToLinearHeading(leftProp)
+                .addDisplacementMarker(() -> drive.followTrajectoryAsync(trajectory2))
+                .build();
 
         trajectory2 = drive.trajectoryBuilder(trajectory1.end())
 
-        .splineToLinearHeading(toStack, CalculateTangents.calculateTangent(leftProp, toStack))
-        .build();
+                .splineToLinearHeading(toStack, CalculateTangents.calculateTangent(leftProp, toStack))
+                .build();
 
         currentstate = State.TRAVEL;
 
-        while (opModeIsActive() && !isStopRequested()){
-            drive.followTrajectoryAsync(trajectory1);
+
+        drive.followTrajectoryAsync(trajectory1);
             /*switch(currentstate){
                 case TRAVEL:
                     if(!drive.isBusy()){
-<<<<<<< HEAD
                         currentstate = State.TEAMPROP;
-=======
-                        currentstate = State.IDLE;
-                        drive.followTrajectoryAsync(trajectory2);
->>>>>>> 8f7cdf86aa526993d9705bf4d170fa62433c2599
                     }
                 case TEAMPROP:
                     if(!drive.isBusy()) {
@@ -117,33 +112,38 @@ public class AutoLinearOp extends LinearOpMode {
                         score();
                     }
             }*/
-            drive.update();
-            telemetry.addData("Robot Angle", drive.getPoseEstimate().getHeading());
-        }
 
 
+
+
+    }
+
+    @Override
+    public void loop() {
+        drive.update();
+        telemetry.addData("Robot Angle", drive.getPoseEstimate().getHeading());
     }
 
     public void initTraj(){
         //nvm
     }
-    public void score(){
-        arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
-        arm.update();
-        sleep(700);
-        turret.setState(LM1Turret.TurretState.SCORE);
-        turret.update();
-        sleep(700);
-        arm.setState(DepoArm.DepoArmState.SCORE);
-        arm.update();
-        sleep(700);
-        arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
-        arm.update();
-        sleep(700);
-        turret.setState(LM1Turret.TurretState.INITIALIZE);
-        turret.update();
-        sleep(700);
-        arm.setState(DepoArm.DepoArmState.INITIALIZE);
-        arm.update();
-    }
+//    public void score(){
+//        arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
+//        arm.update();
+//        sleep(700);
+//        turret.setState(LM1Turret.TurretState.SCORE);
+//        turret.update();
+//        sleep(700);
+//        arm.setState(DepoArm.DepoArmState.SCORE);
+//        arm.update();
+//        sleep(700);
+//        arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
+//        arm.update();
+//        sleep(700);
+//        turret.setState(LM1Turret.TurretState.INITIALIZE);
+//        turret.update();
+//        sleep(700);
+//        arm.setState(DepoArm.DepoArmState.INITIALIZE);
+//        arm.update();
+//    }
 }
