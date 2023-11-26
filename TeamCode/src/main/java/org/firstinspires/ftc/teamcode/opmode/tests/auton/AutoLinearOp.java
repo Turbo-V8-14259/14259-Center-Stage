@@ -22,6 +22,8 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 import org.firstinspires.ftc.teamcode.vision.Red;
 import org.firstinspires.ftc.vision.VisionPortal;
 
+import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
+
 @Autonomous
 public class AutoLinearOp extends LinearOpMode {
 
@@ -32,12 +34,9 @@ public class AutoLinearOp extends LinearOpMode {
         TRAVEL,
         STACK, //picks up pixels from stack
         BOARD, //to scoring board
-        SCORE //arm scores
     }
-    private Red.Location location = Red.Location.MIDDLE;
-    private Red redPropProcessor;
-    private VisionPortal visionPortal;
-    int randomization = 2;
+
+    int randomization = 0;
     //0 means left, 1 means middle, 2 means right.
     SampleMecanumDrive drive;
 
@@ -49,22 +48,15 @@ public class AutoLinearOp extends LinearOpMode {
 
     State currentstate = State.IDLE;
 
-    Pose2d startPose = new Pose2d(-35, 65, Math.toRadians(-90));
-    Pose2d initialLine = new Pose2d(-35, -15, Math.toRadians(-90));
+
+    //First Diverge
+
+    Pose2d startPose = new Pose2d(-35, -65, Math.toRadians(-90));
 
     Pose2d leftProp = new Pose2d(-42, -32, Math.toRadians(-90));
-    Pose2d rightProp = new Pose2d(-32, -40, Math.toRadians(0));
-    Pose2d middleProp = new Pose2d(-30, -21, Math.toRadians(-90));
-    Pose2d prop[] = {leftProp, middleProp, rightProp};
     Pose2d toStack = new Pose2d(-52, -17, Math.toRadians(-180));
-    Pose2d middleStrafe = new Pose2d(59, -41, Math.toRadians(-180));
-    Pose2d leftStrafe = new Pose2d(59, -36, Math.toRadians(-180));
-
-    Pose2d rightStrafe = new Pose2d(59, -47, Math.toRadians(-180));
-
-    Pose2d board[] = {leftStrafe, middleStrafe, rightStrafe};
-
-    Pose2d runToBoardPos = new Pose2d(45, -18, Math.toRadians(-180));
+    Trajectory trajectory1;
+    Trajectory trajectory2;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -86,70 +78,49 @@ public class AutoLinearOp extends LinearOpMode {
 
         drive.setPoseEstimate(startPose);
 
-        Trajectory trajectory1 = drive.trajectoryBuilder(startPose)
-                .lineToLinearHeading(initialLine)
-                .build();
-        Trajectory trajectory2 = drive.trajectoryBuilder(trajectory1.end())
-                .lineToLinearHeading(prop[randomization])
-                .build();
-        Trajectory trajectory3 = drive.trajectoryBuilder(trajectory2.end())
-                .lineToLinearHeading(initialLine)
-                .lineToLinearHeading(toStack)
-                .build();
-        Trajectory trajectory4 = drive.trajectoryBuilder(trajectory3.end())
-                .lineToLinearHeading(runToBoardPos)
-                .lineToLinearHeading(board[randomization])
-                .build();
-        redPropProcessor = new Red(telemetry);
-        visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
+        trajectory1 = drive.trajectoryBuilder(startPose)
+        .lineToLinearHeading(leftProp)
+        .addDisplacementMarker(() -> drive.followTrajectoryAsync(trajectory2))
+        .build();
 
-        while(!isStarted()){
-            location = redPropProcessor.getLocation();
-            if(location==LEFT){
-                randomization = 0;
-            }else if(location==MIDDLE){
-                randomization = 1;
-            }else if(location==RIGHT){
-                randomization = 2;
-            }
-            telemetry.update();
-        }
+        trajectory2 = drive.trajectoryBuilder(trajectory1.end())
+
+        .splineToLinearHeading(toStack, CalculateTangents.calculateTangent(leftProp, toStack))
+        .build();
+
         currentstate = State.TRAVEL;
-        drive.followTrajectoryAsync(trajectory1);
 
         while (opModeIsActive() && !isStopRequested()){
-            switch(currentstate){
+            drive.followTrajectoryAsync(trajectory1);
+            /*switch(currentstate){
                 case TRAVEL:
                     if(!drive.isBusy()){
                         currentstate = State.TEAMPROP;
-                        drive.followTrajectoryAsync(trajectory2);
                     }
                 case TEAMPROP:
                     if(!drive.isBusy()) {
                         currentstate = State.STACK;
-                        intake.setState(Intake.IntakeState.AUTO_HIGH);
-                        intake.update();
-                        sleep(500);
-                        drive.followTrajectory(trajectory3);
+
                     }
                 case STACK:
                     if(!drive.isBusy()){
                         currentstate = State.BOARD;
-                        intake.setPower(-.5);
-                        intake.setState(Intake.IntakeState.AUTO_STACK_DROPPED);
-                        intake.update();
 
-                        sleep(500);
-                        drive.followTrajectory(trajectory4);
                     }
                 case BOARD:
                     if(!drive.isBusy()){
                         score();
                     }
-            }
+            }*/
+            drive.update();
+            telemetry.addData("Robot Angle", drive.getPoseEstimate().getHeading());
         }
 
 
+    }
+
+    public void initTraj(){
+        //nvm
     }
     public void score(){
         arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
