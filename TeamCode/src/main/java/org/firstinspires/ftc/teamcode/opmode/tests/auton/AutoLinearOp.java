@@ -24,11 +24,14 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 
-@Autonomous
+@Autonomous(name = "THE BETTER AUTO RED")
+
 public class AutoLinearOp extends OpMode {
 
     enum State{
         IDLE,
+        GROUNDPL,
+        PRELOAD,
         TEAMPROP,
         INTAKE,
         TRAVEL,
@@ -55,8 +58,9 @@ public class AutoLinearOp extends OpMode {
 
     Pose2d leftProp = new Pose2d(-42, -32, Math.toRadians(-90));
     Pose2d toStack = new Pose2d(-52, -17, Math.toRadians(-180));
-    Trajectory trajectory1;
-    Trajectory trajectory2;
+
+    Trajectory toLeftStack;
+    Trajectory toLeftProp;
 
     @Override
     public void init() {
@@ -78,20 +82,20 @@ public class AutoLinearOp extends OpMode {
 
         drive.setPoseEstimate(startPose);
 
-        trajectory1 = drive.trajectoryBuilder(startPose)
+        toLeftProp = drive.trajectoryBuilder(startPose)
                 .lineToLinearHeading(leftProp)
-                .addDisplacementMarker(() -> drive.followTrajectoryAsync(trajectory2))
+                .addDisplacementMarker(() -> drive.followTrajectoryAsync(toLeftStack))
                 .build();
 
-        trajectory2 = drive.trajectoryBuilder(trajectory1.end())
-
+        toLeftStack = drive.trajectoryBuilder(toLeftProp.end())
+                .forward(-5)
                 .splineToLinearHeading(toStack, CalculateTangents.calculateTangent(leftProp, toStack))
                 .build();
 
         currentstate = State.TRAVEL;
 
 
-        drive.followTrajectoryAsync(trajectory1);
+        drive.followTrajectoryAsync(toLeftProp);
             /*switch(currentstate){
                 case TRAVEL:
                     if(!drive.isBusy()){
@@ -119,14 +123,18 @@ public class AutoLinearOp extends OpMode {
     }
 
     @Override
+
     public void loop() {
+        switch(currentstate){
+            case GROUNDPL:
+
+        }
+
+
         drive.update();
         telemetry.addData("Robot Angle", drive.getPoseEstimate().getHeading());
     }
 
-    public void initTraj(){
-        //nvm
-    }
 //    public void score(){
 //        arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
 //        arm.update();
