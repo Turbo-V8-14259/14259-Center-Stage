@@ -121,7 +121,7 @@ public class AutoLinearOp extends LinearOpMode {
             switch(currentstate){
                 case TRAVEL:
                     if(!drive.isBusy()){
-                        currentstate = State.TEAMPROP;
+                        currentstate = State.IDLE;
                         drive.followTrajectoryAsync(trajectory2);
                     }
                 case TEAMPROP:
