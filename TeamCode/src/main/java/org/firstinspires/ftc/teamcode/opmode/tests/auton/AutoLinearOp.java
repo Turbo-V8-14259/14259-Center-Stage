@@ -37,6 +37,7 @@ public class AutoLinearOp extends OpMode {
         PRELOAD,
         TEAMPROP,
         INTAKE,
+        SCORE,
         TRAVEL,
         STACK, //picks up pixels from stack
         BOARD, //to scoring board
@@ -156,6 +157,7 @@ public class AutoLinearOp extends OpMode {
 
             case INTAKE:
                 if(!drive.isBusy()) {
+                    currentstate = State.SCORE;
                     intake.setPower(-0.5);
                     drive.followTrajectoryAsync(pickUpStack);
                 }
