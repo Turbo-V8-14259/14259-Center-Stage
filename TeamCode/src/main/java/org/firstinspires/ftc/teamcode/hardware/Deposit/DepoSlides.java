@@ -18,7 +18,8 @@ public class DepoSlides {
         INCREMENT_UP,
         INCREMENT_DOWN,
 
-        CALCULATED_UP
+        CALCULATED_UP,
+        RUNTOPOSITION,
     }
     public DepositState depositFSM = DepositState.STOPPED;
 
@@ -33,6 +34,7 @@ public class DepoSlides {
     public int[] presetInches = {0, 15, 30, (int) this.maxTargetInches};
 
     public int level = 0;
+    public double manualPosition = 0;
     public int extension = 0;
     public double[] levels = {0,0.1,0.2,0.3,0.4,0.5};
     public double[] extensions = {0,0.2,0.4,0.6,0.8,1};
@@ -128,6 +130,11 @@ public class DepoSlides {
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
+            case RUNTOPOSITION:
+                this.targetDepositInches = this.manualPosition;
+                this.setInches(targetDepositInches);
+                this.pidRunning = true;
+
         }//untested
     }
     public DepoSlides.DepositState getState() {

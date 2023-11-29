@@ -26,7 +26,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 
-@Autonomous(name = "THE BETTER AUTO RED")
+@Autonomous(name = "no work welp")
 
 public class AutoLinearOp extends OpMode {
 
@@ -60,11 +60,9 @@ public class AutoLinearOp extends OpMode {
     //First Diverge
 
     Pose2d startPose = new Pose2d(-35, -65, Math.toRadians(-90));
-
     Pose2d leftProp = new Pose2d(-42, -32, Math.toRadians(-90));
     Pose2d leftPropIP = new Pose2d(-42, -17, Math.toRadians(-90));
     Pose2d toStack = new Pose2d(-52, -17, Math.toRadians(-180));
-
     Pose2d toStackMore = new Pose2d(-53, -18, Math.toRadians(-180));
     Pose2d runToBoardPos = new Pose2d(45, -18, Math.toRadians(-180));
 
@@ -129,7 +127,6 @@ public class AutoLinearOp extends OpMode {
         switch (currentstate) {
             case GROUNDPL:
                 if (!drive.isBusy()) {
-
                     intake.setState(Intake.IntakeState.AUTO_HIGH);
 
                     if (timeToggle) {//timeToggle starts at true by default
@@ -153,7 +150,6 @@ public class AutoLinearOp extends OpMode {
                         currentstate = State.INTAKE;
                     }
                 }
-
             case INTAKE:
                 if(!drive.isBusy()) {
                     intake.setPower(-0.5);

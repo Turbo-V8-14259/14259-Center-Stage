@@ -32,7 +32,7 @@ import org.firstinspires.ftc.teamcode.vision.Blue;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 
-@Autonomous(name = "blue autonomy")
+@Autonomous(name = "bad blue autonomy")
 public class AutoBlue extends LinearOpMode {
 
     private Blue.Location location = Blue.Location.MIDDLE;

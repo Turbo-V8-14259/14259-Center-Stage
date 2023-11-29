@@ -12,11 +12,13 @@ public class LM1Turret {
         PITCH_MID,
         STOPPED,
 
-        AUTOLOCK
+        AUTOLOCK,
+
+        RUNTOPOSITION,
     }
 
     public double robotAngle = 0;
-
+    public double manualPosition;
 
     public TurretState turretFSM = TurretState.STOPPED;
 
@@ -63,6 +65,8 @@ public class LM1Turret {
             case AUTOLOCK:
                 target = calculateRotation(robotAngle);
                 break;
+            case RUNTOPOSITION:
+                target = manualPosition;
         }
     }
 

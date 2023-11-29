@@ -14,7 +14,8 @@ public class DepoArm {
         ABSOLUTE_INTERMEDIATE,
 
         INTERMEDIATE,
-        STOPPED
+        STOPPED,
+        RUNTOPOSITION,
     }
 
     public DepoArmState depoArmFSM = DepoArmState.STOPPED;
@@ -29,6 +30,7 @@ public class DepoArm {
     private ServoMotorBetter rightArm;
 
     public double target = 0;
+    public double manualPosition = 0;
 
     public int level = 0;
     public double[] levelOffset = {-0.05,0.025,0.05,0.1,0.15,0.2,0.2};
@@ -67,6 +69,9 @@ public class DepoArm {
                 target = 0.6;
             case STOPPED:
                 break;
+            case RUNTOPOSITION:
+                target = manualPosition;
+                //TODO add sanity check to make sure that it is between 0 and 1;
         }
     }
 
