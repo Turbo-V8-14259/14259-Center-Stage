@@ -64,7 +64,7 @@ public class StateMachineAuto extends OpMode {
     Pose2d leftProp = new Pose2d(-46, -26, Math.toRadians(-90));
     Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
     Pose2d toStack = new Pose2d(-54, -12, Math.toRadians(-180));
-    Pose2d toStackMore = new Pose2d(-58, -12, Math.toRadians(-180));
+    Pose2d toStackMore = new Pose2d(-56, -12, Math.toRadians(-160));
     Pose2d middleTruss = new Pose2d(0, -12, Math.toRadians(-180));
     Pose2d depositL = new Pose2d(40, -12, Math.toRadians(-220));
 
@@ -114,7 +114,7 @@ public class StateMachineAuto extends OpMode {
                 .lineToLinearHeading(middleTruss)
                 .addDisplacementMarker(() -> drive.followTrajectoryAsync(ScoreLeft))
                 .build();
-        ScoreLeft = drive.trajectoryBuilder(leftToTruss.end())
+        ScoreLeft = drive.trajectoryBuilder(pickUpStack.end())
                 .lineToLinearHeading(depositL)
                 .build();
         leftToIntake = drive.trajectoryBuilder(ScoreLeft.end())
@@ -150,7 +150,7 @@ public class StateMachineAuto extends OpMode {
                         timeToggle = false;
                     }
                     if (timer.milliseconds() > timeStamp + 100) {
-                        drive.followTrajectoryAsync(leftToTruss);
+                        drive.followTrajectoryAsync(ScoreLeft);
                         currentstate = State.TOSCOREL;
                         timeToggle = true;
                     }
@@ -166,7 +166,7 @@ public class StateMachineAuto extends OpMode {
                         timeToggle = false;
                     }
                     if (timer.milliseconds() > timeStamp + 400) {
-                        turret.manualPosition = 0.55;
+                        turret.manualPosition = 0.5;
                         timeToggle = true;
                     }
                     if(!drive.isBusy()){
