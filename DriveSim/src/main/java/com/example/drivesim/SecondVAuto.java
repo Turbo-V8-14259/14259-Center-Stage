@@ -73,50 +73,42 @@ public class SecondVAuto {
     int x =0, y=0;//arbitrary adjustment values
     int posNum = 0;//0, 1, 2, 3 clockwise from bottom left
     int mult[][] = {{1,1,1}, {1, -1, -1}, {-1, -1}, {-1, 1}};
-    Pose2d initialPosition = new Pose2d(-35*mult[posNum][0]+x, -65*mult[posNum][1]+y, Math.toRadians(-90*mult[posNum][2]));
-    Vector2d secondPosition = new Vector2d(-35*mult[posNum][0]+x,-11.6*mult[posNum][1]+y);
-    Pose2d thirdPositionR = new Pose2d(-35*mult[posNum][0]+x,-29*mult[posNum][1]+y,Math.toRadians(0));//or -180
-    Pose2d thirdPositionL = new Pose2d(-35*mult[posNum][0]+x, -29*mult[posNum][1]+y, Math.toRadians(-180*mult[posNum][2]));
-    Vector2d thirdPositionF = new Vector2d(-35*mult[posNum][0]+x, -14*mult[posNum][1]+y);
-    Pose2d fourthPosition = new Pose2d(-35*mult[posNum][0]+x,-11.6*mult[posNum][1]+y,Math.toRadians(-90*mult[posNum][2]));
-    Pose2d fifthPosition = new Pose2d(-55*mult[posNum][0]+x,-11.6*mult[posNum][1]+y, Math.toRadians(-180*mult[posNum][2]));
-    Pose2d sixthPosition = new Pose2d(5*mult[posNum][0]+x, -11.6*mult[posNum][1]+y, Math.toRadians(-180*mult[posNum][2]));
-    Pose2d seventhPosition = new Pose2d(14*mult[posNum][0]+x, -16*mult[posNum][1]+y, Math.toRadians(-200*mult[posNum][2]));
 
 
 
 
     public static void main(String[] args) {
+        Pose2d startPose = new Pose2d(-39, -61, Math.toRadians(-90));
+        Pose2d leftProp = new Pose2d(-46, -23, Math.toRadians(-90));
+        Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
+        Pose2d toStack = new Pose2d(-58, -12, Math.toRadians(-180));
+        Pose2d toStackMore = new Pose2d(-62, -12, Math.toRadians(-180));
+        Pose2d middleTruss = new Pose2d(0, -12, Math.toRadians(-180));
+        Pose2d depositL = new Pose2d(40, -12, Math.toRadians(-210));
+        Pose2d park = new Pose2d(50,-30,Math.toRadians(-180));
+
+
         MeepMeep meepMeep = new MeepMeep(500);
-        Pose2d startPose = new Pose2d(-35, 65, Math.toRadians(90)); //default position
-        Pose2d initialLine = new Pose2d(-35, 15, Math.toRadians(90));
-        Pose2d leftProp = new Pose2d(-42, 32, Math.toRadians(90));
-        Pose2d leftPropIntermediate = new Pose2d(-42, 5, Math.toRadians(90));
-        Pose2d stackPos = new Pose2d(-45, 17, Math.toRadians(180));
-        Pose2d toStack = new Pose2d(-52, 17, Math.toRadians(180));
-        Pose2d toStackMore = new Pose2d(-53, 18, Math.toRadians(180));
-        Pose2d runToBoardPos = new Pose2d(45, 18, Math.toRadians(180));
-        Pose2d leftStrafe = new Pose2d(59, 36, Math.toRadians(180));
-        Pose2d middleStrafe = new Pose2d(59, 41, Math.toRadians(180));
-        Pose2d rightProp = new Pose2d(-32, 40, Math.toRadians(0)); //rn
-        Pose2d rightPropIntermediate = new Pose2d(-28, 40, Math.toRadians(0)); //rn
-        Pose2d rightPropIntermediate2 = new Pose2d(-40, 40, Math.toRadians(0)); //rn
-
-        Pose2d middleProp = new Pose2d(-30, 21, Math.toRadians(90));
-        Pose2d middlePropIntermediate = new Pose2d(-35,5, Math.toRadians(90));
-        Pose2d rightStrafe = new Pose2d(59, 47, Math.toRadians(180));
-
-        Pose2d startyPose = new Pose2d(0, 0, Math.toRadians(-90));
-        Pose2d middlePose = new Pose2d(0, 12, Math.toRadians(0));
-        Vector2d endPose = new Vector2d(12, 12);
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startyPose)
-                                .splineToLinearHeading(middlePose, CalculateTangents.calculateTangent(startPose, middlePose))
-                                .splineTo(endPose, CalculateTangents.calculateTangent(middlePose, endPose))
+                        drive.trajectorySequenceBuilder(startPose)
+                                .lineToLinearHeading(leftProp)
+                                .lineToLinearHeading(leftPropIP)
+                                .lineToSplineHeading(toStack)
+                                .lineToLinearHeading(toStackMore)
+                                .lineToLinearHeading(middleTruss)
+                                .lineToLinearHeading(depositL)
+                                .lineToLinearHeading(middleTruss)
+                                .lineToLinearHeading(toStackMore)
+                                .lineToLinearHeading(middleTruss)
+                                .lineToLinearHeading(depositL)
+                                .lineToLinearHeading(toStackMore)
+                                .lineToLinearHeading(middleTruss)
+                                .lineToLinearHeading(depositL)
+                                .lineToLinearHeading(park)
                                 .build());
 
 
