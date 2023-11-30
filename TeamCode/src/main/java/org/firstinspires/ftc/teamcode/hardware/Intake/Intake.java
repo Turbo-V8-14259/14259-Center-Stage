@@ -12,11 +12,12 @@ public class Intake{
         STACK_HIGH,
 
         UP,
+        RUNTOPOSITION,
         INCRIMENT_UP,
         INCRIMENT_DOWN,
         AUTO_HIGH,
         AUTO_STACK_DROPPED,
-
+        LEVEL2,
         STOPPED
     }
 
@@ -30,7 +31,7 @@ public class Intake{
     public ServoMotorBetter intakePivot;
 
     public double target = 0;
-
+    public double manualPosition = 0;
     public Intake(DcMotorEx intakeMotor, ServoMotorBetter intakePivot) {
         this.intakeMotor = intakeMotor;
         this.intakePivot = intakePivot;
@@ -48,6 +49,9 @@ public class Intake{
     public void setState(IntakeState state){
         this.intakeFSM = state;
         switch (intakeFSM){
+            case RUNTOPOSITION:
+                target = manualPosition;
+                break;
             case INITIALIZE:
                 target = 0.05;
                 break;
@@ -66,6 +70,9 @@ public class Intake{
                 break;
             case AUTO_HIGH:
                 target = .3;
+                break;
+            case LEVEL2:
+                target = .15;
                 break;
             case AUTO_STACK_DROPPED:
                 target = .23;

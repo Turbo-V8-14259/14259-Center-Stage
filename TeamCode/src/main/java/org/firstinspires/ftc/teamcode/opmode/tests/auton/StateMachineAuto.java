@@ -5,6 +5,7 @@ import static org.firstinspires.ftc.teamcode.vision.Red.Location.MIDDLE;
 import static org.firstinspires.ftc.teamcode.vision.Red.Location.RIGHT;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -37,6 +38,7 @@ public class StateMachineAuto extends OpMode {
         TOSCOREL,
         INTAKE,
         SCORE,
+        RESETTOSTACK,
         STACK, //picks up pixels from stack
         BOARD, //to scoring board
     }
@@ -60,16 +62,24 @@ public class StateMachineAuto extends OpMode {
 
     Pose2d startPose = new Pose2d(-35, -65, Math.toRadians(-90));
     Pose2d leftProp = new Pose2d(-42, -32, Math.toRadians(-90));
-    Pose2d leftPropIP = new Pose2d(-42, -17, Math.toRadians(-90));
+    Pose2d leftPropIP = new Pose2d(-42, -25, Math.toRadians(-90));
     Pose2d toStack = new Pose2d(-52, -17, Math.toRadians(-180));
     Pose2d toStackMore = new Pose2d(-53, -18, Math.toRadians(-180));
-    Pose2d runToBoardPos = new Pose2d(45, -18, Math.toRadians(-180));
+    Pose2d middleTruss = new Pose2d(0, -10, Math.toRadians(-180));
 
+    Pose2d runToBoardPos = new Pose2d(45, -18, Math.toRadians(-180));
+    Pose2d depositL = new Pose2d(45, -26, Math.toRadians(-230));
+    //Vector2d middleTruss = new Vector2d(0,-13);
+    //Vector2d depositL = new Vector2d(30, -18);
+
+
+    boolean fullyReset = true;
     Trajectory toLeftStack;
     Trajectory LeftBackFiveInches;
     Trajectory toLeftProp;
     Trajectory pickUpStack;
     Trajectory ScoreLeft;
+    Trajectory driveToTruss;
 
     Trajectory leftToIntake;
     // Test Commit
@@ -103,8 +113,13 @@ public class StateMachineAuto extends OpMode {
         pickUpStack = drive.trajectoryBuilder(toLeftStack.end())
                 .lineToLinearHeading(toStackMore)
                 .build();
+//        driveToTruss = drive.trajectoryBuilder(pickUpStack.end())
+//                .lineToLinearHeading(middleTruss)
+//                .addDisplacementMarker(() -> drive.followTrajectoryAsync(ScoreLeft))
+//                .build();
         ScoreLeft = drive.trajectoryBuilder(pickUpStack.end())
-                .lineToLinearHeading(runToBoardPos)
+                .splineToSplineHeading(middleTruss, CalculateTangents.calculateTangent(toStackMore, middleTruss))
+                .splineToSplineHeading(depositL, CalculateTangents.calculateTangent(middleTruss, depositL))
                 .build();
         leftToIntake = drive.trajectoryBuilder(ScoreLeft.end())
                 .lineToLinearHeading(toStackMore)
@@ -119,21 +134,17 @@ public class StateMachineAuto extends OpMode {
         switch (currentstate) {
             case TOGPL:
                 if (!drive.isBusy()) {
-                    intake.setState(Intake.IntakeState.AUTO_HIGH);
-                    if (timeToggle) {
-                        timeStamp = timer.milliseconds();
-                        timeToggle = false;
-                    }
-                    if (timer.milliseconds() > timeStamp + 500) {
-                        currentstate = State.TOINTAKE;
-                        drive.followTrajectoryAsync(LeftBackFiveInches);
-                        timeToggle = true;
-                    }
+                    intake.manualPosition = 0.3;
+                    intake.setState(Intake.IntakeState.RUNTOPOSITION);
+                    currentstate = State.TOINTAKE;
+                    drive.followTrajectoryAsync(LeftBackFiveInches);
                 }
+                break;
             case TOINTAKE:
                 if (!drive.isBusy() && atTargetPosition(toStack)) {
                     currentstate = State.INTAKE;
                 }
+                break;
             case INTAKE:
                 if(!drive.isBusy() && atTargetPosition(toStack)) {
                     intake.setPower(-0.5);
@@ -148,13 +159,15 @@ public class StateMachineAuto extends OpMode {
                         timeToggle = true;
                     }
                 }
+                break;
             case TOSCOREL:
                 if(drive.getPoseEstimate().getX() > 5){
                     slides.setState(DepoSlides.DepositState.RUNTOPOSITION);
                     turret.setState(LM1Turret.TurretState.RUNTOPOSITION);
                     arm.setState(DepoArm.DepoArmState.RUNTOPOSITION);
-                    arm.manualPosition = 0.4;
-                    slides.manualPosition = 6;
+                    arm.manualPosition = 0.5;
+                    slides.manualPosition = 9;
+                    fullyReset = false;
                     if (timeToggle) {
                         timeStamp = timer.milliseconds();
                         timeToggle = false;
@@ -167,6 +180,8 @@ public class StateMachineAuto extends OpMode {
                         currentstate = State.SCORE;
                     }
                 }
+                break;
+
             case SCORE:
                 if(!slides.isBusy()){
                     arm.manualPosition = 0.3;
@@ -175,10 +190,30 @@ public class StateMachineAuto extends OpMode {
                     timeStamp = timer.milliseconds();
                     timeToggle = false;
                 }
-                if (timer.milliseconds() > timeStamp + 600) {
-                    turret.manualPosition = 0.6;
+                if (timer.milliseconds() > timeStamp + 1000) {
+                    arm.manualPosition = 0.3;
+                    turret.manualPosition = 0.01;
+                    slides.manualPosition = 0;
+                    currentstate = State.RESETTOSTACK;
+
                     timeToggle = true;
                 }
+                break;
+
+            case RESETTOSTACK:
+                if(!fullyReset){
+                    if(slides.getCurrentInches() < 2){
+                        arm.manualPosition = 0;
+                        fullyReset = true;
+                    }
+                }else{
+                    intake.manualPosition -= 0.1;
+
+                    drive.followTrajectoryAsync(leftToIntake);
+                    currentstate = State.INTAKE;
+                }
+                break;
+
         }
 
         slides.update();
@@ -188,6 +223,7 @@ public class StateMachineAuto extends OpMode {
         drive.update();
         telemetry.addData("Robot Angle", drive.getPoseEstimate().getHeading());
         telemetry.addData("state: ", currentstate);
+        telemetry.addData("slides position", slides.getCurrentInches());
     }
 
     public boolean atTargetPosition(Pose2d targetPose){
