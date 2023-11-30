@@ -64,7 +64,7 @@ public class StateMachineAuto extends OpMode {
     Pose2d leftProp = new Pose2d(-46, -26, Math.toRadians(-90));
     Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
     Pose2d toStack = new Pose2d(-54, -12, Math.toRadians(-180));
-    Pose2d toStackMore = new Pose2d(-56, -12, Math.toRadians(-160));
+    Pose2d toStackMore = new Pose2d(-58, -11, Math.toRadians(-170));
     Pose2d middleTruss = new Pose2d(0, -12, Math.toRadians(-180));
     Pose2d depositL = new Pose2d(40, -12, Math.toRadians(-220));
 
@@ -140,7 +140,7 @@ public class StateMachineAuto extends OpMode {
                 if (!drive.isBusy() && atTargetPosition(toStack)) {
                     currentstate = State.INTAKE;
                     drive.followTrajectoryAsync(pickUpStack);
-                    intake.setPower(-0.8);
+                    intake.setPower(-0.6);
                 }
                 break;
             case INTAKE:
@@ -158,7 +158,7 @@ public class StateMachineAuto extends OpMode {
                 break;
             case TOSCOREL:
                 if(drive.getPoseEstimate().getX() > 5){
-                    arm.manualPosition = 0.7;
+                    arm.manualPosition = 0.6;
                     slides.manualPosition = 22;
                     fullyReset = false;
                     if (timeToggle) {
@@ -195,7 +195,7 @@ public class StateMachineAuto extends OpMode {
                     arm.manualPosition = 0.5;
                     turret.manualPosition = 0.01;
                     slides.manualPosition = 0;
-                    if(slides.getCurrentPosition() < 7){
+                    if(slides.getCurrentPosition() < 18){
                         drive.followTrajectoryAsync(leftToIntake);
                     }
                     if(slides.getCurrentInches() < 3){
@@ -203,7 +203,7 @@ public class StateMachineAuto extends OpMode {
                         fullyReset = true;
                     }
                 }else{
-                    intake.manualPosition -= 0.1;
+                    intake.manualPosition -= 0.125;
                     currentstate = State.INTAKE;
                 }
                 break;
