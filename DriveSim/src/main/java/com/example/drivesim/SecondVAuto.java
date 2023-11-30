@@ -73,18 +73,21 @@ public class SecondVAuto {
     int x =0, y=0;//arbitrary adjustment values
     int posNum = 0;//0, 1, 2, 3 clockwise from bottom left
     int mult[][] = {{1,1,1}, {1, -1, -1}, {-1, -1}, {-1, 1}};
+    int randomization = 1;
+    // 1 -> left; 2 -> middle; 3 -> right
 
 
 
 
     public static void main(String[] args) {
         Pose2d startPose = new Pose2d(-39, -61, Math.toRadians(-90));
-        Pose2d leftProp = new Pose2d(-46, -23, Math.toRadians(-90));
+        Pose2d middleProp = new Pose2d(-46, -24., Math.toRadians(0));
+        Pose2d leftProp = new Pose2d(-46, -26, Math.toRadians(-90));
         Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
-        Pose2d toStack = new Pose2d(-58, -12, Math.toRadians(-180));
-        Pose2d toStackMore = new Pose2d(-62, -12, Math.toRadians(-180));
+        Pose2d toStack = new Pose2d(-54, -12, Math.toRadians(-180));
+        Pose2d toStackMore = new Pose2d(-58, -10, Math.toRadians(-170));
         Pose2d middleTruss = new Pose2d(0, -12, Math.toRadians(-180));
-        Pose2d depositL = new Pose2d(40, -12, Math.toRadians(-210));
+        Pose2d depositL = new Pose2d(40, -12, Math.toRadians(-220));
         Pose2d park = new Pose2d(50,-30,Math.toRadians(-180));
 
 
@@ -92,21 +95,17 @@ public class SecondVAuto {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setConstraints(80, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
                                 .lineToLinearHeading(leftProp)
                                 .lineToLinearHeading(leftPropIP)
                                 .lineToSplineHeading(toStack)
                                 .lineToLinearHeading(toStackMore)
-                                .lineToLinearHeading(middleTruss)
-                                .lineToLinearHeading(depositL)
-                                .lineToLinearHeading(middleTruss)
-                                .lineToLinearHeading(toStackMore)
-                                .lineToLinearHeading(middleTruss)
                                 .lineToLinearHeading(depositL)
                                 .lineToLinearHeading(toStackMore)
-                                .lineToLinearHeading(middleTruss)
+                                .lineToLinearHeading(depositL)
+                                .lineToLinearHeading(toStackMore)
                                 .lineToLinearHeading(depositL)
                                 .lineToLinearHeading(park)
                                 .build());
