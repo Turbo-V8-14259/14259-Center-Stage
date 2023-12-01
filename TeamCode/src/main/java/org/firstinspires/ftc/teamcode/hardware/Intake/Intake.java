@@ -10,7 +10,6 @@ public class Intake{
         INITIALIZE,
         INTAKE_TELE,
         STACK_HIGH,
-
         UP,
         RUNTOPOSITION,
         INCRIMENT_UP,
