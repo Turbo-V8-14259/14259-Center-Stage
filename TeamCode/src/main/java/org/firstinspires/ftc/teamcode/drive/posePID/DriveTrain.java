@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.drive.posePID;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.drive.Drive;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
@@ -26,10 +28,28 @@ public class DriveTrain {
     public void setX(double x) { this.x = x; }
     public void setY(double y) { this.y = y; }
     public void setHeading(double heading) { this.heading = heading; }
-
+    private void addPower(double power, double r) {
+        this.xPower += power * Math.cos(r);
+        this.yPower += power * Math.sin(r);
+    }
+    private void addHeadingPower(double power) {
+        this.headingPower += power;
+    }
     private double xPower = 0.0, yPower = 0.0, headingPower = 0.0;
-    public DriveTrain(SampleMecanumDrive drive) {
-        this.drive = drive;
+    public DriveTrain(HardwareMap hardwareMap) {
+        this.drive = new SampleMecanumDrive(hardwareMap);
+        this.xPid = new PID(
+                DriveTrain.xPidCoefficients,
+                () -> this.x - this.xPred,
+                factor -> this.addPower(factor, -this.headingPred));
+        this.yPid = new PID(
+                DriveTrain.yPidCoefficients,
+                () -> this.y - this.yPred,
+                factor -> this.addPower(factor, -this.headingPred + Math.PI / 2.0));
+        this.headingPid = new PID(
+                DriveTrain.headingPidCoefficients,
+                () -> this.heading - this.headingPred,
+                factor -> this.addHeadingPower(factor));
     }
 
     public void updateLocalizer(){
