@@ -85,7 +85,7 @@ public class SecondVAuto {
         Pose2d leftProp = new Pose2d(-46, -26, Math.toRadians(-90));
         Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
         Pose2d toStack = new Pose2d(-54, -12, Math.toRadians(-180));
-        Pose2d toStackMore = new Pose2d(-58, -10, Math.toRadians(-170));
+        Pose2d toStackMore = new Pose2d(-58, -10, Math.toRadians(-180));
         Pose2d middleTruss = new Pose2d(0, -12, Math.toRadians(-180));
         Pose2d depositL = new Pose2d(40, -12, Math.toRadians(-220));
         Pose2d park = new Pose2d(50,-30,Math.toRadians(-180));
