@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 
-@TeleOp(name = "Slides reset and manual")
+@TeleOp
 public class slidesTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

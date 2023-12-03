@@ -109,8 +109,7 @@ public class Blue implements VisionProcessor {
     }
 
     @Override
-    public void init(int width, int height, CameraCalibration calibration) {
-    }
+    public void init(int width, int height, CameraCalibration calibration) {}
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
