@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
 public class DriveTrain {
@@ -59,7 +60,7 @@ public class DriveTrain {
         this.xPred = drive.getPoseEstimate().getX();
         this.yPred = drive.getPoseEstimate().getY();
         this.headingCurrent = drive.getPoseEstimate().getHeading(); //degree? radian?
-        if(Math.abs(headingCurrent - headingLast) > 180){
+        if(Math.abs(headingCurrent - headingLast) > M.PI){
             count += Math.signum(headingLast - headingCurrent);
         }
         headingLast = headingCurrent;
