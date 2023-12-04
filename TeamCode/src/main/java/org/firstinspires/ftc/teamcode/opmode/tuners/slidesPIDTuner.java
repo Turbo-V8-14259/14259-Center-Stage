@@ -45,7 +45,7 @@ public class slidesPIDTuner extends LinearOpMode {
             turret.setState(LM1Turret.TurretState.INITIALIZE);
             slides.manualMode = false;
             if (gamepad1.a){
-                slides.target = -10; //always make this negative to go forard
+                slides.target = -0.3; //always make this negative to go forard
             }else{
                 slides.target = 0;
             }
