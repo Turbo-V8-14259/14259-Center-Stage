@@ -80,13 +80,17 @@ public class SecondVAuto {
 
 
     public static void main(String[] args) {
-        Pose2d startPose = new Pose2d(-39, -61, Math.toRadians(-90));
-        Pose2d middleProp = new Pose2d(-46, -24., Math.toRadians(0));
+        Pose2d startPose = new Pose2d(-34, -61, Math.toRadians(-90));
+        Pose2d startPoseright = new Pose2d(-34, -61, Math.toRadians(270));
         Pose2d leftProp = new Pose2d(-46, -26, Math.toRadians(-90));
         Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
-        Pose2d toStack = new Pose2d(-54, -12, Math.toRadians(-180));
+        Pose2d middleProp = new Pose2d(-34, -12, Math.toRadians(-90));
+        Pose2d rightProp = new Pose2d(-35, -29, Math.toRadians(0));
+        Pose2d rightPropStack = new Pose2d(-58, -11, Math.toRadians(180));
+        Pose2d toStack = new Pose2d(-58, -11, Math.toRadians(-180));
         Pose2d toStackMore = new Pose2d(-58, -10, Math.toRadians(-180));
-        Pose2d middleTruss = new Pose2d(0, -12, Math.toRadians(-180));
+        Pose2d middleTruss = new Pose2d(0, -7, Math.toRadians(-180));
+
         Pose2d depositL = new Pose2d(40, -12, Math.toRadians(-220));
         Pose2d park = new Pose2d(50,-30,Math.toRadians(-180));
 
@@ -97,20 +101,29 @@ public class SecondVAuto {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(80, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPose)
-                                .lineToLinearHeading(leftProp)
-                                .lineToLinearHeading(leftPropIP)
-                                .lineToSplineHeading(toStack)
-                                .lineToLinearHeading(toStackMore)
+                        drive.trajectorySequenceBuilder(startPoseright)
+                                .lineToLinearHeading(rightProp)
+
+                                .lineToSplineHeading(rightPropStack)
+                                .lineToSplineHeading(depositL)
+                                .lineToLinearHeading(toStack)
                                 .lineToLinearHeading(depositL)
-                                .lineToLinearHeading(toStackMore)
-                                .lineToLinearHeading(depositL)
-                                .lineToLinearHeading(toStackMore)
+                                .lineToLinearHeading(toStack)
                                 .lineToLinearHeading(depositL)
                                 .lineToLinearHeading(park)
                                 .build());
 
-
+//.lineToLinearHeading(leftProp)
+//                .lineToLinearHeading(leftPropIP)
+//                .lineToSplineHeading(toStack)
+//                .lineToLinearHeading(toStackMore)
+//                .lineToLinearHeading(depositL)
+//                .lineToLinearHeading(toStackMore)
+//                .lineToLinearHeading(depositL)
+//                .lineToLinearHeading(toStackMore)
+//                .lineToLinearHeading(depositL)
+//                .lineToLinearHeading(park)
+//                .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
                 .setDarkMode(true)

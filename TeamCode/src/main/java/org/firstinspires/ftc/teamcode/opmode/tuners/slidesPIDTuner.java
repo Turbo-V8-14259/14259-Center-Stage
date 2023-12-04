@@ -27,11 +27,12 @@ public class slidesPIDTuner extends LinearOpMode {
     DepoArm arm;
 
     DepoSlides slides;
-
+    stickyGamepad gamepadOne;
     @Override
     public void runOpMode() throws InterruptedException {
         slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "rightSlides")));
         //initalize here
+        gamepadOne = new stickyGamepad(gamepad1);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "Pitch")));
         turret = new LM1Turret(new ServoMotorBetter(hardwareMap.get(Servo.class, "turret")));
@@ -39,13 +40,19 @@ public class slidesPIDTuner extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
+
             arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
             turret.setState(LM1Turret.TurretState.INITIALIZE);
             slides.manualMode = false;
-            slides.target = setTarget;
+            if (gamepad1.a){
+                slides.target = -10; //always make this negative to go forard
+            }else{
+                slides.target = 0;
+            }
 
             telemetry.addData("slides position", slides.getCurrentPosition());
             telemetry.addData("target", setTarget);
+
             //update here
             //add data here
             telemetry.update();

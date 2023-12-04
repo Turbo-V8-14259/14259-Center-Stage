@@ -1,6 +1,6 @@
-#Sat Nov 04 18:12:22 PDT 2023
-base.0=/Users/des_veve/Documents/14259-Center-Stage/14259-Center-Stage/TeamCode/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/0/classes.dex
-base.1=/Users/des_veve/Documents/14259-Center-Stage/14259-Center-Stage/TeamCode/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/3/classes.dex
+#Sun Dec 03 13:52:26 PST 2023
+base.0=/Users/joy/Documents/GitHub/14259-Center-Stage/TeamCode/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/0/classes.dex
+base.1=/Users/joy/Documents/GitHub/14259-Center-Stage/TeamCode/build/intermediates/dex/debugAndroidTest/mergeProjectDexDebugAndroidTest/3/classes.dex
 path.0=0/classes.dex
 path.1=3/classes.dex
 renamed.0=classes.dex

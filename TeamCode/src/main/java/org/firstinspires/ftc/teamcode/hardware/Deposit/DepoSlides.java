@@ -24,9 +24,9 @@ public class DepoSlides {
     public DepositState depositFSM = DepositState.STOPPED;
 
     public double maxTargetInches = 35;
-    private static final double INCHES_TO_TICKS = -91.228; //number
+    private static final double INCHES_TO_TICKS = 34.848; //number
     private static final double LOWER_BOUND = 0; //number in ticks
-    private static final double UPPER_BOUND = -3200; //number in ticks
+    private static final double UPPER_BOUND = 1150; //number in ticks
     private static final double INIT_INCHES = 0;
     private double targetLinSlidePosition = 0;
     public double targetDepositInches = 0;
@@ -69,7 +69,7 @@ public class DepoSlides {
         this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
                 () -> (this.leftMotor.getCurrentPosition()*-1) - this.targetLinSlidePosition,
                 factor -> {
-                    this.leftMotor.setPower(M.clamp(-factor, 1, -1));
+                    this.leftMotor.setPower(M.clamp(factor, 1, -1));
                     this.rightMotor.setPower(M.clamp(-factor, 1, -1));
                 });
     }
@@ -152,7 +152,7 @@ public class DepoSlides {
             this.rightMotor.setPower(passivePower);
         }else if (!pidRunning && !passive && manualMode) {
             this.leftMotor.setPower(manualPower);
-            this.rightMotor.setPower(manualPower);
+            this.rightMotor.setPower(-manualPower);
         }else{
             this.stop();
         }

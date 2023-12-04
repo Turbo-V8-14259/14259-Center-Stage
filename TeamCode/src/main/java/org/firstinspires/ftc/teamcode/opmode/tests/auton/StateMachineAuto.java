@@ -43,7 +43,7 @@ public class StateMachineAuto extends OpMode {
         BOARD, //to scoring board
     }
 
-    int randomization = 0;
+    int randomization = 1;
     //0 means left, 1 means middle, 2 means right.
     SampleMecanumDrive drive;
     boolean timeToggle = true;
@@ -63,9 +63,12 @@ public class StateMachineAuto extends OpMode {
     Pose2d startPose = new Pose2d(-39, -61, Math.toRadians(-90));
     Pose2d leftProp = new Pose2d(-46, -26, Math.toRadians(-90));
     Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
-    Pose2d toStack = new Pose2d(-54, -12, Math.toRadians(-180));
-    Pose2d toStackMore = new Pose2d(-58, -11, Math.toRadians(-170));
-    Pose2d middleTruss = new Pose2d(0, -12, Math.toRadians(-180));
+    Pose2d middleProp = new Pose2d(-34, -12, Math.toRadians(-90));
+    Pose2d rightProp = new Pose2d(-35, -29, Math.toRadians(0));
+    Pose2d rightPropStack = new Pose2d(-58, -11, Math.toRadians(180));
+    Pose2d toStack = new Pose2d(-58, -11, Math.toRadians(-180));
+
+    Pose2d middleTruss = new Pose2d(0, -7, Math.toRadians(-180));
     Pose2d depositL = new Pose2d(40, -12, Math.toRadians(-220));
 
     Pose2d park = new Pose2d(50,-30,Math.toRadians(-180));
@@ -78,7 +81,12 @@ public class StateMachineAuto extends OpMode {
     Trajectory pickUpStack;
     Trajectory ScoreLeft;
     Trajectory leftToTruss;
+    Trajectory toRightStack;
     Trajectory leftToIntake;
+    Trajectory toTruss;
+    Trajectory [] toProps;
+    Trajectory [] toStacks;
+    Trajectory toMiddleStack;
     // Test Commit
 
     @Override
@@ -97,31 +105,52 @@ public class StateMachineAuto extends OpMode {
 
         drive.setPoseEstimate(startPose);
 
-        toLeftProp = drive.trajectoryBuilder(startPose)
-                .lineToLinearHeading(leftProp)
-                .build();
-        LeftBackFiveInches = drive.trajectoryBuilder(toLeftProp.end())
+        toProps = new Trajectory[]{
+                drive.trajectoryBuilder(startPose)
+                        .lineToLinearHeading(leftProp)
+                        .build(),
+                drive.trajectoryBuilder(startPose)
+                        .lineToLinearHeading(middleProp)
+                        .addDisplacementMarker(()->drive.followTrajectoryAsync(toStacks[randomization]))
+                        .build(),
+                drive.trajectoryBuilder(startPose)
+                        .lineToLinearHeading(rightProp)
+                        .addDisplacementMarker(()->drive.followTrajectoryAsync(toStacks[randomization]))
+                        .build()
+
+        };
+
+        LeftBackFiveInches = drive.trajectoryBuilder(toProps[randomization].end())
                 .lineToLinearHeading(leftPropIP)
-                .addDisplacementMarker(() -> drive.followTrajectoryAsync(toLeftStack))
                 .build();
-        toLeftStack = drive.trajectoryBuilder(LeftBackFiveInches.end())
-                .lineToSplineHeading(toStack)
-                .build();
-        pickUpStack = drive.trajectoryBuilder(toLeftStack.end())
-                .lineToLinearHeading(toStackMore)
-                .build();
-        leftToTruss = drive.trajectoryBuilder(pickUpStack.end())
+        toStacks = new Trajectory[]{
+                drive.trajectoryBuilder(LeftBackFiveInches.end())
+                        .lineToSplineHeading(toStack)
+                        .build(),
+                drive.trajectoryBuilder(toProps[randomization].end())
+                        .lineToLinearHeading(toStack)
+                        .build(),
+                drive.trajectoryBuilder(toProps[randomization].end())
+                        .lineToLinearHeading(rightPropStack)
+                        .build()
+
+
+        };
+
+
+
+        toTruss = drive.trajectoryBuilder(toStacks[randomization].end())
                 .lineToLinearHeading(middleTruss)
                 .addDisplacementMarker(() -> drive.followTrajectoryAsync(ScoreLeft))
                 .build();
-        ScoreLeft = drive.trajectoryBuilder(pickUpStack.end())
-                .lineToLinearHeading(depositL)
+        ScoreLeft = drive.trajectoryBuilder(toTruss.end())
+                .splineToSplineHeading(depositL, CalculateTangents.calculateTangent(middleTruss, depositL))
                 .build();
         leftToIntake = drive.trajectoryBuilder(ScoreLeft.end())
-                .lineToLinearHeading(toStackMore)
+                .lineToLinearHeading(toStack)
                 .build();
         currentstate = State.TOGPL;
-        drive.followTrajectoryAsync(toLeftProp);
+        drive.followTrajectoryAsync(toProps[randomization]);
     }
 
     @Override
@@ -133,13 +162,15 @@ public class StateMachineAuto extends OpMode {
                     arm.manualPosition = 0;
                     intake.manualPosition = 0.25;
                     currentstate = State.TOINTAKE;
-                    drive.followTrajectoryAsync(LeftBackFiveInches);
+                    if(randomization==0){
+                        drive.followTrajectoryAsync(LeftBackFiveInches);
+                    }
                 }
                 break;
             case TOINTAKE:
                 if (!drive.isBusy() && atTargetPosition(toStack)) {
                     currentstate = State.INTAKE;
-                    drive.followTrajectoryAsync(pickUpStack);
+                    drive.followTrajectoryAsync(toStacks[randomization]);
                     intake.setPower(-0.6);
                 }
                 break;
@@ -150,7 +181,7 @@ public class StateMachineAuto extends OpMode {
                         timeToggle = false;
                     }
                     if (timer.milliseconds() > timeStamp + 100) {
-                        drive.followTrajectoryAsync(ScoreLeft);
+                        drive.followTrajectoryAsync(toTruss);
                         currentstate = State.TOSCOREL;
                         timeToggle = true;
                     }
