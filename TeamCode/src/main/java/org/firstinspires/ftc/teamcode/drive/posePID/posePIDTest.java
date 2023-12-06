@@ -35,6 +35,7 @@ public class posePIDTest extends LinearOpMode {
             drive.setY(y);
             drive.setHeading(heading);
             drive.update();
+            gamepadOne.update();
         }
     }
 }
