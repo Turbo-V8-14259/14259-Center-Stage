@@ -59,12 +59,12 @@ public class DriveTrain {
         this.updateLocalizer();
         this.xPred = drive.getPoseEstimate().getX();
         this.yPred = drive.getPoseEstimate().getY();
-        this.headingCurrent = drive.getPoseEstimate().getHeading(); //degree? radian?
+        this.headingCurrent = drive.getPoseEstimate().getHeading(); //radians
         if(Math.abs(headingCurrent - headingLast) > M.PI){
             count += Math.signum(headingLast - headingCurrent);
         }
         headingLast = headingCurrent;
-        this.headingPred = count * 360 + headingCurrent;
+        this.headingPred = count * 2*M.PI + headingCurrent;
         this.xPid.update();
         this.yPid.update();
         this.headingPid.update();
