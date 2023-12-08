@@ -83,17 +83,6 @@ public class Scoring extends LinearOpMode {
         led.update();
         waitForStart();
         while(opModeIsActive()){
-            if(ledState == 0){
-                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.RED);
-            }else if(ledState == 1){
-                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE);
-            }else if(ledState == 2) {
-                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            }else if(ledState == 3) {
-                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
-            }else if(ledState >3){
-                ledState = 0;
-            }
             drive.setWeightedDrivePower(
                     new Pose2d(
                             -gamepad1.left_stick_y,
@@ -101,22 +90,6 @@ public class Scoring extends LinearOpMode {
                             -gamepad1.right_stick_x * 0.7
                     )
             );
-
-            if(autoIntake)intake.setPower(-0.8);
-            else intake.setPower((gamepad2.left_trigger - gamepad2.right_trigger)*1);
-
-            if(climbSafe==3){
-                pitch.setState(Pitch.PitchState.CLIMB);
-                arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
-            }else if (climbSafe == 4){
-                arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
-                pitch.manualMode = true;
-                pitch.setPowerManual(-gamepad2.left_stick_y);
-            }else if(climbSafe > 4){
-                climbSafe = 0;
-                pitch.manualMode = false;
-            }
-
             updateGamepadOne();
             updateGamepadTwo();
             updateVariables();
@@ -286,6 +259,31 @@ public class Scoring extends LinearOpMode {
         }
     }
     public void updateVariables(){
+        if(autoIntake)intake.setPower(-0.8);
+        else intake.setPower((gamepad2.left_trigger - gamepad2.right_trigger)*1);
+
+        if(climbSafe==3){
+            pitch.setState(Pitch.PitchState.CLIMB);
+            arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+        }else if (climbSafe == 4){
+            arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+            pitch.manualMode = true;
+            pitch.setPowerManual(-gamepad2.left_stick_y);
+        }else if(climbSafe > 4){
+            climbSafe = 0;
+            pitch.manualMode = false;
+        }
+        if(ledState == 0){
+            led.changePattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        }else if(ledState == 1){
+            led.changePattern(RevBlinkinLedDriver.BlinkinPattern.ORANGE);
+        }else if(ledState == 2) {
+            led.changePattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+        }else if(ledState == 3) {
+            led.changePattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+        }else if(ledState >3){
+            ledState = 0;
+        }
         if(autoLockMode){ //only update this if in auto lock mode, otherwise its not needed THANKS DAD
             adjustedAngle = drive.getPoseEstimate().getHeading() - boardAngle;
             if(adjustedAngle > M.PI){
