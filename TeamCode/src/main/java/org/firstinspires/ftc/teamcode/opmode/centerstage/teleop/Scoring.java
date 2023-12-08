@@ -39,8 +39,7 @@ public class Scoring extends LinearOpMode {
 
     int ledState = 0;
 
-
-    double TimeStamp = 0; // why the fuck is this ...
+    double TimeStamp = 0;
 
     int climbSafe = 0;
 
@@ -184,21 +183,6 @@ public class Scoring extends LinearOpMode {
         if(extension < 0) extension = 0;
 
         if(gamepadOne.right_bumper) scoringState++;
-
-
-
-
-
-        //gamepad 2
-
-        if(gamepadTwo.left_bumper) autoIntake = !autoIntake;
-
-        if(gamepadTwo.right_bumper){
-            climbSafe++;
-        }
-        if(gamepadTwo.b){
-            ledState++;
-        }
     }
     public void scoringStateMachine(){
         switch (scoringState){
@@ -276,6 +260,15 @@ public class Scoring extends LinearOpMode {
         }
     }
     public void updateGamepadTwo(){
+        //gamepad 2
+        if(gamepadTwo.left_bumper) autoIntake = !autoIntake;
+
+        if(gamepadTwo.right_bumper){
+            climbSafe++;
+        }
+        if(gamepadTwo.b){
+            ledState++;
+        }
         if(gamepadTwo.dpad_up) level++;
         if(gamepadTwo.dpad_down) level--;
 
