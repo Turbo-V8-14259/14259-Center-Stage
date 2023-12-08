@@ -1,9 +1,5 @@
 package org.firstinspires.ftc.teamcode.hardware.Sensors;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
-import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
 public class Blinkdin {
 
