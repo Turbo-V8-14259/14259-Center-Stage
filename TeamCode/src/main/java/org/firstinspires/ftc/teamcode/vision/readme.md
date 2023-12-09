@@ -6,7 +6,7 @@ say we have AprilTagProcessor apriltag
 
 ## apriltag.detectSpecificTag(int)
 
-this function detects only a specified exists. for detecting that specific tag's data use getSpecificTagData(int)
+this function detects only a specified tag exists. for detecting that specific tag's data use getSpecificTagData(int)
 
 ## Detection class
 hi veer
