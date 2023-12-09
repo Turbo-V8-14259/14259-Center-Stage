@@ -31,6 +31,7 @@ public class AprilTagTest extends LinearOpMode{
     private final AprilTagPipeline ac = new AprilTagPipeline();
     private VisionPortal visionPortal;
     public AprilTagDetection detection;
+    int toi = 5;
 //Motor Stuff
     private DcMotorBetter sampleMotor; //no motors yet here for reasons
     //Dashboard
@@ -51,7 +52,7 @@ public class AprilTagTest extends LinearOpMode{
                 telemetryAprilTag();
                 telemetry.update();
 
-                detection = AprilTagPipeline.getSpecificTagData(aprilTag,6);
+                detection = AprilTagPipeline.getSpecificTagData(aprilTag,toi);
                 if(detection != null){
 
                 }
@@ -97,9 +98,9 @@ public class AprilTagTest extends LinearOpMode{
 
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         telemetry.addData("# AprilTags Detected", currentDetections.size());
-        if(AprilTagPipeline.detectSpecificTag(aprilTag,6)){
+        if(AprilTagPipeline.detectSpecificTag(aprilTag,toi)){
             if(detection != null) {
-                telemetry.addLine(String.format(" ID %6.1f Detected, X Y Z %6.1f %6.1f %6.1f  (Inch)", detection.id, detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+                telemetry.addData("Distance from AprilTag (Inches): ", detection.ftcPose.y);
             }
         }
         else{
@@ -109,6 +110,8 @@ public class AprilTagTest extends LinearOpMode{
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
         telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
         telemetry.addLine("RBE = Range, Bearing & Elevation");
+
+        //telemetry.addLine(String.format(" ID %6.1f Detected, X Y Z %6.1f %6.1f %6.1f  (Inch)", detection.id, detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
     }
 
 }
