@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.vision;
-
 /*
  * Copyright (c) 2023 Sebastian Erives
  *
@@ -42,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Config
-public class Red implements VisionProcessor {
+public class Red_ implements VisionProcessor {
 
     /*
      * These are our variables that will be
@@ -58,12 +57,12 @@ public class Red implements VisionProcessor {
      * min and max values here for now, meaning
      * that all pixels will be shown.
      */
-    public static int lowY = 0;
-    public static int lowCr = 155;
-    public static int lowCb = 85;
-    public static int highY = 80;
-    public static int highCr = 235;
-    public static int highCb = 115;
+    public static int lowY = 0; //80
+    public static int lowCr = 165; //130
+    public static int lowCb = 85; //110
+    public static int highY = 80; //110
+    public static int highCr = 235; //200
+    public static int highCb = 115; //200
     public Scalar lower = new Scalar(lowY,lowCr,lowCb);
     public Scalar upper = new Scalar(highY,highCr,highCb);
 
@@ -104,12 +103,13 @@ public class Red implements VisionProcessor {
         }
     }
 
-    public Red(Telemetry telemetry) {
+    public Red_(Telemetry telemetry) {
         this.telemetry = telemetry;
     }
 
     @Override
-    public void init(int width, int height, CameraCalibration calibration) {}
+    public void init(int width, int height, CameraCalibration calibration) {
+    }
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
@@ -123,10 +123,6 @@ public class Red implements VisionProcessor {
         Core.inRange(ycrcbMat, lower, upper, binaryMat);
 
         maskedInputMat.release();
-
-//        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(4, 4));
-//        Imgproc.erode(binaryMat, binaryMat, kernel);
-//        Imgproc.dilate(binaryMat, binaryMat, kernel);
 
         Core.bitwise_and(frame, frame, maskedInputMat, binaryMat);
 

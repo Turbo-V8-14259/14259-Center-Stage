@@ -36,6 +36,7 @@ import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
@@ -58,12 +59,12 @@ public class Blue implements VisionProcessor {
      * min and max values here for now, meaning
      * that all pixels will be shown.
      */
-    public static int lowY = 0;
-    public static int lowCr = 85;
-    public static int lowCb = 135;
-    public static int highY = 255;
-    public static int highCr = 135;
-    public static int highCb = 180;
+    public static int lowY = 25;
+    public static int lowCr = 95;
+    public static int lowCb = 155;
+    public static int highY = 80;
+    public static int highCr = 130;
+    public static int highCb = 255;
     public Scalar lower = new Scalar(lowY,lowCr,lowCb);
     public Scalar upper = new Scalar(highY,highCr,highCb);
 
@@ -124,6 +125,10 @@ public class Blue implements VisionProcessor {
 
         maskedInputMat.release();
 
+        // Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(12, 4));
+        // Imgproc.erode(binaryMat, binaryMat, kernel);
+        // Imgproc.dilate(binaryMat, binaryMat, kernel);
+
         Core.bitwise_and(frame, frame, maskedInputMat, binaryMat);
 
         //use binary mat from here
@@ -132,13 +137,18 @@ public class Blue implements VisionProcessor {
         Imgproc.drawContours(binaryMat, countersList,0, new Scalar(0,0,255));
 
         Rect hat = new Rect(new Point(0,0), new Point(1,1));
+        double minContourArea = 100.0;
 
         for (MatOfPoint countor : countersList)
         {
+            double contourArea = Imgproc.contourArea(countor);
 
-            Rect rect = Imgproc.boundingRect(countor);
-            if (rect.area() > hat.area()) {
-                hat = rect;
+            if (contourArea > minContourArea) {
+                Rect rect = Imgproc.boundingRect(countor);
+
+                if (rect.area() > hat.area()) {
+                    hat = rect;
+                }
             }
 
         }
@@ -147,7 +157,7 @@ public class Blue implements VisionProcessor {
 
         int centerX = hat.x + hat.width;
 
-        if(centerX <= 640/3){
+        if(centerX <= 320/3){
             location = Location.LEFT;
             telemetry.addData("Position:", " Left");
         }else if(centerX <= 1280/3){
