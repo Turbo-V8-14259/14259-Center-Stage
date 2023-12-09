@@ -58,12 +58,12 @@ public class Red implements VisionProcessor {
      * min and max values here for now, meaning
      * that all pixels will be shown.
      */
-    public static int lowY = 0;
-    public static int lowCr = 155;
-    public static int lowCb = 85;
-    public static int highY = 80;
-    public static int highCr = 235;
-    public static int highCb = 115;
+    public static int lowY = 0; // 0
+    public static int lowCr = 140; // 155
+    public static int lowCb = 55; // 85
+    public static int highY = 50; // 80
+    public static int highCr = 160; // 235
+    public static int highCb = 90; // 115
     public Scalar lower = new Scalar(lowY,lowCr,lowCb);
     public Scalar upper = new Scalar(highY,highCr,highCb);
 
@@ -124,10 +124,6 @@ public class Red implements VisionProcessor {
 
         maskedInputMat.release();
 
-//        Mat kernel = Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(4, 4));
-//        Imgproc.erode(binaryMat, binaryMat, kernel);
-//        Imgproc.dilate(binaryMat, binaryMat, kernel);
-
         Core.bitwise_and(frame, frame, maskedInputMat, binaryMat);
 
         //use binary mat from here
@@ -136,13 +132,18 @@ public class Red implements VisionProcessor {
         Imgproc.drawContours(binaryMat, countersList,0, new Scalar(0,0,255));
 
         Rect hat = new Rect(new Point(0,0), new Point(1,1));
+        double minContourArea = 200.0;
 
-        for (MatOfPoint countor : countersList)
+        for (MatOfPoint contour : countersList)
         {
+            double contourArea = Imgproc.contourArea(contour);
 
-            Rect rect = Imgproc.boundingRect(countor);
-            if (rect.area() > hat.area()) {
-                hat = rect;
+            if (contourArea > minContourArea) {
+                Rect rect = Imgproc.boundingRect(contour);
+
+                if (rect.area() > hat.area()) {
+                    hat = rect;
+                }
             }
 
         }

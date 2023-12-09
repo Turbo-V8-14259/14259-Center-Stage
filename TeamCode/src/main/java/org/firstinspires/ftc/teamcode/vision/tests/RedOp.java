@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.vision.Red;
-import org.firstinspires.ftc.teamcode.vision.Red_;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name="VisionOpRed")
