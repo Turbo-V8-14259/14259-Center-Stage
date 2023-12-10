@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.vision.CameraContourTest;
 import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -16,7 +17,6 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.Objects;
 
 @TeleOp
-@Disabled
 
 public class OpenCVTest extends LinearOpMode
 {
@@ -30,8 +30,9 @@ public class OpenCVTest extends LinearOpMode
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        CameraPipeline s = new CameraPipeline(telemetry, ObjectDirection);
-        webcam.setPipeline(s);
+//        CameraPipeline s = new CameraPipeline(telemetry, ObjectDirection);
+        CameraContourTest c = new CameraContourTest(telemetry);
+        webcam.setPipeline(c);
 
         webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
@@ -51,7 +52,7 @@ public class OpenCVTest extends LinearOpMode
             }
         });
         telemetry.addLine("Waiting for start");
-        telemetry.addLine(CameraPipeline.color);
+        //telemetry.addLine(CameraPipeline.color);
         telemetry.update();
 
         /*
@@ -73,15 +74,6 @@ public class OpenCVTest extends LinearOpMode
 
             telemetry.update();
 
-            if (Objects.equals(ObjectDirection, "LEFT")) {
-                //insert stuff here
-            }
-            else if (Objects.equals(ObjectDirection, "MIDDLE")){
-                //insert stuff here
-            }
-            else if (Objects.equals(ObjectDirection, "RIGHT")){
-                //insert stuff here
-            }
             sleep(100);
             //continue the auton path here
         }
