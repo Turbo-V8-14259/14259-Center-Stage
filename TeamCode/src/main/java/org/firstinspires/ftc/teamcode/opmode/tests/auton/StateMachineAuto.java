@@ -32,7 +32,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 
-@Autonomous(name = "2+5 Test Red")
+@Autonomous(name = "2+5 Test")
 @Config
 public class StateMachineAuto extends OpMode {
 
@@ -69,21 +69,23 @@ public class StateMachineAuto extends OpMode {
     //First Diverge
 
     Pose2d startPose = new Pose2d(-39, -61, Math.toRadians(-90));
+
     Pose2d leftProp = new Pose2d(-46, -29, Math.toRadians(-90));
     Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
     Pose2d middleProp = new Pose2d(-34, -12, Math.toRadians(-90));
     Pose2d rightProp = new Pose2d(-35, -29, Math.toRadians(0));
     Pose2d rightPropStack = new Pose2d(-58, -11, Math.toRadians(180));
-    Pose2d toStack = new Pose2d(-59, -12, Math.toRadians(-170));
+    Pose2d toStack = new Pose2d(-58, -11, Math.toRadians(-180));
 
     Pose2d middleTruss = new Pose2d(0, -7, Math.toRadians(-180));
     Pose2d depositL = new Pose2d(38, -8, Math.toRadians(-220));
 
-    Pose2d park = new Pose2d(50,-30,Math.toRadians(-180));
+    Pose2d park = new Pose2d(50,-30 ,Math.toRadians(-180));
 
 
     boolean fullyReset = true;
     Trajectory toPark;
+    Trajectory DriveBack;
     Trajectory toLeftStack;
     Trajectory LeftBackFiveInches;
     Trajectory toLeftProp;
@@ -128,7 +130,6 @@ public class StateMachineAuto extends OpMode {
                         .build()
 
         };
-
         LeftBackFiveInches = drive.trajectoryBuilder(toProps[randomization].end())
                 .lineToLinearHeading(leftPropIP)
                 .build();
@@ -142,9 +143,12 @@ public class StateMachineAuto extends OpMode {
                 drive.trajectoryBuilder(toProps[randomization].end())
                         .lineToLinearHeading(rightPropStack)
                         .build()
-
-
         };
+
+        DriveBack = drive.trajectoryBuilder(toStacks[randomization].end())
+                .back(100)
+                .build();
+
 
 
 
@@ -176,8 +180,8 @@ public class StateMachineAuto extends OpMode {
         switch (currentstate) {
             case TOGPL:
                 if (!drive.isBusy()) {
-                    arm.manualPosition = 0.04;
-                    intake.manualPosition = 0.3;
+                    arm.manualPosition = 0.02;
+                    intake.manualPosition = 0.35;
                     currentstate = State.TOINTAKE;
                     if(randomization==0){
                         drive.followTrajectoryAsync(LeftBackFiveInches);
@@ -198,7 +202,7 @@ public class StateMachineAuto extends OpMode {
                         timeToggle = false;
                     }
                     if (timer.milliseconds() > timeStamp + 100) {
-                        drive.followTrajectoryAsync(ScoreLeft);
+                        drive.followTrajectoryAsync(DriveBack);
                         currentstate = State.TOSCOREL;
                         timeToggle = true;
                     }
@@ -206,8 +210,8 @@ public class StateMachineAuto extends OpMode {
                 }
                 break;
             case TOSCOREL:
-                if(drive.getPoseEstimate().getX() > -45)
-                    intake.setPower(0.6);
+                if(drive.getPoseEstimate().getX() > -54)
+                    intake.setPower(1);
                 if(drive.getPoseEstimate().getX() > 5){
                     arm.manualPosition = 0.6;
                     slides.manualPosition = 22;
@@ -223,6 +227,9 @@ public class StateMachineAuto extends OpMode {
                     if(!drive.isBusy()){
                         currentstate = State.SCORE;
                     }
+                }
+                if(drive.getPoseEstimate().getX() > 0){
+                    drive.followTrajectoryAsync(ScoreLeft);
                 }
                 break;
 
@@ -274,7 +281,7 @@ public class StateMachineAuto extends OpMode {
                         drive.followTrajectoryAsync(toPark);
                     }
                     if (slides.getCurrentInches() > -3) {
-                        arm.manualPosition = 0.04;
+                        arm.manualPosition = 0.02;
                         fullyReset = true;
                     }
                 }else{
