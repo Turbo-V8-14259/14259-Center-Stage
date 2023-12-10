@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.tests.auton;
+package org.firstinspires.ftc.teamcode.opmode.centerstage.autonomous;
 
 import static org.firstinspires.ftc.teamcode.vision.Red.Location.LEFT;
 import static org.firstinspires.ftc.teamcode.vision.Red.Location.MIDDLE;
@@ -9,6 +9,7 @@ import static java.lang.Thread.sleep;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -32,9 +33,9 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 
-@Autonomous(name = "2+5 Test")
+@Autonomous(name = "2+5 Red")
 @Config
-public class StateMachineAuto extends OpMode {
+public class RedTwoPlusFive extends OpMode {
 
     enum State {
         IDLE,
@@ -69,23 +70,21 @@ public class StateMachineAuto extends OpMode {
     //First Diverge
 
     Pose2d startPose = new Pose2d(-39, -61, Math.toRadians(-90));
-
     Pose2d leftProp = new Pose2d(-46, -29, Math.toRadians(-90));
     Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
     Pose2d middleProp = new Pose2d(-34, -12, Math.toRadians(-90));
     Pose2d rightProp = new Pose2d(-35, -29, Math.toRadians(0));
     Pose2d rightPropStack = new Pose2d(-58, -11, Math.toRadians(180));
-    Pose2d toStack = new Pose2d(-58, -11, Math.toRadians(-180));
+    Pose2d toStack = new Pose2d(-59, -12, Math.toRadians(-180));
 
     Pose2d middleTruss = new Pose2d(0, -7, Math.toRadians(-180));
     Pose2d depositL = new Pose2d(38, -8, Math.toRadians(-220));
 
-    Pose2d park = new Pose2d(50,-30 ,Math.toRadians(-180));
+    Pose2d park = new Pose2d(50,-30,Math.toRadians(-180));
 
 
     boolean fullyReset = true;
     Trajectory toPark;
-    Trajectory DriveBack;
     Trajectory toLeftStack;
     Trajectory LeftBackFiveInches;
     Trajectory toLeftProp;
@@ -130,6 +129,7 @@ public class StateMachineAuto extends OpMode {
                         .build()
 
         };
+
         LeftBackFiveInches = drive.trajectoryBuilder(toProps[randomization].end())
                 .lineToLinearHeading(leftPropIP)
                 .build();
@@ -143,12 +143,9 @@ public class StateMachineAuto extends OpMode {
                 drive.trajectoryBuilder(toProps[randomization].end())
                         .lineToLinearHeading(rightPropStack)
                         .build()
+
+
         };
-
-        DriveBack = drive.trajectoryBuilder(toStacks[randomization].end())
-                .back(100)
-                .build();
-
 
 
 
@@ -180,8 +177,8 @@ public class StateMachineAuto extends OpMode {
         switch (currentstate) {
             case TOGPL:
                 if (!drive.isBusy()) {
-                    arm.manualPosition = 0.02;
-                    intake.manualPosition = 0.35;
+                    arm.manualPosition = 0.04;
+                    intake.manualPosition = 0.3;
                     currentstate = State.TOINTAKE;
                     if(randomization==0){
                         drive.followTrajectoryAsync(LeftBackFiveInches);
@@ -202,7 +199,8 @@ public class StateMachineAuto extends OpMode {
                         timeToggle = false;
                     }
                     if (timer.milliseconds() > timeStamp + 100) {
-                        drive.followTrajectoryAsync(DriveBack);
+                        drive.followTrajectoryAsync(ScoreLeft);
+                        SampleMecanumDrive.HEADING_PID = new PIDCoefficients(0, 0, 0);
                         currentstate = State.TOSCOREL;
                         timeToggle = true;
                     }
@@ -210,7 +208,7 @@ public class StateMachineAuto extends OpMode {
                 }
                 break;
             case TOSCOREL:
-                if(drive.getPoseEstimate().getX() > -54)
+                if(drive.getPoseEstimate().getX() > -45)
                     intake.setPower(1);
                 if(drive.getPoseEstimate().getX() > 5){
                     arm.manualPosition = 0.6;
@@ -228,8 +226,9 @@ public class StateMachineAuto extends OpMode {
                         currentstate = State.SCORE;
                     }
                 }
-                if(drive.getPoseEstimate().getX() > 0){
-                    drive.followTrajectoryAsync(ScoreLeft);
+                if(drive.getPoseEstimate().getX() > 12){
+                    SampleMecanumDrive.HEADING_PID = new PIDCoefficients(8, 0, 0);
+                    //got any other bad ideas, Leo?
                 }
                 break;
 
@@ -281,15 +280,16 @@ public class StateMachineAuto extends OpMode {
                         drive.followTrajectoryAsync(toPark);
                     }
                     if (slides.getCurrentInches() > -3) {
-                        arm.manualPosition = 0.02;
+                        arm.manualPosition = 0.04;
                         fullyReset = true;
                     }
                 }else{
                     telemetry.addData("DID YOU DO SCORE A 2+5?", false);
+                    telemetry.addLine("ASLKJFD HASLKJD AHSLKDJ ASLDJK ASLKJD BASLKDJ ASD ");
+                    SampleMecanumDrive.HEADING_PID = new PIDCoefficients(8, 0, 0);
                 }
 
         }
-
 
         intake.setState(Intake.IntakeState.RUNTOPOSITION);
         slides.setState(DepoSlides.DepositState.RUNTOPOSITION);
@@ -305,6 +305,7 @@ public class StateMachineAuto extends OpMode {
         telemetry.addData("slides position", slides.getCurrentInches());
         telemetry.addData("Arm Manual Position = ", arm.manualPosition);
         telemetry.addData("intake Position:" , intake.manualPosition);
+
 
     }
 
