@@ -35,6 +35,10 @@ public class posePIDTest extends LinearOpMode {
             drive.setY(y);
             drive.setHeading(heading);
             drive.update();
+            telemetry.addData("x pos", drive.xPred);
+            telemetry.addData("y pos", drive.yPred);
+            telemetry.addData("heading", drive.headingPred);
+            telemetry.update();
             gamepadOne.update();
         }
     }

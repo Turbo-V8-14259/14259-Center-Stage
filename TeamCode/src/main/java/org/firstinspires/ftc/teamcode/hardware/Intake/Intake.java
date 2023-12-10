@@ -52,11 +52,12 @@ public class Intake{
                 target = manualPosition;
                 break;
             case INITIALIZE:
-                target = 0.05;
+                target = 0;
                 break;
             case INTAKE_TELE:
-                target = 0.05;
+                target = 0.;
             case STACK_HIGH:
+                target = 0.3;
                 break;
             case UP:
                 target = 0.1;

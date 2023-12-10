@@ -183,10 +183,12 @@ public class StateMachineAuto extends OpMode {
                         currentstate = State.TOSCOREL;
                         timeToggle = true;
                     }
+                    intake.setPower(-0.6);
                 }
                 break;
             case TOSCOREL:
                 if(drive.getPoseEstimate().getX() > 5){
+                    intake.setPower(.6);
                     arm.manualPosition = 0.6;
                     slides.manualPosition = 22;
                     fullyReset = false;
@@ -224,6 +226,7 @@ public class StateMachineAuto extends OpMode {
                     arm.manualPosition = 0.5;
                     turret.manualPosition = 0.01;
                     slides.manualPosition = 0;
+//                    intake.setPower(-.6);
                     if(slides.getCurrentPosition() > -18){
                         drive.followTrajectoryAsync(leftToIntake);
                     }

@@ -138,6 +138,12 @@ public class AutoRed extends LinearOpMode {
         Trajectory leftStrafeBoard = drive.trajectoryBuilder(leftRunToBoardish.end())
                 .lineToLinearHeading(leftStrafe)
                 .build();
+        Trajectory backTowardStackStrafeLeft = drive.trajectoryBuilder(leftStrafeBoard.end())
+                .lineToLinearHeading(runToBoardPos)
+                .build();
+        Trajectory backTowardsIntakeStackLeft = drive.trajectoryBuilder(backTowardStackStrafeLeft.end())
+                .lineToLinearHeading(toStackMore)
+                .build();
 
 
         //RIGHT SIDE
@@ -230,11 +236,15 @@ public class AutoRed extends LinearOpMode {
 
                 drive.followTrajectory(leftRunToBoardish);
                 drive.followTrajectory(leftStrafeBoard);
+                intake.setPower(.5);
 
                 score();
 
-                intake.setPower(0);
+                intake.setPower(-.5);
                 intake.update();
+                drive.followTrajectory(backTowardStackStrafeLeft);
+                drive.followTrajectory(backTowardsIntakeStackLeft);
+                
 
                 sleep(500000);
             }else if(randomization == 2){ //RIGHT

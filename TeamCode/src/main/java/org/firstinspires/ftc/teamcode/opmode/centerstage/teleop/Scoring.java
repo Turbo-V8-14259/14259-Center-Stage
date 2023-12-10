@@ -111,6 +111,7 @@ public class Scoring extends LinearOpMode {
     }
 
     public void telemetryData(){
+        telemetry.addData("intake state", intake.getState());
         telemetry.addData("color", led.getPattern());
         telemetry.addData("level", level);
         telemetry.addData("extension", extension);
@@ -256,6 +257,11 @@ public class Scoring extends LinearOpMode {
         if(gamepadTwo.x){
             level = 0;
             extension = 0;
+        }
+        if(gamepadTwo.dpad_left){
+            intake.setState(Intake.IntakeState.INCRIMENT_UP);
+        }else if(gamepadTwo.dpad_right) {
+            intake.setState(Intake.IntakeState.INCRIMENT_DOWN);
         }
     }
     public void updateVariables(){
