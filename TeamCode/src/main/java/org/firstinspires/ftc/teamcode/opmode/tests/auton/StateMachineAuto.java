@@ -45,12 +45,16 @@ public class StateMachineAuto extends OpMode {
 
     int randomization = 0;
     //0 means left, 1 means middle, 2 means right.
+    String[] propDir = {"left", "middle", "right"};
     SampleMecanumDrive drive;
     boolean timeToggle = true;
     double timeStamp = 0;
+
+    double tsProp = 0;
     Intake intake;
 
     ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timerForProp = new ElapsedTime();
     LM1Turret turret;
     DepoArm arm;
     DepoSlides slides;
@@ -149,8 +153,16 @@ public class StateMachineAuto extends OpMode {
                 .build();
         currentstate = State.TOGPL;
         drive.followTrajectoryAsync(toProps[randomization]);
-    }
 
+    }
+    @Override
+    public void init_loop(){
+        tsProp = timerForProp.milliseconds();
+        if(tsProp+1000>timerForProp.milliseconds()){
+            telemetry.addData("Direction", propDir[randomization]);
+        }
+        randomization = (randomization+1)%3;
+    }
     @Override
 
     public void loop() {
