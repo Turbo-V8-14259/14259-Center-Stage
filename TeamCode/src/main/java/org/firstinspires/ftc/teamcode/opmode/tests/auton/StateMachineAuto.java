@@ -4,6 +4,11 @@ import static org.firstinspires.ftc.teamcode.vision.Red.Location.LEFT;
 import static org.firstinspires.ftc.teamcode.vision.Red.Location.MIDDLE;
 import static org.firstinspires.ftc.teamcode.vision.Red.Location.RIGHT;
 
+import static java.lang.Thread.sleep;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -28,7 +33,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.teamcode.usefuls.Math.CalculateTangents;
 
 @Autonomous(name = "2+5 Test Red")
-
+@Config
 public class StateMachineAuto extends OpMode {
 
     enum State {
@@ -43,12 +48,14 @@ public class StateMachineAuto extends OpMode {
         BOARD, //to scoring board
     }
 
-    int randomization = 0;
+    public static int randomization = 0;
     //0 means left, 1 means middle, 2 means right.
     SampleMecanumDrive drive;
     boolean timeToggle = true;
     double timeStamp = 0;
     Intake intake;
+
+    int cycles_left = 3;
 
     ElapsedTime timer = new ElapsedTime();
     LM1Turret turret;
@@ -61,12 +68,12 @@ public class StateMachineAuto extends OpMode {
     //First Diverge
 
     Pose2d startPose = new Pose2d(-39, -61, Math.toRadians(-90));
-    Pose2d leftProp = new Pose2d(-46, -26, Math.toRadians(-90));
+    Pose2d leftProp = new Pose2d(-46, -29, Math.toRadians(-90));
     Pose2d leftPropIP = new Pose2d(-46, -15, Math.toRadians(-90));
     Pose2d middleProp = new Pose2d(-34, -12, Math.toRadians(-90));
     Pose2d rightProp = new Pose2d(-35, -29, Math.toRadians(0));
     Pose2d rightPropStack = new Pose2d(-58, -11, Math.toRadians(180));
-    Pose2d toStack = new Pose2d(-58, -11, Math.toRadians(-180));
+    Pose2d toStack = new Pose2d(-58, -12, Math.toRadians(-170));
 
     Pose2d middleTruss = new Pose2d(0, -7, Math.toRadians(-180));
     Pose2d depositL = new Pose2d(40, -12, Math.toRadians(-220));
@@ -91,6 +98,8 @@ public class StateMachineAuto extends OpMode {
 
     @Override
     public void init() {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+
         drive = new SampleMecanumDrive(hardwareMap);
         intake = new Intake(hardwareMap.get(DcMotorEx.class, "Intake"), new ServoMotorBetter(hardwareMap.get(Servo.class, "intakeArm")));
         intake.setState(Intake.IntakeState.INITIALIZE);
@@ -147,8 +156,13 @@ public class StateMachineAuto extends OpMode {
         leftToIntake = drive.trajectoryBuilder(ScoreLeft.end())
                 .lineToLinearHeading(toStack)
                 .build();
+
+    }
+    public void init_loop(){
+        telemetry.addData("random", randomization);
         currentstate = State.TOGPL;
         drive.followTrajectoryAsync(toProps[randomization]);
+        telemetry.update();
     }
 
     @Override
@@ -158,7 +172,7 @@ public class StateMachineAuto extends OpMode {
             case TOGPL:
                 if (!drive.isBusy()) {
                     arm.manualPosition = 0;
-                    intake.manualPosition = 0.25;
+                    intake.manualPosition = 0.3;
                     currentstate = State.TOINTAKE;
                     if(randomization==0){
                         drive.followTrajectoryAsync(LeftBackFiveInches);
@@ -169,7 +183,7 @@ public class StateMachineAuto extends OpMode {
                 if (!drive.isBusy()) {
                     currentstate = State.INTAKE;
                     drive.followTrajectoryAsync(toStacks[randomization]);
-                    intake.setPower(-0.6);
+                    intake.setPower(-1);
                 }
                 break;
             case INTAKE:
@@ -183,12 +197,12 @@ public class StateMachineAuto extends OpMode {
                         currentstate = State.TOSCOREL;
                         timeToggle = true;
                     }
-                    intake.setPower(-0.6);
+                    intake.setPower(-1);
                 }
                 break;
             case TOSCOREL:
                 if(drive.getPoseEstimate().getX() > 5){
-                    intake.setPower(.6);
+                    intake.setPower(0.6);
                     arm.manualPosition = 0.6;
                     slides.manualPosition = 22;
                     fullyReset = false;
@@ -217,7 +231,16 @@ public class StateMachineAuto extends OpMode {
                 if (timer.milliseconds() > timeStamp + 1000) {
                     arm.manualPosition = 0.5;
                     currentstate = State.RESETTOSTACK;
+                    cycles_left--;
                     timeToggle = true;
+                }
+                if(cycles_left == 0) {
+                    try {
+                        intake.setPower(0);
+                        sleep(10000);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 break;
 

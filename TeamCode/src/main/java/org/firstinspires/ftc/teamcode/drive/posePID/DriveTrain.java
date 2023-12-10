@@ -19,7 +19,7 @@ public class DriveTrain {
 
 
     private double x = 0.0, y = 0.0, heading = 0.0;
-    private double xPred = 0.0, yPred = 0.0, headingPred = 0.0, headingLast = 0.0, headingCurrent = 0.0;
+    public double xPred = 0.0, yPred = 0.0, headingPred = 0.0, headingLast = 0.0, headingCurrent = 0.0;
     private int count = 0;
     public void addX(double x) { this.x += x; }
     public void addY(double y) { this.y += y; }
@@ -71,4 +71,5 @@ public class DriveTrain {
         this.drive.setWeightedDrivePower(new Pose2d(xPower, yPower, headingPower));
         drive.update();
     }
+
 }

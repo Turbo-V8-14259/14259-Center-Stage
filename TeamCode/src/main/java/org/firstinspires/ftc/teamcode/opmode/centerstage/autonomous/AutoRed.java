@@ -182,14 +182,15 @@ public class AutoRed extends LinearOpMode {
 
 
         while (!isStarted()) {
-            location = redPropProcessor.getLocation();
-            if(location==LEFT){
-                randomization = 0;
-            }else if(location==MIDDLE){
-                randomization = 1;
-            }else if(location==RIGHT){
-                randomization = 2;
-            }
+//            location = redPropProcessor.getLocation();
+//            if(location==LEFT){
+//                randomization = 0;
+//            }else if(location==MIDDLE){
+//                randomization = 1;
+//            }else if(location==RIGHT){
+//                randomization = 2;
+//            }
+            randomization = 0;
             telemetry.update();
         }
         while (opModeIsActive() && !isStopRequested()) {
@@ -237,6 +238,7 @@ public class AutoRed extends LinearOpMode {
                 drive.followTrajectory(leftRunToBoardish);
                 drive.followTrajectory(leftStrafeBoard);
                 intake.setPower(.5);
+                intake.update();
 
                 score();
 
@@ -244,7 +246,7 @@ public class AutoRed extends LinearOpMode {
                 intake.update();
                 drive.followTrajectory(backTowardStackStrafeLeft);
                 drive.followTrajectory(backTowardsIntakeStackLeft);
-                
+
 
                 sleep(500000);
             }else if(randomization == 2){ //RIGHT

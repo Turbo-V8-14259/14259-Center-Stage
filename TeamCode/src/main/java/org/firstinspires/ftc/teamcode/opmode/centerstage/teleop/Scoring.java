@@ -31,6 +31,7 @@ public class Scoring extends LinearOpMode {
     stickyGamepad gamepadOne;
     stickyGamepad gamepadTwo;
     ElapsedTime timer = new ElapsedTime();
+    ElapsedTime timer2 = new ElapsedTime();
 
     Pitch pitch;
 
@@ -40,10 +41,12 @@ public class Scoring extends LinearOpMode {
     int ledState = 0;
 
     double TimeStamp = 0;
+    double TimeStamp2 = 0;
 
     int climbSafe = 0;
 
     boolean timeToggle = true;
+    boolean timeToggle2 = true;
     double adjustedAngle = 0;
     double boardAngle = 0;
 
@@ -190,10 +193,20 @@ public class Scoring extends LinearOpMode {
                 if(timeToggle){//timeToggle starts at true by default
                     TimeStamp = timer.milliseconds();
                     timeToggle = false;
+                    timeToggle2 = false;
                 }
                 if(timer.milliseconds()> TimeStamp + 300){
                     arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
                     timeToggle = true;
+                    timeToggle2 = true;
+                }
+                if(timeToggle2){//timeToggle starts at true by default
+                    TimeStamp2 = timer2.milliseconds();
+                    timeToggle2 = false;
+                }
+                if(timer2.milliseconds()> TimeStamp2 + 450){
+                    scoringState = 3;
+                    timeToggle2 = true;
                 }
 
                 break;

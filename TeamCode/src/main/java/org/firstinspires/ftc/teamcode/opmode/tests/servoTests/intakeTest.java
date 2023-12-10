@@ -12,8 +12,6 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
 
 @TeleOp
-@Disabled
-
 public class intakeTest extends LinearOpMode {
 
     Intake intake;
@@ -38,6 +36,7 @@ public class intakeTest extends LinearOpMode {
 
             telemetry.addData("intake", intake.getState());
             telemetry.addData("intake power", intake.intakeMotor.getPower());
+            telemetry.addData("intake position", intake.target);
             gamepadOne.update();
             telemetry.update();
             intake.update();

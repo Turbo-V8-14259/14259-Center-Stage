@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.hardware.Deposit;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
@@ -60,6 +61,7 @@ public class DepoSlides {
         this.leftMotor.setLowerBound(DepoSlides.LOWER_BOUND);
         this.leftMotor.setUpperBound(DepoSlides.UPPER_BOUND);
         this.leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.rightMotor = rightMotor;
         this.rightMotor.setLowerBound(DepoSlides.LOWER_BOUND);
