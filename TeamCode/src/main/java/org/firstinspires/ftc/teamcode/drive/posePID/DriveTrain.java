@@ -8,6 +8,8 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
 public class DriveTrain {
+    private boolean isAtTarget;
+    private double xTol = .1, yTol = .1, headingTol = 2;
     SampleMecanumDrive drive;
 
 
@@ -70,6 +72,11 @@ public class DriveTrain {
         this.headingPid.update();
         this.drive.setWeightedDrivePower(new Pose2d(xPower, yPower, headingPower));
         drive.update();
+        if(Math.abs(this.x - this.xPred) < xTol && Math.abs(this.y - this.yPred) < yTol && Math.abs(this.heading - this.headingPred) < headingTol){
+            this.isAtTarget = true;
+        }else{
+            this.isAtTarget = false;
+        }
     }
 
     public double getX() {
@@ -99,6 +106,20 @@ public class DriveTrain {
     }
     public double getDeltaHeading() {
         return this.heading - this.headingPred;
+    }
+
+    public boolean checkIsAtTarget() {
+        return this.isAtTarget;
+    }
+
+    public void setxTol(double xTol) {
+        this.xTol = xTol;
+    }
+    public void setyTol(double yTol) {
+        this.yTol = yTol;
+    }
+    public void setheadingTol(double headingTol) {
+        this.headingTol = headingTol;
     }
 
 }
