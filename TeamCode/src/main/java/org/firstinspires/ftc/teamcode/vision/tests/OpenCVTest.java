@@ -1,28 +1,21 @@
 package org.firstinspires.ftc.teamcode.vision.tests;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.vision.CameraContourTest;
 import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
+import org.firstinspires.ftc.teamcode.vision.RedContour;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
-
-import java.util.Objects;
 
 @TeleOp
 
 public class OpenCVTest extends LinearOpMode
 {
     OpenCvWebcam webcam;
-
-
     public static String ObjectDirection;
     @Override
     public void runOpMode()
@@ -31,7 +24,7 @@ public class OpenCVTest extends LinearOpMode
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
 //        CameraPipeline s = new CameraPipeline(telemetry, ObjectDirection);
-        CameraContourTest c = new CameraContourTest(telemetry);
+        RedContour c = new RedContour(telemetry);
         webcam.setPipeline(c);
 
         webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
@@ -52,7 +45,7 @@ public class OpenCVTest extends LinearOpMode
             }
         });
         telemetry.addLine("Waiting for start");
-        //telemetry.addLine(CameraPipeline.color);
+        telemetry.addLine(String.valueOf(RedContour.p));
         telemetry.update();
 
         /*
