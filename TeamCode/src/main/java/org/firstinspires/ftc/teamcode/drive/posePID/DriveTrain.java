@@ -82,4 +82,23 @@ public class DriveTrain {
         return this.headingPred;
     }
 
+    public double getTargetX() {
+        return this.x;
+    }
+    public double getTargetY() {
+        return this.y;
+    }
+    public double getTargetHeading() {
+        return this.heading;
+    }
+    public double getDeltaX() {
+        return this.x - this.xPred;
+    }
+    public double getDeltaY() {
+        return this.y - this.yPred;
+    }
+    public double getDeltaHeading() {
+        return this.heading - this.headingPred;
+    }
+
 }
