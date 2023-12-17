@@ -42,15 +42,15 @@ public class DriveTrain {
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.xPid = new PID(
                 DriveTrain.xPidCoefficients,
-                () -> this.x - this.xPred,
+                () -> this.xPred - this.x,
                 factor -> this.addPower(factor, -this.headingPred));
         this.yPid = new PID(
                 DriveTrain.yPidCoefficients,
-                () -> this.y - this.yPred,
+                () -> this.yPred - this.y,
                 factor -> this.addPower(factor, -this.headingPred + Math.PI / 2.0));
         this.headingPid = new PID(
                 DriveTrain.headingPidCoefficients,
-                () -> this.heading - this.headingPred,
+                () -> this.headingPred - this.heading,
                 factor -> this.addHeadingPower(factor));
     }
 
