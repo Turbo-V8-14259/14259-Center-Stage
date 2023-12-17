@@ -80,7 +80,7 @@ public class RedTwoPlusFive extends OpMode {
     Pose2d middleTruss = new Pose2d(0, -7, Math.toRadians(-180));
     Pose2d depositL = new Pose2d(38, -8, Math.toRadians(-220));
 
-    Pose2d park = new Pose2d(50,-30,Math.toRadians(-180));
+    Pose2d park = new Pose2d(50, -30, Math.toRadians(-180));
 
 
     boolean fullyReset = true;
@@ -94,8 +94,8 @@ public class RedTwoPlusFive extends OpMode {
     Trajectory toRightStack;
     Trajectory leftToIntake;
     Trajectory toTruss;
-    Trajectory [] toProps;
-    Trajectory [] toStacks;
+    Trajectory[] toProps;
+    Trajectory[] toStacks;
     Trajectory toMiddleStack;
     // Test Commit
 
@@ -148,7 +148,6 @@ public class RedTwoPlusFive extends OpMode {
         };
 
 
-
 //        toTruss = drive.trajectoryBuilder(toStacks[randomization].end())
 //                .lineToLinearHeading(middleTruss)
 //                .addDisplacementMarker(() -> drive.followTrajectoryAsync(ScoreLeft))
@@ -164,7 +163,8 @@ public class RedTwoPlusFive extends OpMode {
                 .build();
 
     }
-    public void init_loop(){
+
+    public void init_loop() {
         telemetry.addData("random", randomization);
         currentstate = State.TOGPL;
         drive.followTrajectoryAsync(toProps[randomization]);
@@ -180,7 +180,7 @@ public class RedTwoPlusFive extends OpMode {
                     arm.manualPosition = 0.04;
                     intake.manualPosition = 0.3;
                     currentstate = State.TOINTAKE;
-                    if(randomization==0){
+                    if (randomization == 0) {
                         drive.followTrajectoryAsync(LeftBackFiveInches);
                     }
                 }
@@ -193,7 +193,7 @@ public class RedTwoPlusFive extends OpMode {
                 }
                 break;
             case INTAKE:
-                if(!drive.isBusy() && atTargetPosition(toStack)) {
+                if (!drive.isBusy() && atTargetPosition(toStack)) {
                     if (timeToggle) {
                         timeStamp = timer.milliseconds();
                         timeToggle = false;
@@ -208,9 +208,9 @@ public class RedTwoPlusFive extends OpMode {
                 }
                 break;
             case TOSCOREL:
-                if(drive.getPoseEstimate().getX() > -45)
+                if (drive.getPoseEstimate().getX() > -45)
                     intake.setPower(1);
-                if(drive.getPoseEstimate().getX() > 5){
+                if (drive.getPoseEstimate().getX() > 5) {
                     arm.manualPosition = 0.6;
                     slides.manualPosition = 22;
                     fullyReset = false;
@@ -222,18 +222,18 @@ public class RedTwoPlusFive extends OpMode {
                         turret.manualPosition = 0.5;
                         timeToggle = true;
                     }
-                    if(!drive.isBusy()){
+                    if (!drive.isBusy()) {
                         currentstate = State.SCORE;
                     }
                 }
-                if(drive.getPoseEstimate().getX() > 12){
+                if (drive.getPoseEstimate().getX() > 12) {
                     SampleMecanumDrive.HEADING_PID = new PIDCoefficients(8, 0, 0);
                     //got any other bad ideas, Leo?
                 }
                 break;
 
             case SCORE:
-                if(atTargetPosition(depositL)){
+                if (atTargetPosition(depositL)) {
                     arm.manualPosition = 0.3;
                 }
                 if (timeToggle) {
@@ -247,31 +247,31 @@ public class RedTwoPlusFive extends OpMode {
                     cycles_left--;
                     timeToggle = true;
                 }
-                if(cycles_left == 0) {
+                if (cycles_left == 0) {
                     currentstate = State.PARK;
                 }
                 break;
 
             case RESETTOSTACK:
-                if(!fullyReset){
+                if (!fullyReset) {
                     arm.manualPosition = 0.5;
                     turret.manualPosition = 0.01;
                     slides.manualPosition = 0;
 //                    intake.setPower(-.6);
-                    if(slides.getCurrentPosition() > -18){
+                    if (slides.getCurrentPosition() > -18) {
                         drive.followTrajectoryAsync(leftToIntake);
                     }
-                    if(slides.getCurrentInches() > -3){
+                    if (slides.getCurrentInches() > -3) {
                         arm.manualPosition = 0.04;
                         fullyReset = true;
                     }
-                }else{
+                } else {
                     intake.manualPosition -= 0.155;
                     currentstate = State.INTAKE;
                 }
                 break;
             case PARK:
-                if(!fullyReset) {
+                if (!fullyReset) {
                     arm.manualPosition = 0.5;
                     turret.manualPosition = 0.01;
                     slides.manualPosition = 0;
@@ -283,7 +283,7 @@ public class RedTwoPlusFive extends OpMode {
                         arm.manualPosition = 0.04;
                         fullyReset = true;
                     }
-                }else{
+                } else {
                     telemetry.addData("DID YOU DO SCORE A 2+5?", false);
                     telemetry.addLine("ASLKJFD HASLKJD AHSLKDJ ASLDJK ASLKJD BASLKDJ ASD ");
                     SampleMecanumDrive.HEADING_PID = new PIDCoefficients(8, 0, 0);
@@ -304,12 +304,12 @@ public class RedTwoPlusFive extends OpMode {
         telemetry.addData("state: ", currentstate);
         telemetry.addData("slides position", slides.getCurrentInches());
         telemetry.addData("Arm Manual Position = ", arm.manualPosition);
-        telemetry.addData("intake Position:" , intake.manualPosition);
+        telemetry.addData("intake Position:", intake.manualPosition);
 
 
     }
 
-    public boolean atTargetPosition(Pose2d targetPose){
+    public boolean atTargetPosition(Pose2d targetPose) {
         double deltaX = targetPose.getX() - drive.getPoseEstimate().getX();
         double deltaY = targetPose.getY() - drive.getPoseEstimate().getY();
         double deltaR = targetPose.getHeading() - drive.getPoseEstimate().getHeading();

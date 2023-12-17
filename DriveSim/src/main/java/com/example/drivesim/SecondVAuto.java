@@ -106,7 +106,7 @@ public class SecondVAuto {
 
                                 .lineToSplineHeading(rightPropStack)
                                 .lineToSplineHeading(depositL)
-                                .lineToLinearHeading(toStack)
+                                .lineToSplineHeading(toStack)
                                 .lineToLinearHeading(depositL)
                                 .lineToLinearHeading(toStack)
                                 .lineToLinearHeading(depositL)
