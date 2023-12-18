@@ -13,8 +13,7 @@ public class DriveTrain {
     SampleMecanumDrive drive;
 
 
-    private static PID.Coefficients xPidCoefficients = new PID.Coefficients(0.08, 0.1, 0.01);
-    private static PID.Coefficients yPidCoefficients = new PID.Coefficients(0.08, 0.1, 0.01);
+    private static PID.Coefficients translationalPidCoefficients = new PID.Coefficients(0.08, 0.1, 0.01);
     private static PID.Coefficients headingPidCoefficients = new PID.Coefficients(0.7, 0.55, 0.01);
     private PID xPid, yPid, headingPid;
 
@@ -41,11 +40,11 @@ public class DriveTrain {
     public DriveTrain(HardwareMap hardwareMap) {
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.xPid = new PID(
-                DriveTrain.xPidCoefficients,
+                DriveTrain.translationalPidCoefficients,
                 () -> this.xPred - this.x,
                 factor -> this.addPower(factor, -this.headingPred));
         this.yPid = new PID(
-                DriveTrain.yPidCoefficients,
+                DriveTrain.translationalPidCoefficients,
                 () -> this.yPred - this.y,
                 factor -> this.addPower(factor, -this.headingPred + Math.PI / 2.0));
         this.headingPid = new PID(
