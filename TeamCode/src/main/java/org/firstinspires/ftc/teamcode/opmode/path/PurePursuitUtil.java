@@ -20,8 +20,21 @@ public class PurePursuitUtil {
         double B = (2*m1*y1) -(2*pow(m1,2)*x1);
         double C = (pow(y1, 2)) - (2*m1*y1*x1) -(pow(m1, 2)*pow(x1, 2)) - (pow(r, 2));
 
-        double root1 = ((-2*B)-sqrt(pow(B,2)-4*A*C))/(2*A);
-        double root2 = ((-2*B)+sqrt(pow(B,2)-4*A*C))/(2*A);
 
+
+        ArrayList<Point> allPoints = new ArrayList<>();
+        try{
+            double root1 = ((-2*B)-sqrt(pow(B,2)-4*A*C))/(2*A);
+            double yroot1 = m1*(root1-x1);
+            root1+= circleCenter.x;
+            yroot1 += circleCenter.y;
+
+            double root2 = ((-2*B)+sqrt(pow(B,2)-4*A*C))/(2*A);
+            double yroot2 = m1*(root1-x1);
+            root2+= circleCenter.x;
+            yroot2 += circleCenter.y;
+        }catch{
+
+        }
     }
 }
