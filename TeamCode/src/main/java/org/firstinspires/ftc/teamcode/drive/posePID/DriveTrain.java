@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
 public class DriveTrain {
     private boolean isAtTarget;
+    private boolean xOn = true, yOn = true, headingOn = true;
     private double xTol = .1, yTol = .1, headingTol = 2;
     SampleMecanumDrive drive;
 
@@ -66,9 +67,22 @@ public class DriveTrain {
         }
         headingLast = headingCurrent;
         this.headingPred = count * 2*M.PI + headingCurrent;
-        this.xPid.update();
-        this.yPid.update();
-        this.headingPid.update();
+        if(this.xOn){
+            this.xPid.update();
+        }else{
+            this.xPower = 0;
+        }
+        if(this.yOn){
+            this.yPid.update();
+        }else{
+            this.yPower = 0;
+        }
+        if(this.headingOn){
+            this.headingPid.update();
+        }else{
+            this.headingPower = 0;
+        }
+
         this.drive.setWeightedDrivePower(new Pose2d(xPower, yPower, headingPower));
         drive.update();
         if(Math.abs(this.x - this.xPred) < xTol && Math.abs(this.y - this.yPred) < yTol && Math.abs(this.heading - this.headingPred) < headingTol){
@@ -119,6 +133,25 @@ public class DriveTrain {
     }
     public void setheadingTol(double headingTol) {
         this.headingTol = headingTol;
+    }
+
+    public void turnXOff(){
+        this.xOn = false;
+    }
+    public void turnXOn(){
+        this.xOn = true;
+    }
+    public void turnYOff(){
+        this.yOn = false;
+    }
+    public void turnYOn(){
+        this.yOn = true;
+    }
+    public void turnHeadingOff(){
+        this.headingOn = false;
+    }
+    public void turnHeadingOn(){
+        this.headingOn = true;
     }
 
 }
