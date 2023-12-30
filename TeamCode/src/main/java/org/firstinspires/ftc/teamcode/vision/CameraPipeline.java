@@ -27,12 +27,11 @@ public class CameraPipeline extends OpenCvPipeline
             new Point(150, 100),
             new Point(300, 225));
     static double PERCENT_COLOR_THRESHOLD = 0.22;
-    String ObjectDirection;
+    public static String ObjectDirection;
     Mat mat = new Mat();
 
-    public CameraPipeline(Telemetry t, String s) {
+    public CameraPipeline(Telemetry t){
         telemetry = t;
-        ObjectDirection = s;
     }
 
     public Mat processFrame(Mat input)

@@ -22,6 +22,8 @@ public class AutoVisionTester extends LinearOpMode
 {
     boolean Blue = false;
     boolean Red = true;
+
+    //it would probably be simpler to port this from the camerapipeline but shhh this was made a while ago im only updating it now.
     OpenCvWebcam webcam;
     public static String ObjectDirection;
 
@@ -35,22 +37,37 @@ public class AutoVisionTester extends LinearOpMode
     @Override
     public void runOpMode()
     {
-        initAll();
-        telemetry.addLine("Waiting for start");
+        telemetry.addLine("Loading Pipeline...");
+        telemetry.update();
+        initPipeline();
+        ObjectDirection = CameraPipeline.ObjectDirection;
+
+        if(ObjectDirection != null){
+            telemetry.addData("Location:", ObjectDirection);
+            telemetry.update();
+            sleep(50);
+            webcam.stopRecordingPipeline();
+            webcam.closeCameraDevice();
+        }
+        else{
+            telemetry.addLine("Identifying Location...");
+            telemetry.update();
+        }
+        telemetry.update();
+        telemetry.addLine("Loading AprilTagDetections...");
+        telemetry.update();
+
+        initAprilTag();
+        visionPortal.setProcessorEnabled(aprilTag, true);
+
+        telemetry.addLine("Ready to Start");
+        telemetry.addData("Location:", ObjectDirection);
         telemetry.update();
         waitForStart();
+
         while (opModeIsActive())
         {
-
-            final String detectionDR;
-            detectionDR = ObjectDirection;
-            sleep(5000);
-            webcam.stopRecordingPipeline();
-
-            visionPortal.setProcessorEnabled(aprilTag, true);
-
-
-            if(detectionDR == "LEFT"){
+            if(ObjectDirection == "LEFT"){
                 if(Red){
                     detection = AprilTagPipeline.getSpecificTagData(aprilTag,4);
                 }
@@ -58,7 +75,7 @@ public class AutoVisionTester extends LinearOpMode
                     detection = AprilTagPipeline.getSpecificTagData(aprilTag,1);
                 }
             }
-            else if(detectionDR == "MIDDLE"){
+            else if(ObjectDirection == "MIDDLE"){
                 if(Red){
                     detection = AprilTagPipeline.getSpecificTagData(aprilTag,5);
                 }
@@ -66,7 +83,7 @@ public class AutoVisionTester extends LinearOpMode
                     detection = AprilTagPipeline.getSpecificTagData(aprilTag,2);
                 }
             }
-            else if(detectionDR == "RIGHT"){
+            else if(ObjectDirection == "RIGHT"){
                 if(Red){
                     detection = AprilTagPipeline.getSpecificTagData(aprilTag,6);
                 }
@@ -74,29 +91,17 @@ public class AutoVisionTester extends LinearOpMode
                     detection = AprilTagPipeline.getSpecificTagData(aprilTag,3);
                 }
             }
+
             if(detection != null){
 
             }
             else{
 
             }
-            telemetry.addData("Direction", detectionDR);
+            telemetry.addData("Location", ObjectDirection);
             telemetry.update();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private void initAprilTag() {
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
@@ -110,7 +115,7 @@ public class AutoVisionTester extends LinearOpMode
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        CameraPipeline s = new CameraPipeline(telemetry, ObjectDirection);
+        CameraPipeline s = new CameraPipeline(telemetry);
         webcam.setPipeline(s);
 
         webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
@@ -130,10 +135,8 @@ public class AutoVisionTester extends LinearOpMode
                  */
             }
         });
-    }
-    private void initAll(){
-        initAprilTag();
-        initPipeline();
-    }
 
+        sleep(1000);
+
+    }
 }
