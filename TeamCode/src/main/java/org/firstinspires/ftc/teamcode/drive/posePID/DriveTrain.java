@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 public class DriveTrain {
     private boolean isAtTarget;
     private boolean xOn = true, yOn = true, headingOn = true;
-    private double xTol = .1, yTol = .1, headingTol = 2;
+    private double xTol = 1, yTol = 1, headingTol = .5;
     SampleMecanumDrive drive;
 
 
@@ -161,6 +161,17 @@ public class DriveTrain {
     }
     public double getPowerHeading(){
         return this.headingPower;
+    }
+
+    public double getPIDCalculationX(){
+        return this.xPred - this.x;
+    }
+
+    public double getPIDCalculationY(){
+        return this.yPred - this.y;
+    }
+    public double getPIDCalculationHeading(){
+        return this.headingPred - this.heading;
     }
 
 
