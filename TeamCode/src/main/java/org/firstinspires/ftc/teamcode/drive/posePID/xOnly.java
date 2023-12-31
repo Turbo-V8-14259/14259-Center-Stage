@@ -30,6 +30,7 @@ public class xOnly extends LinearOpMode {
             telemetry.addData("x pos", drive.getX());
             telemetry.addData("y pos", drive.getY());
             telemetry.addData("heading", drive.getHeading());
+            telemetry.addData("xPower", drive.getPowerX());
             telemetry.update();
             gamepadOne.update();
         }

@@ -153,5 +153,15 @@ public class DriveTrain {
     public void turnHeadingOn(){
         this.headingOn = true;
     }
+    public double getPowerX(){
+        return this.xPower;
+    }
+    public double getPowerY(){
+        return this.yPower;
+    }
+    public double getPowerHeading(){
+        return this.headingPower;
+    }
+
 
 }

@@ -30,6 +30,7 @@ public class rotationalOnly extends LinearOpMode {
             telemetry.addData("x pos", drive.getX());
             telemetry.addData("y pos", drive.getY());
             telemetry.addData("heading", drive.getHeading());
+            telemetry.addData("headingPower", drive.getPowerHeading());
             telemetry.update();
             gamepadOne.update();
         }
