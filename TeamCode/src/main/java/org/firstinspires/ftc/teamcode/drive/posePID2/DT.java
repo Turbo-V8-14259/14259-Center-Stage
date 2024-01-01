@@ -74,10 +74,10 @@ public class DT{
     }
     public void setPowers(double y, double x, double r){
         double normalize = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(r),1);
-        this.leftFront.setPower(((y+x+r)/normalize));
-        this.leftRear.setPower(((y-x+r)/normalize));
-        this.rightRear.setPower(((y+x-r)/normalize));
-        this.rightFront.setPower(((y-x-r)/normalize));
+        leftFront.setPower(((y+x+r)/normalize));
+        leftRear.setPower(((y-x+r)/normalize));
+        rightRear.setPower(((y+x-r)/normalize));
+        rightFront.setPower(((y-x-r)/normalize));
     }
     public void update(){
         drive.updatePoseEstimate();
