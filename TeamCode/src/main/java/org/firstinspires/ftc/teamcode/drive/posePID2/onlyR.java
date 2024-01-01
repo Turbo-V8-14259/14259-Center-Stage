@@ -3,12 +3,13 @@ package org.firstinspires.ftc.teamcode.drive.posePID2;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp
 @Config
-
+@Disabled
 public class onlyR extends LinearOpMode {
     public static double r = 0;
     @Override
