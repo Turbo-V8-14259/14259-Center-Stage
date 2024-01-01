@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.posePID2;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -16,48 +17,67 @@ public class DT{
     private DcMotorEx rightFront;
     private DcMotorEx leftRear;
 
-    private double xTarget = 0;
-    private double yTarget = 0;
-    private double rTarget = 0;
+    private double xTarget;
+    private double yTarget;
+    private double rTarget;
 
     private double xRn, yRn, rRn;
-    private PIDCoefficients xyCoeff, rCoeff;
 
+    private BasicPID xController, yController, rController;
+    private PIDCoefficients xyCoeff, rCoeff;
     public static double xyP = 0.15, xyI = 0, xyD = .2;
     public static double rP = 0.5, rI = 0, rD = 0;
 
-    private BasicPID xController, yController, rController;
-
     private double xOut, yOut, rOut;
     private double twistedR, count, lastAngle;
-
     private double xPower, yPower;
-
 
     public DT(HardwareMap hardwareMap){
         this.drive = new SampleMecanumDrive(hardwareMap);
-        leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
-        leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
-        rightRear = hardwareMap.get(DcMotorEx.class, "RightBack");
-        rightFront = hardwareMap.get(DcMotorEx.class, "RightFront");
+        this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
+        this.leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
+        this.rightRear = hardwareMap.get(DcMotorEx.class, "RightBack");
+        this.rightFront = hardwareMap.get(DcMotorEx.class, "RightFront");
+        this.rightRear.setDirection(DcMotor.Direction.FORWARD);
+        this.rightFront.setDirection(DcMotor.Direction.FORWARD);
+        this.leftFront.setDirection(DcMotor.Direction.REVERSE);
+        this.leftRear.setDirection(DcMotor.Direction.REVERSE);
+        this.xyCoeff = new PIDCoefficients(xyP, xyI, xyD);
+        this.rCoeff = new PIDCoefficients(rP, rI, rD);
+        this.xController = new BasicPID(xyCoeff);
+        this.yController = new BasicPID(xyCoeff);
+        this.rController = new BasicPID(rCoeff);
+        this.xTarget = 0;
+        this.yTarget = 0;
+        this.rTarget = 0;
+    }
+    public DT(HardwareMap hardwareMap, Pose2d startPose){
+        this.drive = new SampleMecanumDrive(hardwareMap);
+        this.drive.setPoseEstimate(startPose);
+        this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
+        this.leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
+        this.rightRear = hardwareMap.get(DcMotorEx.class, "RightBack");
+        this.rightFront = hardwareMap.get(DcMotorEx.class, "RightFront");
 
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
-        xyCoeff = new PIDCoefficients(xyP, xyI, xyD);
-        rCoeff = new PIDCoefficients(rP, rI, rD);
-        xController = new BasicPID(xyCoeff);
-        yController = new BasicPID(xyCoeff);
-        rController = new BasicPID(rCoeff);
-
+        this.rightRear.setDirection(DcMotor.Direction.FORWARD);
+        this.rightFront.setDirection(DcMotor.Direction.FORWARD);
+        this.leftFront.setDirection(DcMotor.Direction.REVERSE);
+        this.leftRear.setDirection(DcMotor.Direction.REVERSE);
+        this.xyCoeff = new PIDCoefficients(xyP, xyI, xyD);
+        this.rCoeff = new PIDCoefficients(rP, rI, rD);
+        this.xController = new BasicPID(xyCoeff);
+        this.yController = new BasicPID(xyCoeff);
+        this.rController = new BasicPID(rCoeff);
+        this.xTarget = startPose.getX();
+        this.yTarget = startPose.getY();
+        this.rTarget = startPose.getHeading();
     }
     public void setPowers(double y, double x, double r){
         double normalize = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(r),1);
-        leftFront.setPower(((y+x+r)/normalize));
-        leftRear.setPower(((y-x+r)/normalize));
-        rightRear.setPower(((y+x-r)/normalize));
-        rightFront.setPower(((y-x-r)/normalize));
+        this.leftFront.setPower(((y+x+r)/normalize));
+        this.leftRear.setPower(((y-x+r)/normalize));
+        this.rightRear.setPower(((y+x-r)/normalize));
+        this.rightFront.setPower(((y-x-r)/normalize));
     }
     public void update(){
         drive.updatePoseEstimate();
@@ -72,8 +92,8 @@ public class DT{
         lastAngle = rRn;
         twistedR = count * (2*Math.PI) + rRn;
         rOut = rController.calculate(rTarget, twistedR);
-        xPower = xOut * Math.cos(rRn) - (-1*yOut) * Math.sin(rRn);
-        yPower = xOut * Math.sin(rRn) + (-1*yOut) * Math.cos(rRn);
+        xPower = xOut * Math.cos(rRn) - (-yOut) * Math.sin(rRn);
+        yPower = xOut * Math.sin(rRn) + (-yOut) * Math.cos(rRn);
         setPowers(xPower, yPower,-rOut);
     }
 
@@ -90,17 +110,16 @@ public class DT{
         return (xOut * Math.cos(rRn));
     }
     public double getPowerY(){
-        return -1 * yOut * (Math.sin(rRn + Math.PI/2));
+        return yPower;
     }
-
+    public double getPowerR(){
+        return -rOut;
+    }
     public double getRawY(){
         return yOut;
     }
     public double getRawX(){
         return xOut;
-    }
-    public double getPowerR(){
-        return rOut;
     }
     public double getX(){
         return xRn;
@@ -111,15 +130,12 @@ public class DT{
     public double getR(){
         return rRn;
     }
-
     public double getYTarget(){
         return yTarget;
     }
-
     public double getTwistedR(){
         return twistedR;
     }
-
     public void lineTo(double x, double y, double r){
         setXTarget(x);
         setYTarget(y);
