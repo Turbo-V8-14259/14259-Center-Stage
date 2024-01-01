@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.drive.posePID;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -8,12 +11,15 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 
 
 @TeleOp(name = "posePIDTest")
+@Disabled
+
 public class posePIDTest extends LinearOpMode {
     double x = 0.0, y = 0.0, heading = 0.0;
     @Override
     public void runOpMode() throws InterruptedException {
         DriveTrain drive = new DriveTrain(hardwareMap);
         stickyGamepad gamepadOne = new stickyGamepad(gamepad1);
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         waitForStart();
         while (opModeIsActive()) {
             if(gamepadOne.dpad_up){

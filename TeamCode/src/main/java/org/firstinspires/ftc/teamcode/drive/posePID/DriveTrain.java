@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.drive.posePID;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.PID;
 
+@Config
 public class DriveTrain {
     private boolean isAtTarget;
     private boolean xOn = true, yOn = true, headingOn = true;
@@ -14,7 +17,7 @@ public class DriveTrain {
     SampleMecanumDrive drive;
 
 
-    private static PID.Coefficients translationalPidCoefficients = new PID.Coefficients(0.08, 0.1, 0.01);
+    private static PID.Coefficients translationalPidCoefficients = new PID.Coefficients(0.0001, 0.1, 0.01);
     private static PID.Coefficients headingPidCoefficients = new PID.Coefficients(0.7, 0.55, 0.01);
     private PID xPid, yPid, headingPid;
 
@@ -43,11 +46,11 @@ public class DriveTrain {
         this.xPid = new PID(
                 DriveTrain.translationalPidCoefficients,
                 () -> this.xPred - this.x,
-                factor -> this.addPower(factor, -this.headingPred));
+                factor -> this.addPower(factor, this.headingPred));
         this.yPid = new PID(
                 DriveTrain.translationalPidCoefficients,
                 () -> this.yPred - this.y,
-                factor -> this.addPower(factor, -this.headingPred + Math.PI / 2.0));
+                factor -> this.addPower(factor, this.headingPred));
         this.headingPid = new PID(
                 DriveTrain.headingPidCoefficients,
                 () -> this.headingPred - this.heading,
@@ -61,12 +64,8 @@ public class DriveTrain {
         this.updateLocalizer();
         this.xPred = drive.getPoseEstimate().getX();
         this.yPred = drive.getPoseEstimate().getY();
-        this.headingCurrent = drive.getPoseEstimate().getHeading(); //radians
-        if(Math.abs(headingCurrent - headingLast) > M.PI){
-            count += Math.signum(headingLast - headingCurrent);
-        }
-        headingLast = headingCurrent;
-        this.headingPred = count * 2*M.PI + headingCurrent;
+        this.headingPred = drive.getPoseEstimate().getHeading(); //radians
+
         if(this.xOn){
             this.xPid.update();
         }else{
@@ -82,14 +81,24 @@ public class DriveTrain {
         }else{
             this.headingPower = 0;
         }
-
-        this.drive.setWeightedDrivePower(new Pose2d(xPower, yPower, headingPower));
-        drive.update();
-        if(Math.abs(this.x - this.xPred) < xTol && Math.abs(this.y - this.yPred) < yTol && Math.abs(this.heading - this.headingPred) < headingTol){
-            this.isAtTarget = true;
-        }else{
-            this.isAtTarget = false;
+        if(Math.abs(this.x - this.xPred) < xTol){
+            this.xPower = 0;
         }
+        if(Math.abs(this.y - this.yPred) < yTol){
+            this.yPower = 0;
+        }
+//        this.drive.setWeightedDrivePower(new Pose2d(-xPower, 0, 0));
+//        this.drive.setWeightedDrivePower(new Pose2d(0, yPower, 0));
+        this.drive.setWeightedDrivePower(new Pose2d(-xPower, yPower, 0));
+
+//        this.drive.setWeightedDrivePower(new Pose2d(-xPower, yPower, headingPower));
+//        this.drive.setWeightedDrivePower(new Pose2d(0, 0, 0));
+        drive.update();
+//        if(Math.abs(this.x - this.xPred) < xTol && Math.abs(this.y - this.yPred) < yTol && Math.abs(this.heading - this.headingPred) < headingTol){
+//            this.isAtTarget = true;
+//        }else{
+//            this.isAtTarget = false;
+//        }
     }
 
     public double getX() {

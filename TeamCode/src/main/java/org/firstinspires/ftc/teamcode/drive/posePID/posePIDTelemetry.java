@@ -1,16 +1,18 @@
 package org.firstinspires.ftc.teamcode.drive.posePID;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
-import org.firstinspires.ftc.teamcode.usefuls.Math.M;
+@TeleOp(name = "posePID ALLO?")
+@Disabled
 
-
-@TeleOp(name = "posePID telemetry")
 public class posePIDTelemetry extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         DriveTrain drive = new DriveTrain(hardwareMap);
         waitForStart();
         while (opModeIsActive()) {
@@ -24,6 +26,9 @@ public class posePIDTelemetry extends LinearOpMode {
             telemetry.addData("xPower", drive.getPowerX());
             telemetry.addData("yPower", drive.getPowerY());
             telemetry.addData("headingPower", drive.getPowerHeading());
+            telemetry.addData("x calculation", drive.getPIDCalculationX());
+            telemetry.addData("y calculation", drive.getPIDCalculationY());
+            telemetry.addData("r calculation", drive.getPIDCalculationHeading());
             telemetry.update();
         }
     }
