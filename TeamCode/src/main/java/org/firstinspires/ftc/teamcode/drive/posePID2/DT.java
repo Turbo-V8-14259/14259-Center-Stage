@@ -107,7 +107,7 @@ public class DT{
         this.rTarget = r;
     }
     public double getPowerX(){
-        return (xOut * Math.cos(rRn));
+        return xPower;
     }
     public double getPowerY(){
         return yPower;
@@ -140,5 +140,9 @@ public class DT{
         setXTarget(x);
         setYTarget(y);
         setRTarget(r);
+    }
+    public void lineToCHeading(double x, double y, double r){
+        setXTarget(x);
+        setYTarget(y);
     }
 }
