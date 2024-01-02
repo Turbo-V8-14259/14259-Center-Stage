@@ -91,11 +91,11 @@ public class DT{
         }
         lastAngle = rRn;
         twistedR = count * (2* M.PI) + rRn;
-        rOut = rController.calculate(rTarget, twistedR);
+        rOut = -rController.calculate(rTarget, twistedR);
         xPower = xOut * T.cos(rRn) - yOut * T.sin(rRn);
         yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
 
-        setPowers(xPower, yPower,-rOut);
+        setPowers(xPower, yPower,rOut);
     }
 
     public void setXTarget(double x){
@@ -114,7 +114,7 @@ public class DT{
         return yPower;
     }
     public double getPowerR(){
-        return -rOut;
+        return rOut;
     }
     public double getRawY(){
         return yOut;
