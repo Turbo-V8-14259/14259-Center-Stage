@@ -8,31 +8,39 @@ import org.opencv.core.Point;
 import java.util.ArrayList;
 
 public class PurePursuitUtil {
-    public static ArrayList<Point> lineCircleIntersection(Point circleCenter, double radius, Point linePoint1, Point linePoint2){
-
+    public static ArrayList<Point> lineCircleIntersection(Point circleCenter, double radius, Point linePoint1, Point linePoint2) {
         double discTolerance = 0.01;
-        double m1 = (linePoint2.y-linePoint1.y)-(linePoint2.x-linePoint1.y);
-        double x1 = linePoint1.x-circleCenter.x;
-        double y1 = linePoint1.y-circleCenter.y;
+        double m1;
 
-        //quadratic coefficients of the solution to the intersection of the line segment and circle
-        double A = 1 + pow(m1, 2);
-        double B = (2*m1*y1) -(2*pow(m1,2)*x1);
-        double C = (pow(y1, 2)) - (2*m1*y1*x1) -(pow(m1, 2)*pow(x1, 2)) - (pow(radius, 2));
+        // Handle vertical line
+        if (linePoint2.x - linePoint1.x != 0) {
+            m1 = (linePoint2.y - linePoint1.y) / (linePoint2.x - linePoint1.x);
+        } else {
+            m1 = Double.POSITIVE_INFINITY; // Vertical line
+        }
 
+        double x1 = linePoint1.x - circleCenter.x;
+        double y1 = linePoint1.y - circleCenter.y;
 
-        double disc = sqrt(pow(B, 2) - 4 * A * C);
+        // Quadratic coefficients of the solution to the intersection of the line segment and circle
+        double A = 1 + Math.pow(m1, 2);
+        double B = m1 * y1 - Math.pow(m1, 2) * x1;
+        double C = Math.pow(y1, 2) - 2 * m1 * y1 * x1 + Math.pow(m1, 2) * Math.pow(x1, 2) - Math.pow(radius, 2);
+
+        double disc = Math.sqrt(Math.pow(B, 2) -  A * C);
         ArrayList<Point> allPoints = new ArrayList<>();
-        try{
-            if(disc>discTolerance) {
-                //first root
-                double xroot1 = ((-2 * B) - disc) / (2 * A);
-                double yroot1 = m1 * (xroot1 - x1);
+
+        try {
+            if (disc > discTolerance) {
+                // First root
+                double xroot1 = (-B - disc) / ( A);
+                double yroot1 = m1 * xroot1;
                 xroot1 += circleCenter.x;
                 yroot1 += circleCenter.y;
-                //second root
-                double xroot2 = ((-2 * B) + disc) / (2 * A);
-                double yroot2 = m1 * (xroot2 - x1);
+
+                // Second root
+                double xroot2 = (-B + disc) / (A);
+                double yroot2 = m1 * xroot2;
                 xroot2 += circleCenter.x;
                 yroot2 += circleCenter.y;
 
@@ -42,16 +50,15 @@ public class PurePursuitUtil {
                 if (withinSegment(linePoint1.x, linePoint2.x, xroot2)) {
                     allPoints.add(new Point(xroot2, yroot2));
                 }
-            }else if(disc>=0&&disc<=discTolerance){
-                double xroot = -B/A;
+            } else if (disc >= 0 && disc <= discTolerance) {
+                double xroot = -B / A;
                 double yroot = m1 * (xroot - x1);
-                xroot+= circleCenter.x;
-                yroot+= circleCenter.y;
+                xroot += circleCenter.x;
+                yroot += circleCenter.y;
                 allPoints.add(new Point(xroot, yroot));
-            }else{
             }
-        }catch(Exception e){
-
+        } catch (Exception e) {
+            // Handle exceptions
         }
 
         return allPoints;
@@ -81,5 +88,7 @@ public class PurePursuitUtil {
     public static boolean passedWayPt(Point robotLocation, Point wayPt, Double radius){
         return hypot((robotLocation.y- wayPt.y),(robotLocation.x- wayPt.x)) <= radius;
     }
-
+    public static Point recoveryPt(){
+        
+    }
 }
