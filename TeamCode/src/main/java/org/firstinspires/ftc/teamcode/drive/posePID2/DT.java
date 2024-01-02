@@ -94,7 +94,15 @@ public class DT{
         rOut = -rController.calculate(rTarget, twistedR);
         xPower = xOut * T.cos(rRn) - yOut * T.sin(rRn);
         yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
-
+        if(Math.abs(xPower) > DTConstants.maxAxialPower){
+            xPower = DTConstants.maxAxialPower * Math.signum(xPower);
+        }
+        if(Math.abs(yPower) > DTConstants.maxAxialPower){
+            yPower = DTConstants.maxAxialPower * Math.signum(yPower);
+        }
+        if(Math.abs(rOut) > DTConstants.maxAngularPower){
+            rOut = DTConstants.maxAngularPower * Math.signum(rOut);
+        }
         setPowers(xPower, yPower,rOut);
     }
 
