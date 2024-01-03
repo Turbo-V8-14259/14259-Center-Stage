@@ -1,12 +1,5 @@
-package org.firstinspires.ftc.teamcode.opmode.path;
+package org.firstinspires.ftc.teamcode.drive.path;
 
-import static org.firstinspires.ftc.teamcode.opmode.path.PurePursuitUtil.*;
-
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import org.firstinspires.ftc.teamcode.opmode.path.PurePursuitUtil.*;
-import org.opencv.core.Point;
-
-import java.util.ArrayList;
 import org.opencv.core.Point;
 
 import java.util.ArrayList;

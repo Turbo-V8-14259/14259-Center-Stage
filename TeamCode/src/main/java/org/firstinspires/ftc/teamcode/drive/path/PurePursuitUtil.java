@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.path;
+package org.firstinspires.ftc.teamcode.drive.path;
 
 
 import static java.lang.Math.*;
@@ -11,12 +11,13 @@ public class PurePursuitUtil {
     public static ArrayList<Point> lineCircleIntersection(Point circleCenter, double radius, Point linePoint1, Point linePoint2) {
         double discTolerance = 0.01;
         double m1;
-
+        ArrayList<Point> allPoints = new ArrayList<>();
         // Handle vertical line
         if (linePoint2.x - linePoint1.x != 0) {
             m1 = (linePoint2.y - linePoint1.y) / (linePoint2.x - linePoint1.x);
         } else {
-            m1 = Double.POSITIVE_INFINITY; // Vertical line
+            allPoints.add(new Point(circleCenter.x, circleCenter.y+radius));
+            return allPoints;
         }
 
         double x1 = linePoint1.x - circleCenter.x;
@@ -28,7 +29,7 @@ public class PurePursuitUtil {
         double C = Math.pow(y1, 2) - 2 * m1 * y1 * x1 + Math.pow(m1, 2) * Math.pow(x1, 2) - Math.pow(radius, 2);
 
         double disc = Math.sqrt(Math.pow(B, 2) -  A * C);
-        ArrayList<Point> allPoints = new ArrayList<>();
+
 
         try {
             if (disc > discTolerance) {
@@ -56,6 +57,9 @@ public class PurePursuitUtil {
                 xroot += circleCenter.x;
                 yroot += circleCenter.y;
                 allPoints.add(new Point(xroot, yroot));
+            }else{
+                Point pt = recoveryPt(linePoint1, linePoint2, circleCenter);
+                allPoints.add(pt);
             }
         } catch (Exception e) {
             // Handle exceptions
@@ -88,7 +92,34 @@ public class PurePursuitUtil {
     public static boolean passedWayPt(Point robotLocation, Point wayPt, Double radius){
         return hypot((robotLocation.y- wayPt.y),(robotLocation.x- wayPt.x)) <= radius;
     }
-    public static Point recoveryPt(){
-        
+    public static Point recoveryPt(Point waypt1, Point waypt2, Point robotLocation){
+        if(robotLocation.x<min(waypt1.x, waypt2.x)){
+            Point newPt = min(waypt1.x, waypt2.x) == waypt1.x ? waypt1:waypt2;
+            return newPt;
+        }else if(robotLocation.x>max(waypt1.x, waypt2.x)){
+            Point newPt = max(waypt1.x, waypt2.x) == waypt1.x ? waypt1:waypt2;
+            return newPt;
+        }else if(robotLocation.x<=max(waypt1.x, waypt2.x)&&robotLocation.x>=min(waypt1.x, waypt2.x)){
+            double m;
+            if (waypt2.x - waypt1.x != 0) {
+                m = (waypt2.y - waypt1.y) / (waypt2.x - waypt1.x);
+                double b = (waypt2.y-waypt1.y) - m*(waypt2.x-waypt1.x);
+                double x1 = robotLocation.x;
+                double y1 = robotLocation.y - b;
+                if(m==0){
+                    b = waypt1.y;
+                    return new Point(robotLocation.x, b);
+                }else{
+                    double rootx = (m*(y1+x1*(1/m)))/(pow(m,2)+1);
+                    double rooty = m*rootx + b;
+                    return new Point(rootx, rooty);
+                }
+            } else {
+                return new Point(waypt1.x, robotLocation.y);
+            }
+        }else{
+            Point pt = hypot(robotLocation.x-waypt1.x, robotLocation.y-waypt1.y) < hypot(robotLocation.x-waypt2.x, robotLocation.y-waypt2.y) ? waypt1 : waypt2;
+            return new Point(pt.x, pt.y);
+        }
     }
 }

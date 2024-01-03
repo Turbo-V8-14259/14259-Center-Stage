@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.path;
+package org.firstinspires.ftc.teamcode.drive.path;
 import org.opencv.core.Point;
 public class Robot {
     private Point location;
