@@ -7,32 +7,33 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.usefuls.Math.M;
+import org.firstinspires.ftc.teamcode.usefuls.Math.T;
+
+import kotlin.comparisons.UComparisonsKt;
+
 @Config
 public class DT{
     private SampleMecanumDrive drive;
-    private DcMotorEx leftFront;
-    private DcMotorEx rightRear;
-    private DcMotorEx rightFront;
-    private DcMotorEx leftRear;
+    private VoltageSensor vs;
+    private double compensator;
+    private DcMotorEx leftFront, rightRear, rightFront, leftRear;
 
-    private double xTarget;
-    private double yTarget;
-    private double rTarget;
-
+    private double xTarget, yTarget, rTarget;
     private double xRn, yRn, rRn;
 
     private BasicPID xController, yController, rController;
     private PIDCoefficients xyCoeff, rCoeff;
-    public static double xyP = 0.15, xyI = 0, xyD = .2;
-    public static double rP = 0.5, rI = 0, rD = 0;
 
     private double xOut, yOut, rOut;
     private double twistedR, count, lastAngle;
     private double xPower, yPower;
 
     public DT(HardwareMap hardwareMap){
+        this.batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
         this.leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
@@ -42,8 +43,8 @@ public class DT{
         this.rightFront.setDirection(DcMotor.Direction.FORWARD);
         this.leftFront.setDirection(DcMotor.Direction.REVERSE);
         this.leftRear.setDirection(DcMotor.Direction.REVERSE);
-        this.xyCoeff = new PIDCoefficients(xyP, xyI, xyD);
-        this.rCoeff = new PIDCoefficients(rP, rI, rD);
+        this.xyCoeff = new PIDCoefficients(DTConstants.xyP, DTConstants.xyI, DTConstants.xyD);
+        this.rCoeff = new PIDCoefficients(DTConstants.rP, DTConstants.rI, DTConstants.rD);
         this.xController = new BasicPID(xyCoeff);
         this.yController = new BasicPID(xyCoeff);
         this.rController = new BasicPID(rCoeff);
@@ -52,6 +53,7 @@ public class DT{
         this.rTarget = 0;
     }
     public DT(HardwareMap hardwareMap, Pose2d startPose){
+        this.batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.drive.setPoseEstimate(startPose);
         this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
@@ -63,8 +65,8 @@ public class DT{
         this.rightFront.setDirection(DcMotor.Direction.FORWARD);
         this.leftFront.setDirection(DcMotor.Direction.REVERSE);
         this.leftRear.setDirection(DcMotor.Direction.REVERSE);
-        this.xyCoeff = new PIDCoefficients(xyP, xyI, xyD);
-        this.rCoeff = new PIDCoefficients(rP, rI, rD);
+        this.xyCoeff = new PIDCoefficients(DTConstants.xyP, DTConstants.xyI, DTConstants.xyD);
+        this.rCoeff = new PIDCoefficients(DTConstants.rP, DTConstants.rI, DTConstants.rD);
         this.xController = new BasicPID(xyCoeff);
         this.yController = new BasicPID(xyCoeff);
         this.rController = new BasicPID(rCoeff);
@@ -85,16 +87,29 @@ public class DT{
         yRn = drive.getPoseEstimate().getY();
         rRn = drive.getPoseEstimate().getHeading();
         xOut = xController.calculate(xTarget, xRn);
-        yOut = yController.calculate(yTarget, yRn);
-        if(Math.abs(rRn - lastAngle) > Math.PI){
+        yOut = -yController.calculate(yTarget, yRn);
+        if(Math.abs(rRn - lastAngle) > M.PI){
             count += Math.signum(lastAngle - rRn);
         }
         lastAngle = rRn;
-        twistedR = count * (2*Math.PI) + rRn;
-        rOut = rController.calculate(rTarget, twistedR);
-        xPower = xOut * Math.cos(rRn) - (-yOut) * Math.sin(rRn);
-        yPower = xOut * Math.sin(rRn) + (-yOut) * Math.cos(rRn);
-        setPowers(xPower, yPower,-rOut);
+        twistedR = count * (2* M.PI) + rRn;
+        rOut = -rController.calculate(rTarget, twistedR);
+        xPower = xOut * T.cos(rRn) - yOut * T.sin(rRn);
+        yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
+        if(Math.abs(xPower) > DTConstants.maxAxialPower){
+            xPower = DTConstants.maxAxialPower * Math.signum(xPower);
+        }
+        if(Math.abs(yPower) > DTConstants.maxAxialPower){
+            yPower = DTConstants.maxAxialPower * Math.signum(yPower);
+        }
+        if(Math.abs(rOut) > DTConstants.maxAngularPower){
+            rOut = DTConstants.maxAngularPower * Math.signum(rOut);
+        }
+        compensator = vs.getVoltage() / 12.5;
+        xPower/=compensator;
+        yPower/=compensator;
+        rOut/=compensator;
+        setPowers(xPower, yPower,rOut);
     }
 
     public void setXTarget(double x){
@@ -107,13 +122,13 @@ public class DT{
         this.rTarget = r;
     }
     public double getPowerX(){
-        return (xOut * Math.cos(rRn));
+        return xPower;
     }
     public double getPowerY(){
         return yPower;
     }
     public double getPowerR(){
-        return -rOut;
+        return rOut;
     }
     public double getRawY(){
         return yOut;
@@ -140,5 +155,9 @@ public class DT{
         setXTarget(x);
         setYTarget(y);
         setRTarget(r);
+    }
+    public void lineToCHeading(double x, double y, double r){
+        setXTarget(x);
+        setYTarget(y);
     }
 }
