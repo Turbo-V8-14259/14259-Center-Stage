@@ -13,8 +13,6 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Math.T;
 
-import kotlin.comparisons.UComparisonsKt;
-
 @Config
 public class DT{
     private SampleMecanumDrive drive;
@@ -24,6 +22,8 @@ public class DT{
 
     private double xTarget, yTarget, rTarget;
     private double xRn, yRn, rRn;
+    private double deltaX, deltaY, deltaR;
+    private boolean isAtTarget;
 
     private BasicPID xController, yController, rController;
     private PIDCoefficients xyCoeff, rCoeff;
@@ -95,6 +95,13 @@ public class DT{
         xPower = xOut * T.cos(rRn) - yOut * T.sin(rRn);
         yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
 
+        deltaR = rTarget - rRn;
+        deltaY = yTarget - yRn;
+        deltaX = xTarget - xRn;
+        if((Math.abs(deltaX) < DTConstants.allowedAxialError) && (Math.abs(deltaY) < DTConstants.allowedAxialError) && (Math.abs(deltaR) < DTConstants.allowedAngularError)) isAtTarget = true;
+        else isAtTarget = false;
+
+        if (Math.abs(xPower) < 0.01) xPower = 0;
         if(Math.abs(xPower) > DTConstants.maxAxialPower) xPower = DTConstants.maxAxialPower * Math.signum(xPower);
         if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
         if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
@@ -103,7 +110,7 @@ public class DT{
         else xPower += DTConstants.XYBasePower * Math.signum(xPower);
         if(Math.abs(yPower) < 0.01) yPower = 0;
         else yPower += DTConstants.XYBasePower * Math.signum(yPower);
-        if (Math.abs(rOut) < 0.01) rOut = 0;
+        if (Math.abs(rOut) < 0.01 || Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
         else rOut += DTConstants.RBasePower * Math.signum(rOut);
 
         compensator = vs.getVoltage() / 12.5;
@@ -152,6 +159,18 @@ public class DT{
     }
     public double getTwistedR(){
         return twistedR;
+    }
+    public double getDeltaX(){
+        return deltaX;
+    }
+    public double getDeltaY(){
+        return deltaY;
+    }
+    public double getDeltaR(){
+        return deltaR;
+    }
+    public boolean isAtTarget(){
+        return isAtTarget;
     }
     public void lineTo(double x, double y, double r){
         setXTarget(x);
