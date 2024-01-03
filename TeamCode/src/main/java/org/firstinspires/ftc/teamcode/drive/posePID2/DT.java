@@ -152,13 +152,13 @@ public class DT{
         return yRn;
     }
     public double getR(){
-        return rRn;
+        return twistedR;
     }
     public double getYTarget(){
         return yTarget;
     }
-    public double getTwistedR(){
-        return twistedR;
+    public double getUnTwistedR(){
+        return rRn;
     }
     public double getDeltaX(){
         return deltaX;
@@ -172,6 +172,7 @@ public class DT{
     public boolean isAtTarget(){
         return isAtTarget;
     }
+
     public void lineTo(double x, double y, double r){
         setXTarget(x);
         setYTarget(y);
