@@ -33,7 +33,7 @@ public class DT{
     private double xPower, yPower;
 
     public DT(HardwareMap hardwareMap){
-        this.batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
+        this.vs = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
         this.leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
@@ -53,7 +53,7 @@ public class DT{
         this.rTarget = 0;
     }
     public DT(HardwareMap hardwareMap, Pose2d startPose){
-        this.batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
+        this.vs = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.drive.setPoseEstimate(startPose);
         this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
@@ -88,27 +88,29 @@ public class DT{
         rRn = drive.getPoseEstimate().getHeading();
         xOut = xController.calculate(xTarget, xRn);
         yOut = -yController.calculate(yTarget, yRn);
-        if(Math.abs(rRn - lastAngle) > M.PI){
-            count += Math.signum(lastAngle - rRn);
-        }
+        if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
         lastAngle = rRn;
         twistedR = count * (2* M.PI) + rRn;
         rOut = -rController.calculate(rTarget, twistedR);
         xPower = xOut * T.cos(rRn) - yOut * T.sin(rRn);
         yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
-        if(Math.abs(xPower) > DTConstants.maxAxialPower){
-            xPower = DTConstants.maxAxialPower * Math.signum(xPower);
-        }
-        if(Math.abs(yPower) > DTConstants.maxAxialPower){
-            yPower = DTConstants.maxAxialPower * Math.signum(yPower);
-        }
-        if(Math.abs(rOut) > DTConstants.maxAngularPower){
-            rOut = DTConstants.maxAngularPower * Math.signum(rOut);
-        }
+
+        if(Math.abs(xPower) > DTConstants.maxAxialPower) xPower = DTConstants.maxAxialPower * Math.signum(xPower);
+        if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
+        if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
+
+        if(Math.abs(xPower) < 0.01) xPower = 0;
+        else xPower += DTConstants.XYBasePower * Math.signum(xPower);
+        if(Math.abs(yPower) < 0.01) yPower = 0;
+        else yPower += DTConstants.XYBasePower * Math.signum(yPower);
+        if (Math.abs(rOut) < 0.01) rOut = 0;
+        else rOut += DTConstants.RBasePower * Math.signum(rOut);
+
         compensator = vs.getVoltage() / 12.5;
         xPower/=compensator;
         yPower/=compensator;
         rOut/=compensator;
+
         setPowers(xPower, yPower,rOut);
     }
 
