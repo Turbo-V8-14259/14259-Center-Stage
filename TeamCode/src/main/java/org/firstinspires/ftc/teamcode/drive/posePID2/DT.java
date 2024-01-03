@@ -101,7 +101,6 @@ public class DT{
         if((Math.abs(deltaX) < DTConstants.allowedAxialError) && (Math.abs(deltaY) < DTConstants.allowedAxialError) && (Math.abs(deltaR) < DTConstants.allowedAngularError)) isAtTarget = true;
         else isAtTarget = false;
 
-        if (Math.abs(xPower) < 0.01) xPower = 0;
         if(Math.abs(xPower) > DTConstants.maxAxialPower) xPower = DTConstants.maxAxialPower * Math.signum(xPower);
         if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
         if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
@@ -172,14 +171,30 @@ public class DT{
     public boolean isAtTarget(){
         return isAtTarget;
     }
+    public boolean isAtTargetX(){
+        return Math.abs(xRn - xTarget) < DTConstants.allowedAxialError;
+    }
+    public boolean isAtTargetY(){
+        return Math.abs(yRn - yTarget) < DTConstants.allowedAxialError;
+    }
+    public boolean isAtTargetR(){
+        return Math.abs(twistedR - rTarget) < DTConstants.allowedAngularError;
+    }
 
     public void lineTo(double x, double y, double r){
         setXTarget(x);
         setYTarget(y);
         setRTarget(r);
     }
-    public void lineToCHeading(double x, double y, double r){
+    public void lineToCHeading(double x, double y){
         setXTarget(x);
         setYTarget(y);
+    }
+    public void lineToChangeHeadingUnderCondition(double x, double y, double r, boolean condition){
+        setXTarget(x);
+        setYTarget(y);
+        if(condition){
+            setRTarget(r);
+        }
     }
 }
