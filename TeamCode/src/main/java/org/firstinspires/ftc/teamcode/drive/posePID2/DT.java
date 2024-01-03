@@ -7,22 +7,22 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
+
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Math.T;
 
+import kotlin.comparisons.UComparisonsKt;
+
 @Config
 public class DT{
     private SampleMecanumDrive drive;
-    private DcMotorEx leftFront;
-    private DcMotorEx rightRear;
-    private DcMotorEx rightFront;
-    private DcMotorEx leftRear;
+    private VoltageSensor vs;
+    private double compensator;
+    private DcMotorEx leftFront, rightRear, rightFront, leftRear;
 
-    private double xTarget;
-    private double yTarget;
-    private double rTarget;
-
+    private double xTarget, yTarget, rTarget;
     private double xRn, yRn, rRn;
 
     private BasicPID xController, yController, rController;
@@ -33,6 +33,7 @@ public class DT{
     private double xPower, yPower;
 
     public DT(HardwareMap hardwareMap){
+        this.batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
         this.leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
@@ -52,6 +53,7 @@ public class DT{
         this.rTarget = 0;
     }
     public DT(HardwareMap hardwareMap, Pose2d startPose){
+        this.batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.drive.setPoseEstimate(startPose);
         this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
@@ -103,6 +105,10 @@ public class DT{
         if(Math.abs(rOut) > DTConstants.maxAngularPower){
             rOut = DTConstants.maxAngularPower * Math.signum(rOut);
         }
+        compensator = vs.getVoltage() / 12.5;
+        xPower/=compensator;
+        yPower/=compensator;
+        rOut/=compensator;
         setPowers(xPower, yPower,rOut);
     }
 
