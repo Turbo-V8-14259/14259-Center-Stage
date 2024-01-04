@@ -25,6 +25,8 @@ public class DT{
     private double deltaX, deltaY, deltaR;
     private boolean isAtTarget;
 
+    private double errorX, errorY; //PEE JAY
+
     private BasicPID xController, yController, rController;
     private PIDCoefficients xyCoeff, rCoeff;
 
@@ -90,8 +92,8 @@ public class DT{
 //        yOut = -yController.calculate(yTarget, yRn);
         deltaY = yTarget - yRn; //PEE JAY
         deltaX = xTarget - xRn; //PEE JAY
-        double errorX = deltaX * T.cos(rRn) - deltaY * T.sin(rRn); //PEE JAY
-        double errorY = deltaX * T.sin(rRn) + deltaY * T.cos(rRn); //PEE JAY
+        errorX = deltaX * T.cos(rRn) - deltaY * T.sin(rRn); //PEE JAY
+        errorY = deltaX * T.sin(rRn) + deltaY * T.cos(rRn); //PEE JAY
         xOut = xController.calculate(errorX, 0); //PEE JAY
         yOut = -yController.calculate(errorY, 0); //PEE JAY
         if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
