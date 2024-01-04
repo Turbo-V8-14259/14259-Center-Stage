@@ -86,8 +86,14 @@ public class DT{
         xRn = drive.getPoseEstimate().getX();
         yRn = drive.getPoseEstimate().getY();
         rRn = drive.getPoseEstimate().getHeading();
-        xOut = xController.calculate(xTarget, xRn);
-        yOut = -yController.calculate(yTarget, yRn);
+//        xOut = xController.calculate(xTarget, xRn);
+//        yOut = -yController.calculate(yTarget, yRn);
+        deltaY = yTarget - yRn; //PEE JAY
+        deltaX = xTarget - xRn; //PEE JAY
+        double errorX = deltaX * T.cos(rRn) - deltaY * T.sin(rRn); //PEE JAY
+        double errorY = deltaX * T.sin(rRn) + deltaY * T.cos(rRn); //PEE JAY
+        xOut = xController.calculate(errorX, 0); //PEE JAY
+        yOut = -yController.calculate(errorY, 0); //PEE JAY
         if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
         lastAngle = rRn;
         twistedR = count * (2* M.PI) + rRn;
@@ -96,8 +102,6 @@ public class DT{
         yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
 
         deltaR = rTarget - rRn;
-        deltaY = yTarget - yRn;
-        deltaX = xTarget - xRn;
         if((Math.abs(deltaX) < DTConstants.allowedAxialError) && (Math.abs(deltaY) < DTConstants.allowedAxialError) && (Math.abs(deltaR) < DTConstants.allowedAngularError)) isAtTarget = true;
         else isAtTarget = false;
 
