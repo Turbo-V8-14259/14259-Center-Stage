@@ -13,8 +13,6 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Math.T;
 
-import kotlin.comparisons.UComparisonsKt;
-
 @Config
 public class DT{
     private SampleMecanumDrive drive;
@@ -24,6 +22,10 @@ public class DT{
 
     private double xTarget, yTarget, rTarget;
     private double xRn, yRn, rRn;
+    private double deltaX, deltaY, deltaR;
+    private boolean isAtTarget;
+
+    private double errorX, errorY; //PEE JAY
 
     private BasicPID xController, yController, rController;
     private PIDCoefficients xyCoeff, rCoeff;
@@ -33,7 +35,7 @@ public class DT{
     private double xPower, yPower;
 
     public DT(HardwareMap hardwareMap){
-        this.batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
+        this.vs = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
         this.leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
@@ -53,7 +55,7 @@ public class DT{
         this.rTarget = 0;
     }
     public DT(HardwareMap hardwareMap, Pose2d startPose){
-        this.batteryVoltageSensor = hardwareMap.voltageSensor.iterator().next();
+        this.vs = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
         this.drive.setPoseEstimate(startPose);
         this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
@@ -86,29 +88,41 @@ public class DT{
         xRn = drive.getPoseEstimate().getX();
         yRn = drive.getPoseEstimate().getY();
         rRn = drive.getPoseEstimate().getHeading();
-        xOut = xController.calculate(xTarget, xRn);
-        yOut = -yController.calculate(yTarget, yRn);
-        if(Math.abs(rRn - lastAngle) > M.PI){
-            count += Math.signum(lastAngle - rRn);
-        }
+//        xOut = xController.calculate(xTarget, xRn);
+//        yOut = -yController.calculate(yTarget, yRn);
+        deltaY = yTarget - yRn; //PEE JAY
+        deltaX = xTarget - xRn; //PEE JAY
+        errorX = deltaX * T.cos(rRn) - deltaY * T.sin(rRn); //PEE JAY
+        errorY = deltaX * T.sin(rRn) + deltaY * T.cos(rRn); //PEE JAY
+        xOut = xController.calculate(errorX, 0); //PEE JAY
+        yOut = -yController.calculate(errorY, 0); //PEE JAY
+        if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
         lastAngle = rRn;
         twistedR = count * (2* M.PI) + rRn;
         rOut = -rController.calculate(rTarget, twistedR);
         xPower = xOut * T.cos(rRn) - yOut * T.sin(rRn);
         yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
-        if(Math.abs(xPower) > DTConstants.maxAxialPower){
-            xPower = DTConstants.maxAxialPower * Math.signum(xPower);
-        }
-        if(Math.abs(yPower) > DTConstants.maxAxialPower){
-            yPower = DTConstants.maxAxialPower * Math.signum(yPower);
-        }
-        if(Math.abs(rOut) > DTConstants.maxAngularPower){
-            rOut = DTConstants.maxAngularPower * Math.signum(rOut);
-        }
+
+        deltaR = rTarget - rRn;
+        if((Math.abs(deltaX) < DTConstants.allowedAxialError) && (Math.abs(deltaY) < DTConstants.allowedAxialError) && (Math.abs(deltaR) < DTConstants.allowedAngularError)) isAtTarget = true;
+        else isAtTarget = false;
+
+        if(Math.abs(xPower) > DTConstants.maxAxialPower) xPower = DTConstants.maxAxialPower * Math.signum(xPower);
+        if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
+        if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
+
+        if(Math.abs(xPower) < 0.01) xPower = 0;
+        else xPower += DTConstants.XYBasePower * Math.signum(xPower);
+        if(Math.abs(yPower) < 0.01) yPower = 0;
+        else yPower += DTConstants.XYBasePower * Math.signum(yPower);
+        if (Math.abs(rOut) < 0.01 || Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
+        else rOut += DTConstants.RBasePower * Math.signum(rOut);
+
         compensator = vs.getVoltage() / 12.5;
         xPower/=compensator;
         yPower/=compensator;
         rOut/=compensator;
+
         setPowers(xPower, yPower,rOut);
     }
 
@@ -143,21 +157,50 @@ public class DT{
         return yRn;
     }
     public double getR(){
-        return rRn;
+        return twistedR;
     }
     public double getYTarget(){
         return yTarget;
     }
-    public double getTwistedR(){
-        return twistedR;
+    public double getUnTwistedR(){
+        return rRn;
     }
+    public double getDeltaX(){
+        return deltaX;
+    }
+    public double getDeltaY(){
+        return deltaY;
+    }
+    public double getDeltaR(){
+        return deltaR;
+    }
+    public boolean isAtTarget(){
+        return isAtTarget;
+    }
+    public boolean isAtTargetX(){
+        return Math.abs(xRn - xTarget) < DTConstants.allowedAxialError;
+    }
+    public boolean isAtTargetY(){
+        return Math.abs(yRn - yTarget) < DTConstants.allowedAxialError;
+    }
+    public boolean isAtTargetR(){
+        return Math.abs(twistedR - rTarget) < DTConstants.allowedAngularError;
+    }
+
     public void lineTo(double x, double y, double r){
         setXTarget(x);
         setYTarget(y);
         setRTarget(r);
     }
-    public void lineToCHeading(double x, double y, double r){
+    public void lineToCHeading(double x, double y){
         setXTarget(x);
         setYTarget(y);
+    }
+    public void lineToChangeHeadingUnderCondition(double x, double y, double r, boolean condition){
+        setXTarget(x);
+        setYTarget(y);
+        if(condition){
+            setRTarget(r);
+        }
     }
 }
