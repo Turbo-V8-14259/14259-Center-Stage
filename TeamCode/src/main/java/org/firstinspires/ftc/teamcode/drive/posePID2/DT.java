@@ -34,6 +34,8 @@ public class DT{
     private double twistedR, count, lastAngle;
     private double xPower, yPower;
 
+    private boolean isAtXYTarget;
+
     public DT(HardwareMap hardwareMap){
         this.vs = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
@@ -88,14 +90,14 @@ public class DT{
         xRn = drive.getPoseEstimate().getX();
         yRn = drive.getPoseEstimate().getY();
         rRn = drive.getPoseEstimate().getHeading();
-//        xOut = xController.calculate(xTarget, xRn);
-//        yOut = -yController.calculate(yTarget, yRn);
+        xOut = xController.calculate(xTarget, xRn);
+        yOut = -yController.calculate(yTarget, yRn);
         deltaY = yTarget - yRn; //PEE JAY
         deltaX = xTarget - xRn; //PEE JAY
-        errorX = deltaX * T.cos(rRn) - deltaY * T.sin(rRn); //PEE JAY
-        errorY = deltaX * T.sin(rRn) + deltaY * T.cos(rRn); //PEE JAY
-        xOut = xController.calculate(errorX, 0); //PEE JAY
-        yOut = -yController.calculate(errorY, 0); //PEE JAY
+//        errorX = deltaX * T.cos(rRn) - deltaY * T.sin(rRn); //PEE JAY
+//        errorY = deltaX * T.sin(rRn) + deltaY * T.cos(rRn); //PEE JAY
+        xOut = xController.calculate(xTarget, xRn); //PEE JAY
+        yOut = -yController.calculate(yTarget, yRn); //PEE JAY
         if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
         lastAngle = rRn;
         twistedR = count * (2* M.PI) + rRn;
@@ -103,9 +105,7 @@ public class DT{
         xPower = xOut * T.cos(rRn) - yOut * T.sin(rRn);
         yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
 
-        deltaR = rTarget - rRn;
-        if((Math.abs(deltaX) < DTConstants.allowedAxialError) && (Math.abs(deltaY) < DTConstants.allowedAxialError) && (Math.abs(deltaR) < DTConstants.allowedAngularError)) isAtTarget = true;
-        else isAtTarget = false;
+        deltaR = rTarget - twistedR;
 
         if(Math.abs(xPower) > DTConstants.maxAxialPower) xPower = DTConstants.maxAxialPower * Math.signum(xPower);
         if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
@@ -114,10 +114,18 @@ public class DT{
         if(Math.abs(xPower) < 0.01) xPower = 0;
         else xPower += DTConstants.XYBasePower * Math.signum(xPower);
         if(Math.abs(yPower) < 0.01) yPower = 0;
-        else yPower += DTConstants.XYBasePower * Math.signum(yPower);
+        else yPower += DTConstants.XYBasePower * Math.signum(yPower); // doesnt work since y becomes x and x becomes y
         if (Math.abs(rOut) < 0.01 || Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
-        else rOut += DTConstants.RBasePower * Math.signum(rOut);
-
+        else rOut += DTConstants.RBasePower * Math.signum(rOut); //this works tho
+//        if((Math.abs(deltaX) < DTConstants.allowedAxialError) && (Math.abs(deltaY) < DTConstants.allowedAxialError)) {
+//            isAtXYTarget = true;
+//            xPower = 0;
+//            yPower = 0;
+//        } else {
+//            isAtXYTarget = false;
+//            xPower += DTConstants.XYBasePower * Math.signum(xPower);
+//            yPower += DTConstants.XYBasePower * Math.signum(yPower);
+//        }
         compensator = vs.getVoltage() / 12.5;
         xPower/=compensator;
         yPower/=compensator;
@@ -185,6 +193,10 @@ public class DT{
     }
     public boolean isAtTargetR(){
         return Math.abs(twistedR - rTarget) < DTConstants.allowedAngularError;
+    }
+
+    public double getTwistedR(){
+        return 0;
     }
 
     public void lineTo(double x, double y, double r){

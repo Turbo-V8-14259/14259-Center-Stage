@@ -21,9 +21,9 @@ public class xyrLetsGo extends LinearOpMode {
             drive.setXTarget(x);
             drive.setRTarget(Math.toRadians(r));
             drive.update();
-            telemetry.addData("abs delta x ", Math.abs(drive.getX() - x));
-            telemetry.addData("abs delta y ", Math.abs(drive.getY() - y));
-            telemetry.addData("abs delta theta deg ", Math.abs(Math.toDegrees(drive.getR()) - r));
+            telemetry.addData("delta x", drive.getX() - x));
+            telemetry.addData("delta y ", Math.abs(drive.getY() - y));
+            telemetry.addData("delta theta deg ", Math.abs(Math.toDegrees(drive.getR()) - r));
             telemetry.update();
         }
     }

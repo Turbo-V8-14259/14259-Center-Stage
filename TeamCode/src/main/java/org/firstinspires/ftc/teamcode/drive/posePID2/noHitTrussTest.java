@@ -14,7 +14,7 @@ public class noHitTrussTest extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         waitForStart();
         while(opModeIsActive()){
-            drive.lineToChangeHeadingUnderCondition(20, 0, Math.toRadians(30), drive.getX() > 10);
+            drive.lineToChangeHeadingUnderCondition(60, 0, Math.toRadians(30), drive.getX() > 20);
             drive.update();
             telemetry.update();
         }
