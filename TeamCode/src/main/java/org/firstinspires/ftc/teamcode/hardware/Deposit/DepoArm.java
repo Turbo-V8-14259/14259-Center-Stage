@@ -21,8 +21,8 @@ public class DepoArm {
     public DepoArmState depoArmFSM = DepoArmState.STOPPED;
 
 
-    private static final double LEFT_LOWER_BOUND = 0;
-    private static final double LEFT_UPPER_BOUND = 0.5;
+    private static final double LEFT_LOWER_BOUND = .8; //0
+    private static final double LEFT_UPPER_BOUND = 0.25; //0.5
     private static final double RIGHT_LOWER_BOUND = 0;
     private static final double RIGHT_UPPER_BOUND = 1;
 
@@ -63,10 +63,10 @@ public class DepoArm {
                 target = .3 - levelOffset[level];
                 break;
             case INTERMEDIATE:
-                target = 0.6 - levelOffset[level];
+                target = 1 - levelOffset[level];
                 break;
             case ABSOLUTE_INTERMEDIATE:
-                target = 0.6;
+                target = 1;
             case STOPPED:
                 break;
             case RUNTOPOSITION:

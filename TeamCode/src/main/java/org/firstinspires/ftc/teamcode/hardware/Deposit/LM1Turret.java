@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.hardware.Deposit;
 
 
 import com.acmerobotics.dashboard.config.Config;
+
+import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
 @Config
@@ -22,13 +24,12 @@ public class LM1Turret {
 
     public TurretState turretFSM = TurretState.STOPPED;
 
-    private static final double LEFT_LOWER_BOUND = 1;
-    private static final double LEFT_UPPER_BOUND = .14;
+    private static final double LEFT_LOWER_BOUND = .95;
+    private static final double LEFT_UPPER_BOUND = .11;
 
     private static final double LEFT_90_DEGREES = 0.86;
 
-    private static final double RIGHT_90_DEGREES = 0.42;
-    // temp number, will tune today
+    private static final double RIGHT_90_DEGREES = 0.42; //tune ALLO?
 
     private ServoMotorBetter turret;
 
@@ -44,7 +45,7 @@ public class LM1Turret {
     }
 
     public double calculateRotation(double robotA){
-        double calculatedAngle = (2*robotA/3.1415) * (LEFT_90_DEGREES - RIGHT_90_DEGREES) + 0.65;
+        double calculatedAngle = (2*robotA/ M.PI) * (LEFT_90_DEGREES - RIGHT_90_DEGREES) + 0.65;
         return calculatedAngle > LEFT_90_DEGREES || calculatedAngle < RIGHT_90_DEGREES ? 0.65 : calculatedAngle;
 
     }
@@ -56,7 +57,7 @@ public class LM1Turret {
         this.turretFSM = state;
         switch (turretFSM){
             case INITIALIZE:
-                target = 0.01;
+                target = 0.0;
                 break;
             case SCORE:
                 target = 0.65;
