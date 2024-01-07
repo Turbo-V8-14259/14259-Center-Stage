@@ -133,7 +133,9 @@ public class DT{
 
         setPowers(xPower, yPower,rOut);
     }
-
+    public Pose2d getLocation(){
+        return new Pose2d(xRn, yRn, rRn);
+    }
     public void setXTarget(double x){
         this.xTarget = x;
     }
