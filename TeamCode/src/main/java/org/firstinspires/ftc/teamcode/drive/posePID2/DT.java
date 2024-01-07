@@ -111,11 +111,11 @@ public class DT{
         if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
         if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
 
-        if(Math.abs(xPower) < 0.01) xPower = 0;
+        if(Math.abs(xPower) < 0.1) xPower = 0;
         else xPower += DTConstants.XYBasePower * Math.signum(xPower);
-        if(Math.abs(yPower) < 0.01) yPower = 0;
+        if(Math.abs(yPower) < 0.1) yPower = 0;
         else yPower += DTConstants.XYBasePower * Math.signum(yPower); // doesnt work since y becomes x and x becomes y
-        if (Math.abs(rOut) < 0.01 || Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
+        if (Math.abs(rOut) < 0.05 || Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
         else rOut += DTConstants.RBasePower * Math.signum(rOut); //this works tho
 //        if((Math.abs(deltaX) < DTConstants.allowedAxialError) && (Math.abs(deltaY) < DTConstants.allowedAxialError)) {
 //            isAtXYTarget = true;

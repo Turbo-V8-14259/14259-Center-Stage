@@ -13,6 +13,6 @@ public class DTConstants {
     public static double maxAxialPower = 1;
     public static double maxAngularPower = 1;
 
-    public static double allowedAxialError = 5;
-    public static double allowedAngularError = M.toRadians(2);
+    public static double allowedAxialError = 1;
+    public static double allowedAngularError = M.toRadians(.5);
 }
