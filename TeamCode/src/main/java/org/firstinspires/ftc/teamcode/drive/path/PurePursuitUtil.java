@@ -148,4 +148,7 @@ public class PurePursuitUtil {
             return targetAngle;
         }
     }
+    public static double distanceTo(Pose2d robot, Pose2d target){
+        return hypot(robot.getX()-target.getX(), robot.getY()-target.getY());
+    }
 }
