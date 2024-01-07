@@ -32,10 +32,14 @@ public class PathTest extends LinearOpMode {
                 Pose2d currentWaypoint = wayPoints.get(currentWaypointIndex);
                 Pose2d nextWaypoint = wayPoints.get(currentWaypointIndex + 1);
                 while(!PurePursuitUtil.passedWayPt(drive.getLocation(), nextWaypoint, lookaheadRadius)){
-                    Pose2d follow = PurePursuitUtil.followMe(currentWaypoint, nextWaypoint, drive.getLocation(), lookaheadRadius);
-                    drive.lineTo(follow.getX(),follow.getY(), follow.getHeading());
-                    drive.update();
-                    telemetry.update();
+                    if(PurePursuitUtil.distanceTo(drive.getLocation(), nextWaypoint)>lookaheadRadius) {
+                        Pose2d follow = PurePursuitUtil.followMe(currentWaypoint, nextWaypoint, drive.getLocation(), lookaheadRadius);
+                        drive.lineTo(follow.getX(), follow.getY(), follow.getHeading());
+                        drive.update();
+                        telemetry.update();
+                    }else{
+                        break;
+                    }
                 }
                 telemetry.addData("Robot passed waypoint ", (currentWaypointIndex+1));
                 currentWaypointIndex++;
