@@ -39,6 +39,7 @@ public class DT{
     public DT(HardwareMap hardwareMap){
         this.vs = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
+        this.drive.setPoseEstimate(new Pose2d(0, 0, 0));
         this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
         this.leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
         this.rightRear = hardwareMap.get(DcMotorEx.class, "RightBack");
