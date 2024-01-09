@@ -197,10 +197,15 @@ public class DT{
     public boolean isAtTargetR(){
         return Math.abs(twistedR - rTarget) < DTConstants.allowedAngularError;
     }
-
     public double getTwistedR(){
         return 0;
+    } //??
+
+    public void setPoseEstimate(Pose2d pose){
+        this.drive.setPoseEstimate(pose);
     }
+
+    
 
     public void lineTo(double x, double y, double r){
         setXTarget(x);
