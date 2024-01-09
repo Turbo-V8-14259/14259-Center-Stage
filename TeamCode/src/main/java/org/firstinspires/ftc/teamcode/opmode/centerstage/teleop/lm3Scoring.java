@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
-@TeleOp(name = "new tele op")
+@TeleOp(name = "New Tele Op")
 public class lm3Scoring extends LinearOpMode {
     SampleMecanumDrive drive;
     Intake intake;

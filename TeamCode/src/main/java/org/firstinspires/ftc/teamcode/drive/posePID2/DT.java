@@ -97,8 +97,8 @@ public class DT{
         deltaX = xTarget - xRn; //PEE JAY
 //        errorX = deltaX * T.cos(rRn) - deltaY * T.sin(rRn); //PEE JAY
 //        errorY = deltaX * T.sin(rRn) + deltaY * T.cos(rRn); //PEE JAY
-        xOut = xController.calculate(xTarget, xRn); //PEE JAY
-        yOut = -yController.calculate(yTarget, yRn); //PEE JAY
+        xOut = xController.calculate(xTarget, xRn);
+        yOut = -yController.calculate(yTarget, yRn);
         if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
         lastAngle = rRn;
         twistedR = count * (2* M.PI) + rRn;
@@ -200,13 +200,9 @@ public class DT{
     public double getTwistedR(){
         return 0;
     } //??
-
     public void setPoseEstimate(Pose2d pose){
         this.drive.setPoseEstimate(pose);
     }
-
-    
-
     public void lineTo(double x, double y, double r){
         setXTarget(x);
         setYTarget(y);
