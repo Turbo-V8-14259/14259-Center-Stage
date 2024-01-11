@@ -56,6 +56,9 @@ public class DT{
         this.xTarget = 0;
         this.yTarget = 0;
         this.rTarget = 0;
+        if(drive.getPoseEstimate().getX() != 0 || drive.getPoseEstimate().getY() != 0 || drive.getPoseEstimate().getHeading() != 0){
+            drive.setPoseEstimate(new Pose2d(0, 0, 0));
+        }
     }
     public DT(HardwareMap hardwareMap, Pose2d startPose){
         this.vs = hardwareMap.voltageSensor.iterator().next();
