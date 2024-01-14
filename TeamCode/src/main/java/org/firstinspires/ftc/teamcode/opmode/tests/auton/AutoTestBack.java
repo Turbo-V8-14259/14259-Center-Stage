@@ -19,6 +19,9 @@ public class AutoTestBack extends LinearOpMode {
         STACK,
         DEPOSIT
     }
+    //start locs
+    Pose2d startBPose = new Pose2d(-35, -65, Math.toRadians(-90)); //default position
+    Pose2d startFPose = new Pose2d(11, -65, Math.toRadians(-90));
     //props
     Pose2d leftBProp = new Pose2d(-35, -32, Math.toRadians(-180));
     Vector2d leftBPropIntermediate = new Vector2d(-37, -32);
@@ -59,7 +62,7 @@ public class AutoTestBack extends LinearOpMode {
     int intermediaterandomizationstate =0;
     @Override
     public void runOpMode() throws InterruptedException {
-        DT drive = new DT(hardwareMap, new Pose2d(-35, -65, Math.toRadians(-90)));
+        DT drive = new DT(hardwareMap, new Pose2d(startBPose.getX(), startBPose.getY(), startBPose.getHeading()));
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         waitForStart();
         while(opModeIsActive()){
