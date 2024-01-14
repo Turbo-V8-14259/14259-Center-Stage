@@ -88,35 +88,273 @@ public class DriveSim {
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(500);
-        Pose2d startPose = new Pose2d(-35, 65, Math.toRadians(90)); //default position
-        Pose2d initialLine = new Pose2d(-35, 15, Math.toRadians(90));
-        Pose2d leftProp = new Pose2d(-42, 32, Math.toRadians(90));
-        Pose2d leftPropIntermediate = new Pose2d(-42, 5, Math.toRadians(90));
-        Pose2d stackPos = new Pose2d(-45, 17, Math.toRadians(180));
-        Pose2d toStack = new Pose2d(-52, 17, Math.toRadians(180));
-        Pose2d toStackMore = new Pose2d(-53, 18, Math.toRadians(180));
-        Pose2d runToBoardPos = new Pose2d(45, 18, Math.toRadians(180));
-        Pose2d leftStrafe = new Pose2d(59, 36, Math.toRadians(180));
-        Pose2d middleStrafe = new Pose2d(59, 41, Math.toRadians(180));
-        Pose2d rightProp = new Pose2d(-32, 40, Math.toRadians(0)); //rn
-        Pose2d rightPropIntermediate = new Pose2d(-28, 40, Math.toRadians(0)); //rn
-        Pose2d rightPropIntermediate2 = new Pose2d(-40, 40, Math.toRadians(0)); //rn
+        Pose2d startBPose = new Pose2d(-35, -65, Math.toRadians(-90)); //default position
+        Pose2d startFPose = new Pose2d(11, -65, Math.toRadians(-90));
 
-        Pose2d middleProp = new Pose2d(-30, 21, Math.toRadians(90));
-        Pose2d middlePropIntermediate = new Pose2d(-35,5, Math.toRadians(90));
-        Pose2d rightStrafe = new Pose2d(59, 47, Math.toRadians(180));
+        //props
+        Vector2d leftBProp = new Vector2d(-35, -32);
+        Vector2d leftBPropIntermediate = new Vector2d(-37, -32);
+        Vector2d leftFProp = new Vector2d(10, -31);
+        Vector2d leftFPropIntermediate = new Vector2d(14,-31);
 
-        Pose2d startyPose = new Pose2d(0, 0, Math.toRadians(-90));
-        Pose2d middlePose = new Pose2d(0, 12, Math.toRadians(0));
-        Vector2d endPose = new Vector2d(12, 12);
+        Vector2d rightBProp = new Vector2d(-35, -32); //rn
+        Vector2d rightBPropIntermediate = new Vector2d(-32, -32); //rn
+        Vector2d rightFProp = new Vector2d(31, -32);
+        Vector2d rightFPropIntermediate = new Vector2d(38, -32);
+
+        Vector2d middleBProp = new Vector2d(-35, -12);
+        Vector2d middleBPropIntermediate = new Vector2d(-35,-14);
+        Vector2d middleFProp = new Vector2d(20, -24);
+
+        //turns
+        double nninetyTurn = Math.toRadians(-90);
+        double halfTurn = Math.toRadians(180);
+        double pninetyTurn = Math.toRadians(90);
+        double TurnL = Math.toRadians(-20);
+        double TurnR = Math.toRadians(-40);
+        double TurnM = Math.toRadians(-30);
+        double unTurnL = Math.toRadians(20);
+        double unTurnM = Math.toRadians(30);
+        double unTurnR = Math.toRadians(40);
+
+        //stack
+        Vector2d beforeStack = new Vector2d(-37, -12);
+        Vector2d stackPos = new Vector2d(-54, -12);
+
+        Vector2d FStackI2 = new Vector2d(35, -60);
+        Vector2d FStackI1 = new Vector2d(-37, -60);
+        Vector2d FStack = new Vector2d(-54, -36);
+        //deposit
+        Vector2d dropOff = new Vector2d(32, -12);
+
+        Vector2d deposit = new Vector2d(35, -16);
+        Vector2d afterDepo = new Vector2d(35, -12);
+
+        Vector2d FFirstR = new Vector2d(45, -42);
+        Vector2d FFirstM = new Vector2d(45, -35);
+        Vector2d FFirstL = new Vector2d(45, -28);
+        Vector2d runToBoardPos = new Vector2d(55, -12);
+
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startyPose)
-                                .splineToLinearHeading(middlePose, CalculateTangents.calculateTangent(startPose, middlePose))
-                                .splineTo(endPose, CalculateTangents.calculateTangent(middlePose, endPose))
+                        drive.trajectorySequenceBuilder(startFPose)
+
+//                                .lineTo(leftBProp)
+//                                .turn(nninetyTurn)
+//                                .lineTo(leftBPropIntermediate)
+//                                .lineTo(leftBProp)
+//                                .lineTo(beforeStack)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnL)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnL)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnL)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnL)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnL)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnL)
+//                                .lineTo(runToBoardPos)
+//                                <--- left back
+//                                .lineTo(middleBProp)
+//                                .lineTo(middleBPropIntermediate)
+//                                .lineTo(middleBProp)
+//                                .turn(nninetyTurn)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnM)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnM)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnM)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnM)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnM)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnM)
+//                                .lineTo(runToBoardPos)
+//                                 <--- middle back
+//                                .lineTo(rightBProp)
+//                                .turn(pninetyTurn)
+//                                .lineTo(rightBPropIntermediate)
+//                                .lineTo(rightBProp)
+//                                .lineTo(beforeStack)
+//                                .turn(halfTurn)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnR)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnR)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnR)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnR)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnR)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnR)
+//                                .lineTo(runToBoardPos)
+////                                <--- right back
+//                                .lineTo(FFirstR)
+//                                .turn(nninetyTurn)
+//                                .lineTo(rightFPropIntermediate)
+//                                .lineTo(rightFProp)
+//                                .lineTo(dropOff)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnR)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnR)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnR)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnR)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnR)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnR)
+//                                .lineTo(runToBoardPos)
+                                // <--- right front
+//                                .lineTo(FFirstL)
+//                                .turn(nninetyTurn)
+//                                .lineTo(leftFProp)
+//                                .lineTo(leftFPropIntermediate)
+//                                .lineTo(dropOff)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnL)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnL)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnL)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnL)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnL)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnL)
+//                                .lineTo(runToBoardPos)
+//                                <--- left front
+//                                .lineTo(FFirstM)
+//                                .turn(nninetyTurn)
+//                                .lineTo(middleFProp)
+//                                .lineTo(dropOff)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnL)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnL)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnL)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnL)
+//                                .lineTo(stackPos)
+//                                .lineTo(dropOff)
+//                                .lineTo(deposit)
+//                                .turn(TurnL)
+//                                .lineTo(afterDepo)
+//                                .turn(unTurnL)
+//                                .lineTo(runToBoardPos)
+//                                <--- front middle
+//                                .lineTo(FFirstR)
+//                                .turn(nninetyTurn)
+//                                .lineTo(rightFPropIntermediate)
+//                                .lineTo(rightFProp)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStack)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FFirstR)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStack)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FFirstR)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStack)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FFirstR)
+//                                  <-- front right bottom
+//
+//                                .lineTo(FFirstM)
+//                                .turn(nninetyTurn)
+//                                .lineTo(middleFProp)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStack)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FFirstM)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStack)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FFirstM)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStack)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FFirstM)
+//                                  <--- front middle bottom
+//                                .lineTo(FFirstL)
+//                                .turn(nninetyTurn)
+//                                .lineTo(leftFProp)
+//                                .lineTo(leftFPropIntermediate)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStack)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FFirstL)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStack)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FFirstL)
+//                                  <--- front left bottom
+
                                 .build());
 
 
