@@ -119,7 +119,7 @@ public class DT{
         else xPower += DTConstants.XYBasePower * Math.signum(xPower);
         if(Math.abs(yPower) < 0.1) yPower = 0;
         else yPower += DTConstants.XYBasePower * Math.signum(yPower); // doesnt work since y becomes x and x becomes y
-        if (Math.abs(rOut) < 0.05 || Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
+        if (Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
         else rOut += DTConstants.RBasePower * Math.signum(rOut); //this works tho
 //        if((Math.abs(deltaX) < DTConstants.allowedAxialError) && (Math.abs(deltaY) < DTConstants.allowedAxialError)) {
 //            isAtXYTarget = true;
@@ -136,7 +136,7 @@ public class DT{
         rOut/=compensator;
 
         setPowers(xPower, yPower,rOut);
-        if(Math.abs(deltaX) < 2 && Math.abs(deltaY)<2 && Math.abs(Math.toDegrees(deltaR)) < 3){
+        if(Math.abs(deltaX) < 2 && Math.abs(deltaY)<2 && Math.abs(deltaR) < DTConstants.allowedAngularError){
             isAtTarget = true;
         }else{
             isAtTarget = false;
