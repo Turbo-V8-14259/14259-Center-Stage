@@ -136,7 +136,7 @@ public class DT{
         rOut/=compensator;
 
         setPowers(xPower, yPower,rOut);
-        if(Math.abs(deltaX) < 1 && Math.abs(deltaY)<1 && Math.abs(Math.toDegrees(deltaR)) < 1){
+        if(Math.abs(deltaX) < 2 && Math.abs(deltaY)<2 && Math.abs(Math.toDegrees(deltaR)) < 3){
             isAtTarget = true;
         }else{
             isAtTarget = false;
@@ -180,6 +180,12 @@ public class DT{
     }
     public double getYTarget(){
         return yTarget;
+    }
+    public double getXTarget(){
+        return xTarget;
+    }
+    public double getRTarget(){
+        return rTarget;
     }
     public double getUnTwistedR(){
         return rRn;

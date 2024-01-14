@@ -16,7 +16,8 @@ public class AutoTestFront extends LinearOpMode {
     enum State {
         PROP,
         STACK,
-        DEPOSIT
+        DEPOSIT,
+        END
     }
     //start locs
     Pose2d startBPose = new Pose2d(-35, -65, Math.toRadians(-90)); //default position
@@ -76,19 +77,19 @@ public class AutoTestFront extends LinearOpMode {
                                 intermediaterandomizationstate++;
                             }
                         }else if(intermediaterandomizationstate == 1){
-                            drive.lineToCHeading(leftFProp.getX(), leftFProp.getY());
+                            drive.lineTo(leftFProp.getX(), leftFProp.getY(), FFirstR.getHeading());
 
                             if(drive.isAtTarget()){
                                 intermediaterandomizationstate++;
                             }
                         }else if(intermediaterandomizationstate == 2){
-                            drive.lineToCHeading(leftFPropIntermediate.getX(), leftFPropIntermediate.getY());
+                            drive.lineTo(leftFPropIntermediate.getX(), leftFPropIntermediate.getY(), FFirstR.getHeading());
 
                             if(drive.isAtTarget()){
                                 intermediaterandomizationstate++;
                             }
                         }else if(intermediaterandomizationstate == 3){
-                            drive.lineToCHeading(dropOff.getX(), dropOff.getY());
+                            drive.lineTo(dropOff.getX(), dropOff.getY(), FFirstR.getHeading());
 
                             if(drive.isAtTarget()){
                                 intermediaterandomizationstate = 0;
@@ -105,7 +106,7 @@ public class AutoTestFront extends LinearOpMode {
 
                     if(randomization==2){
                         if(intermediaterandomizationstate == 0){
-                            drive.lineToCHeading(stackPos.getX(), stackPos.getY());
+                            drive.lineTo(stackPos.getX(), stackPos.getY(),FFirstR.getHeading());
 
                             if(drive.isAtTarget()){
                                 currentState = AutoTestBack.State.DEPOSIT;
@@ -120,7 +121,7 @@ public class AutoTestFront extends LinearOpMode {
                 case DEPOSIT:
                     if(randomization==2){
                         if(intermediaterandomizationstate == 0){
-                            drive.lineToCHeading(dropOff.getX(), dropOff.getY());
+                            drive.lineTo(dropOff.getX(), dropOff.getY(), FFirstR.getHeading());
 
                             if(drive.isAtTarget()){
                                 intermediaterandomizationstate++;
@@ -135,7 +136,7 @@ public class AutoTestFront extends LinearOpMode {
                             drive.lineTo(afterDepo.getX(), afterDepo.getY(), afterDepo.getHeading());
 
                             if(drive.isAtTarget()){
-                                currentState = AutoTestBack.State.STACK;
+                                currentState = AutoTestBack.State.DEPOSIT;
                                 intermediaterandomizationstate =0;
                             }
                         }
