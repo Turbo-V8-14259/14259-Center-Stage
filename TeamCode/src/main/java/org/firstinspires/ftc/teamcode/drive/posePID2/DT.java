@@ -136,6 +136,11 @@ public class DT{
         rOut/=compensator;
 
         setPowers(xPower, yPower,rOut);
+        if(Math.abs(deltaX) < 1 && Math.abs(deltaY)<1 && Math.abs(Math.toDegrees(deltaR)) < 1){
+            isAtTarget = true;
+        }else{
+            isAtTarget = false;
+        }
     }
     public Pose2d getLocation(){
         return new Pose2d(xRn, yRn, rRn);

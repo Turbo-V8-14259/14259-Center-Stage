@@ -111,7 +111,6 @@ public class lm3Scoring extends LinearOpMode {
             claw.update();
 
             telemetryData();
-            telemetry.update();
             led.update();
         }
     }
@@ -134,6 +133,7 @@ public class lm3Scoring extends LinearOpMode {
 //        telemetry.addData("adjusted angle", adjustedAngle);
         telemetry.addData("auto lock Mode", autoLockMode);
         telemetry.addData("AMPS(not including drive)", slides.leftMotor.getCurrentAMPS() + slides.rightMotor.getCurrentAMPS() + intake.intakeMotor.getCurrent(CurrentUnit.AMPS) + pitch.pitchMotor.getCurrentAMPS());
+        telemetry.update();
     }
 
     public void updateGamepadOne(){
@@ -168,6 +168,7 @@ public class lm3Scoring extends LinearOpMode {
     public void scoringStateMachine(){
         switch (scoringState){
             case -1: //Init
+                intake.setState(Intake.IntakeState.INTAKE_TELE);
                 slides.setState(DepoSlides.DepositState.DOWN);
                 claw.setState(Claw.ClawState.INTAKE);
                 if(climbSafe!=3&&climbSafe!=4){
