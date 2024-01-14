@@ -1,16 +1,13 @@
-package org.firstinspires.ftc.teamcode.vision.tests;
+package org.firstinspires.ftc.teamcode.vision;
 
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.vision.AprilTagPipeline;
-import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -19,22 +16,14 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import java.lang.*;
-import java.util.Objects;
-
 @TeleOp
-public class AutoVisionTester extends LinearOpMode
+public class VisionOpmode extends LinearOpMode
 {
     //it would probably be simpler to port this from the camerapipeline but shhh this was made a while ago im only updating it now.
     OpenCvWebcam webcam;
     public String ObjectDirection;
-
+    public int randomization = 99;
     private VisionPortal visionPortal;
-
-    //AprilTag (unneeded rn)
-    private final AprilTagPipeline ac = new AprilTagPipeline();
-    private AprilTagProcessor aprilTag;
-    public AprilTagDetection detection;
     public double thresh = 10;
 
     @Override
@@ -47,23 +36,20 @@ public class AutoVisionTester extends LinearOpMode
         while(ObjectDirection == null){
             telemetry.addLine("Identifying Location...");
             sleep(1000);
+
             if(leftPer > thresh || rightPer > thresh || midPer > thresh){
-                if(leftPer > rightPer && leftPer > midPer){ //left
-                    ObjectDirection = "LEFT";
+                if(leftPer > rightPer && leftPer > midPer){ //mid
+                    ObjectDirection = "MIDDLE";
+                    randomization = 1;
                 }
                 else if(rightPer > leftPer && rightPer > midPer){ //right
                     ObjectDirection = "RIGHT";
-                }
-                else if(midPer > rightPer && midPer > leftPer){ //mid
-                    ObjectDirection = "MIDDLE";
+                    randomization = 2;
                 }
             }
             else{
-                thresh--;
-                telemetry.addLine("Retrying...");
-                telemetry.addData("Value L:", leftPer);
-                telemetry.addData("Location R:", rightPer);
-                telemetry.addData("Location M:", midPer);
+                ObjectDirection = "LEFT";
+                randomization = 0;
             }
             telemetry.update();
         }
@@ -126,15 +112,6 @@ public class AutoVisionTester extends LinearOpMode
             telemetry.update();
         }
     }
-
-    private void initAprilTag() {
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        aprilTag = ac.initAprilTag();
-        visionPortal = ac.initVision(webcamName);
-
-        visionPortal.setProcessorEnabled(aprilTag, false);
-    }
     private void initPipeline(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -163,4 +140,38 @@ public class AutoVisionTester extends LinearOpMode
         sleep(1000);
 
     }
+    public int randomization(){
+        int random = 0;
+        if(leftPer > thresh || rightPer > thresh || midPer > thresh){
+            if(leftPer > rightPer && leftPer > midPer){ //left
+                random = 1;
+            }
+            else if(rightPer > leftPer && rightPer > midPer){ //right
+                random = 2;
+            }
+        }
+        else{
+            random = 0;
+        }
+        return random;
+    }
+
+    //            if(leftPer > thresh || rightPer > thresh || midPer > thresh){
+//                if(leftPer > rightPer && leftPer > midPer){ //left
+//                    ObjectDirection = "LEFT";
+//                }
+//                else if(rightPer > leftPer && rightPer > midPer){ //right
+//                    ObjectDirection = "RIGHT";
+//                }
+//                else if(midPer > rightPer && midPer > leftPer){ //mid
+//                    ObjectDirection = "MIDDLE";
+//                }
+//            }
+//            else{
+//                thresh--;
+//                telemetry.addLine("Retrying...");
+//                telemetry.addData("Value L:", leftPer);
+//                telemetry.addData("Location R:", rightPer);
+//                telemetry.addData("Location M:", midPer);
+//            }
 }

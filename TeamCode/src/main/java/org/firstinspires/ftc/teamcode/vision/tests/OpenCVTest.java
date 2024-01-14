@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.vision.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
+import org.firstinspires.ftc.teamcode.vision.PatternDetectionTest;
+import org.opencv.android.CameraRenderer;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -16,32 +16,27 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.Objects;
 
 @TeleOp
-@Disabled
-
 public class OpenCVTest extends LinearOpMode
 {
     OpenCvWebcam webcam;
 
-
-    public static String ObjectDirection;
     @Override
     public void runOpMode()
     {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        CameraPipeline s = new CameraPipeline(telemetry, ObjectDirection);
-        webcam.setPipeline(s);
+        CameraPipeline p = new CameraPipeline(telemetry);
+        webcam.setPipeline(p);
 
-        webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
+        webcam.setMillisecondsPermissionTimeout(5000);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
-            public void onOpened()
-            {
-                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+            public void onOpened() {
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.SIDEWAYS_LEFT
+                );
             }
-
             @Override
             public void onError(int errorCode)
             {
@@ -50,8 +45,9 @@ public class OpenCVTest extends LinearOpMode
                  */
             }
         });
+
         telemetry.addLine("Waiting for start");
-        telemetry.addLine(CameraPipeline.color);
+        telemetry.addData("Current Detection", CameraPipeline.ObjectDirection);
         telemetry.update();
 
         /*
@@ -71,17 +67,9 @@ public class OpenCVTest extends LinearOpMode
             telemetry.addData("Overhead time ms", webcam.getOverheadTimeMs());
             telemetry.addData("Theoretical max FPS", webcam.getCurrentPipelineMaxFps());
 
-            telemetry.update();
+            telemetry.addData("Color", PatternDetectionTest.op);
 
-            if (Objects.equals(ObjectDirection, "LEFT")) {
-                //insert stuff here
-            }
-            else if (Objects.equals(ObjectDirection, "MIDDLE")){
-                //insert stuff here
-            }
-            else if (Objects.equals(ObjectDirection, "RIGHT")){
-                //insert stuff here
-            }
+            telemetry.update();
             sleep(100);
             //continue the auton path here
         }

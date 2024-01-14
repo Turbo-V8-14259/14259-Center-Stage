@@ -1,5 +1,4 @@
 package org.firstinspires.ftc.teamcode.vision;
-
 /*
  * Copyright (c) 2023 Sebastian Erives
  *
@@ -26,7 +25,7 @@ package org.firstinspires.ftc.teamcode.vision;
 import android.graphics.Canvas;
 
 import com.acmerobotics.dashboard.config.Config;
-
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
@@ -58,12 +57,12 @@ public class Red implements VisionProcessor {
      * min and max values here for now, meaning
      * that all pixels will be shown.
      */
-    public static int lowY = 0; // 0
-    public static int lowCr = 140; // 155
-    public static int lowCb = 55; // 85
-    public static int highY = 50; // 80
-    public static int highCr = 160; // 235
-    public static int highCb = 90; // 115
+    public static int lowY = 0; //80
+    public static int lowCr = 135; //130
+    public static int lowCb = 85; //110
+    public static int highY = 255; //110
+    public static int highCr = 180; //200
+    public static int highCb = 115; //200
     public Scalar lower = new Scalar(lowY,lowCr,lowCb);
     public Scalar upper = new Scalar(highY,highCr,highCb);
 
@@ -109,7 +108,8 @@ public class Red implements VisionProcessor {
     }
 
     @Override
-    public void init(int width, int height, CameraCalibration calibration) {}
+    public void init(int width, int height, CameraCalibration calibration) {
+    }
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
@@ -129,28 +129,23 @@ public class Red implements VisionProcessor {
         //use binary mat from here
         List<MatOfPoint> countersList = new ArrayList<>();
         Imgproc.findContours(binaryMat, countersList, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
-        Imgproc.drawContours(binaryMat, countersList,0, new Scalar(0,0,255));
+        Imgproc.drawContours(binaryMat, countersList,0, new Scalar(255,0,0));
 
         Rect hat = new Rect(new Point(0,0), new Point(1,1));
-        double minContourArea = 200.0;
 
-        for (MatOfPoint contour : countersList)
+        for (MatOfPoint countor : countersList)
         {
-            double contourArea = Imgproc.contourArea(contour);
 
-            if (contourArea > minContourArea) {
-                Rect rect = Imgproc.boundingRect(contour);
-
-                if (rect.area() > hat.area()) {
-                    hat = rect;
-                }
+            Rect rect = Imgproc.boundingRect(countor);
+            if (rect.area() > hat.area()) {
+                hat = rect;
             }
 
         }
 
         Imgproc.rectangle(maskedInputMat, hat, new Scalar(255,255,255));
 
-        int centerX = hat.x + hat.width;
+        int centerX = (hat.x + hat.width)/2;
 
         if(centerX <= 640/3){
             location = Location.LEFT;
