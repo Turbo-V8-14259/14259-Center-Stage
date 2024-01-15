@@ -76,10 +76,14 @@ public class pathVeer extends LinearOpMode {
                 if(drive.isAtTarget()) a++;
             }
             else if(a==1){
-                drive.lineToCHeading(leftBPropIntermediate.getX(), leftBPropIntermediate.getY());
+                drive.lineTo(leftBPropIntermediate.getX(), leftBPropIntermediate.getY(), leftBProp.getHeading());
                 if(drive.isAtTarget()) a++;
             }else if(a==2){
-                drive.lineToCHeading(leftBProp.getX(), leftBProp.getY());
+                drive.lineTo(leftBProp.getX(), leftBProp.getY(), leftBProp.getHeading());
+                if(drive.isAtTarget()) a++;
+            }else if(a==3){
+                drive.lineTo(beforeStack.getX(), beforeStack.getY(), leftBProp.getHeading());
+                if(drive.isAtTarget()) a++;
             }
 //            switch(currentState){
 //                case PROP:
