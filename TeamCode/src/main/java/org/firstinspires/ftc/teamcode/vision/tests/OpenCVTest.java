@@ -1,19 +1,15 @@
 package org.firstinspires.ftc.teamcode.vision.tests;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
 import org.firstinspires.ftc.teamcode.vision.PatternDetectionTest;
-import org.opencv.android.CameraRenderer;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
-
-import java.util.Objects;
 
 @TeleOp
 public class OpenCVTest extends LinearOpMode

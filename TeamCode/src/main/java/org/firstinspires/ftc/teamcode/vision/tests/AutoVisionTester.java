@@ -4,8 +4,6 @@ import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -20,9 +18,9 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.lang.*;
-import java.util.Objects;
 
 @TeleOp
+@Disabled
 public class AutoVisionTester extends LinearOpMode
 {
     //it would probably be simpler to port this from the camerapipeline but shhh this was made a while ago im only updating it now.
