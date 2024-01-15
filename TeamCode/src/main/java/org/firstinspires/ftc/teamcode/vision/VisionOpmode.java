@@ -35,7 +35,7 @@ public class VisionOpmode extends LinearOpMode
 
         while(ObjectDirection == null){
             telemetry.addLine("Identifying Location...");
-            sleep(1000);
+            sleep(2500);
 
             if(leftPer > thresh || rightPer > thresh || midPer > thresh){
                 if(leftPer > rightPer && leftPer > midPer){ //mid

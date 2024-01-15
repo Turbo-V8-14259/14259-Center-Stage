@@ -77,11 +77,11 @@ public class pathVeerVision extends LinearOpMode {
     public String ObjectDirection;
 
     private VisionPortal visionPortal;
-    public double thresh = 10;
+    public double thresh = 15;
 
     State currentState;
 
-    int randomization = 99;
+    public int randomization = 99;
     int intermediaterandomizationstate =0;
 
     int a = 0;
@@ -95,10 +95,11 @@ public class pathVeerVision extends LinearOpMode {
         telemetry.addLine("Loading Pipeline...");
         telemetry.update();
         initPipeline();
+
         //vision math
-        while(randomization == 99){
+        while(ObjectDirection == null){
             telemetry.addLine("Identifying Location...");
-            sleep(1000);
+            sleep(2500);
             if(leftPer > thresh || rightPer > thresh || midPer > thresh){
                 if(leftPer > rightPer && leftPer > midPer){ //mid
                     randomization = 1;
@@ -117,14 +118,18 @@ public class pathVeerVision extends LinearOpMode {
         }
 
         telemetry.addData("Location:", ObjectDirection);
-        sleep(50);
+        telemetry.update();
 
+        webcam.stopRecordingPipeline();
+        webcam.closeCameraDevice();
+
+        telemetry.addLine("Ready to Start");
+        telemetry.addData("Location:", ObjectDirection);
         telemetry.update();
 
         waitForStart();
 
-        webcam.stopRecordingPipeline();
-        webcam.closeCameraDevice();
+
         while(opModeIsActive()){
             if(a == 0){
                 drive.lineTo(leftBProp.getX(), leftBProp.getY(), leftBProp.getHeading());

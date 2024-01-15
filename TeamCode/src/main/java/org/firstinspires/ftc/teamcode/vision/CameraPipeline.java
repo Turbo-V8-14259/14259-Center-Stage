@@ -14,11 +14,11 @@ import java.util.Objects;
 
 public class CameraPipeline extends OpenCvPipeline
 {
-    public static String color = "RED"; //change this every match accordingly
+    public static String color = "BLUE"; //change this every match accordingly
     //or find some way to change this easier
     //if you want me to make a completely new pipeline for each side just say so
 
-    public static double perThreshold = 10;
+    public static double perThreshold = 15;
     Telemetry telemetry;
     static Rect LEFT_ROI = null;
     static Rect RIGHT_ROI = null;
@@ -44,12 +44,12 @@ public class CameraPipeline extends OpenCvPipeline
         double width = s.width;
 
         LEFT_ROI = new Rect(
-                new Point(0, 1.0/2 * height),
-                new Point(width/2, height));
+                new Point(1.0 / 8 * width, 1.0/4 * height),
+                new Point(1.0 * width/2, 1.0/2 * height));
 
         RIGHT_ROI = new Rect(
-                new Point(width/2, 1.0/2 * height),
-                new Point(width, height));
+                new Point(3 * width/4, 1.0/4 * height),
+                new Point(width, 3.0/4 * height));
 
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV); //Uses HSV Colors
 
@@ -91,11 +91,11 @@ public class CameraPipeline extends OpenCvPipeline
         right.release();
         //mid.release();
 
-        telemetry.addData("Left value Thr", leftValThr);
-        telemetry.addData("Right value Thr",  rightValThr);
-
-        telemetry.addData("Left value", leftValue);
-        telemetry.addData("Right value",  rightValue);
+//        telemetry.addData("Left value Thr", leftValThr);
+//        telemetry.addData("Right value Thr",  rightValThr);
+//
+//        telemetry.addData("Left value", leftValue);
+//        telemetry.addData("Right value",  rightValue);
 
 
 
@@ -160,12 +160,12 @@ public class CameraPipeline extends OpenCvPipeline
 //                MID_ROI,
 //                new Scalar(255, 255, 255), 4);
 
-        telemetry.addData("Location: ", ObjectDirection);
-        telemetry.update();
+       // telemetry.addData("Location: ", ObjectDirection);
+        //telemetry.update();
 
 
 
-        return input; //input
+        return thresh; //input
 
         /**
          * NOTE: to see how to get data from your pipeline to your OpMode as well as how
