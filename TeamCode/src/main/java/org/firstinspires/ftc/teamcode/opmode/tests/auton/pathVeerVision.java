@@ -19,7 +19,6 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.teamcode.vision.CameraPipeline.*;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import org.firstinspires.ftc.teamcode.drive.posePID2.DT;

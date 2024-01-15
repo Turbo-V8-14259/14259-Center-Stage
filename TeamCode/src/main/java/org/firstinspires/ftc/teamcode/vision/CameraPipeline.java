@@ -43,13 +43,25 @@ public class CameraPipeline extends OpenCvPipeline
         double height = s.height;
         double width = s.width;
 
-        LEFT_ROI = new Rect(
-                new Point(1.0 / 8 * width, 1.0/4 * height),
-                new Point(1.0 * width/2, 1.0/2 * height));
+        if(Objects.equals(color, "RED")){
+            LEFT_ROI = new Rect(
+                    new Point(1.0 / 8 * width, 1.0/4 * height),
+                    new Point(width /2, 1.0/2 * height));
 
-        RIGHT_ROI = new Rect(
-                new Point(3 * width/4, 1.0/4 * height),
-                new Point(width, 3.0/4 * height));
+            RIGHT_ROI = new Rect(
+                    new Point(3 * width/4, 1.0/4 * height),
+                    new Point(width, 3.0/4 * height));
+        }
+        else if (Objects.equals(color, "BLUE")) {
+            LEFT_ROI = new Rect(
+                    new Point(0, 1.0/4 * height),
+                    new Point(width/4, 3.0/4 * height));
+
+            RIGHT_ROI = new Rect(
+                    new Point(width/4, 1.0/4 * height),
+                    new Point(width, 1.0/2 * height));
+        }
+
 
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV); //Uses HSV Colors
 
