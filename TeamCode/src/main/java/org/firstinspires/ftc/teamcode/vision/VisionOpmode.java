@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.vision;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.color;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -39,17 +40,42 @@ public class VisionOpmode extends LinearOpMode
 
             if(leftPer > thresh || rightPer > thresh || midPer > thresh){
                 if(leftPer > rightPer && leftPer > midPer){ //mid
-                    ObjectDirection = "MIDDLE";
-                    randomization = 1;
+                    if(color.equals("BLUE")){
+                        ObjectDirection = "LEFT";
+                    }
+                    else if(color.equals("RED")){
+                        ObjectDirection = "MIDDLE";
+                    }
                 }
                 else if(rightPer > leftPer && rightPer > midPer){ //right
-                    ObjectDirection = "RIGHT";
-                    randomization = 2;
+                    if(color.equals("BLUE")){
+                        ObjectDirection = "MIDDLE";
+                    }
+                    else if(color.equals("RED")){
+                        ObjectDirection = "RIGHT";
+                    }
                 }
             }
+
             else{
-                ObjectDirection = "LEFT";
-                randomization = 0;
+                if(color.equals("BLUE")){
+                    ObjectDirection = "RIGHT";
+                }
+                else if(color.equals("RED")){
+                    ObjectDirection = "LEFT";
+                }
+            }
+
+            switch (ObjectDirection) {
+                case "LEFT":
+                    randomization = 0;
+                    break;
+                case "RIGHT":
+                    randomization = 2;
+                    break;
+                case "MIDDLE":
+                    randomization = 1;
+                    break;
             }
             telemetry.update();
         }

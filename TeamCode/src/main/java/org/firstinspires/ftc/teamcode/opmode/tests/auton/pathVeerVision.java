@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.opmode.tests.auton;
 
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.color;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
@@ -102,17 +103,41 @@ public class pathVeerVision extends LinearOpMode {
             sleep(2500);
             if(leftPer > thresh || rightPer > thresh || midPer > thresh){
                 if(leftPer > rightPer && leftPer > midPer){ //mid
-                    randomization = 1;
-                    ObjectDirection = "MIDDLE";
+                    if(color.equals("BLUE")){
+                        ObjectDirection = "LEFT";
+                    }
+                    else if(color.equals("RED")){
+                        ObjectDirection = "MIDDLE";
+                    }
                 }
                 else if(rightPer > leftPer && rightPer > midPer){ //right
-                    randomization = 2;
-                    ObjectDirection = "RIGHT";
+                    if(color.equals("BLUE")){
+                        ObjectDirection = "MIDDLE";
+                    }
+                    else if(color.equals("RED")){
+                        ObjectDirection = "RIGHT";
+                    }
                 }
             }
             else{
-                randomization = 0; //left
-                ObjectDirection = "LEFT";
+                if(color.equals("BLUE")){
+                    ObjectDirection = "RIGHT";
+                }
+                else if(color.equals("RED")){
+                    ObjectDirection = "LEFT";
+                }
+            }
+
+            switch (ObjectDirection){
+                case "LEFT":
+                    randomization = 0;
+                    break;
+                case "RIGHT":
+                    randomization = 2;
+                    break;
+                case "MIDDLE":
+                    randomization = 1;
+                    break;
             }
             telemetry.update();
         }

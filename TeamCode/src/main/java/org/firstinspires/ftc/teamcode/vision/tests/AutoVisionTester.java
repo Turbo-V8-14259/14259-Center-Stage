@@ -23,6 +23,7 @@ import java.lang.*;
 import java.util.Objects;
 
 @TeleOp
+@Disabled
 public class AutoVisionTester extends LinearOpMode
 {
     //it would probably be simpler to port this from the camerapipeline but shhh this was made a while ago im only updating it now.
