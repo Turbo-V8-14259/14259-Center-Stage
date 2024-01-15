@@ -33,6 +33,7 @@ public class lm3Scoring extends LinearOpMode {
     stickyGamepad gamepadTwo;
     ElapsedTime timer = new ElapsedTime();
     ElapsedTime timer2 = new ElapsedTime();
+    ElapsedTime timer3 = new ElapsedTime();
 
     Pitch pitch;
 
@@ -43,22 +44,26 @@ public class lm3Scoring extends LinearOpMode {
 
     double TimeStamp = 0;
     double TimeStamp2 = 0;
+    double TimeStamp3 = 0;
 
     int climbSafe = 0;
 
     boolean timeToggle = true;
     boolean timeToggle2 = true;
+    boolean timeToggle3 = true;
     double adjustedAngle = 0;
     double boardAngle = 0;
 
     int height = 1;
     int scoringState = -1;
+    int pitchSlidesState = -1;
 
 
     public int level = 0;  //6 levels
     public int extension = 0; //6 levels
     public boolean autoLockMode = false;
     public boolean autoIntake = false;
+    boolean thisToggle = true;
     @Override
     public void runOpMode() throws InterruptedException {
         claw = new Claw(new ServoMotorBetter(hardwareMap.get(Servo.class, "claw")));
@@ -164,36 +169,74 @@ public class lm3Scoring extends LinearOpMode {
         if(extension < 0) extension = 0;
 
         if(gamepadOne.right_bumper) scoringState++;
+        if(gamepadOne.left_bumper) scoringState--;
+        if(gamepadOne.b) scoringState = 100; //full reset
     }
     public void scoringStateMachine(){
+        switch(pitchSlidesState){
+            case -1:
+                slides.setState(DepoSlides.DepositState.DOWN);
+                if(climbSafe!=3&&climbSafe!=4) {
+                    pitch.setState(Pitch.PitchState.INITIALIZE);
+                }
+                break;
+            case 1:
+                pitch.setState(Pitch.PitchState.SCOREATLEVEL);
+                break;
+
+            case 2:
+                slides.setState(DepoSlides.DepositState.CALCULATED_UP);
+                break;
+            case 6:
+                slides.setState(DepoSlides.DepositState.DOWN);
+                if(-slides.getCurrentPosition() > 0.2){
+                    break;
+                }
+                pitch.setState(Pitch.PitchState.INITIALIZE);
+                break;
+
+            case 100:
+                //looses control of the mechanisms.
+                break;
+
+        }
         switch (scoringState){
             case -1: //Init
                 intake.setState(Intake.IntakeState.INTAKE_TELE);
-                slides.setState(DepoSlides.DepositState.DOWN);
+//                slides.setState(DepoSlides.DepositState.DOWN);
+                pitchSlidesState = -1;
                 claw.setState(Claw.ClawState.INTAKE);
                 if(climbSafe!=3&&climbSafe!=4){
-                    pitch.setState(Pitch.PitchState.INITIALIZE);
+//                    pitch.setState(Pitch.PitchState.INITIALIZE);
                     arm.setState(DepoArm.DepoArmState.TRANSFER);
                 }
                 break;
             case 0:
                 claw.setState(Claw.ClawState.LATCHED);
+                thisToggle = true;
                 break;
             case 1: //arm / pitch / slides up
-                pitch.setState(Pitch.PitchState.SCOREATLEVEL);
+//                pitch.setState(Pitch.PitchState.SCOREATLEVEL);
+//                if(thisToggle){
+                    pitchSlidesState = 1;
+//                    thisToggle = false;
+//                }
+//                if(Math.abs(pitch.getCurrentPosition() - pitch.target) < .1){
+//                    pitchSlidesState = 2;
+//                }
                 arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
-
                 if(timeToggle){//timeToggle starts at true by default
                     TimeStamp = timer.milliseconds();
                     timeToggle = false;
                 }
-                if(timer.milliseconds() > TimeStamp + 1000){
+                if(timer.milliseconds() > TimeStamp + 1500){
                     scoringState=2;
                     timeToggle = true;
                 }//change this to be position of pitch baseed
                 break;
             case 2: // turret move
-                slides.setState(DepoSlides.DepositState.CALCULATED_UP);
+//                slides.setState(DepoSlides.DepositState.CALCULATED_UP);
+                pitchSlidesState = 2;
                 if(autoLockMode) {
                     //turret.robotAngle =
                     turret.setState(LM1Turret.TurretState.AUTOLOCK);
@@ -213,7 +256,7 @@ public class lm3Scoring extends LinearOpMode {
                     TimeStamp2 = timer2.milliseconds();
                     timeToggle2 = false;
                 }
-                if(timer2.milliseconds()> TimeStamp2 + 650){
+                if(timer2.milliseconds() > TimeStamp2 + 650){
                     scoringState = 3;
                     timeToggle2 = true;
                 }
@@ -238,11 +281,12 @@ public class lm3Scoring extends LinearOpMode {
                 break;
             case 6: //resetting turret
                 turret.setState(LM1Turret.TurretState.INITIALIZE);
-                slides.setState(DepoSlides.DepositState.DOWN);
-                if(-slides.getCurrentPosition() > 0.2){
-                    break;
-                }
-                pitch.setState(Pitch.PitchState.INITIALIZE);
+//                slides.setState(DepoSlides.DepositState.DOWN);
+//                if(-slides.getCurrentPosition() > 0.2){
+//                    break;
+//                }
+//                pitch.setState(Pitch.PitchState.INITIALIZE);
+                pitchSlidesState = 6;
                 if(timeToggle){
                     TimeStamp = timer.milliseconds();
                     timeToggle = false;
@@ -252,6 +296,44 @@ public class lm3Scoring extends LinearOpMode {
                     timeToggle=true;
                 }
 
+                break;
+            case 100: //universal reset
+                pitchSlidesState = 100;
+                arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+                if(timeToggle3){
+                    TimeStamp3 = timer3.milliseconds();
+                    timeToggle3 = false;
+                }
+                if(timer.milliseconds() > TimeStamp3 + 500){
+                    scoringState = 101;
+                    timeToggle3 = true;
+                }
+                break;
+            case 101:
+                pitchSlidesState = 100;
+                turret.setState(LM1Turret.TurretState.INITIALIZE);
+                if(timeToggle3){
+                    TimeStamp3 = timer3.milliseconds();
+                    timeToggle3 = false;
+                }
+                if(timer.milliseconds() > TimeStamp3 + 700){
+                    scoringState = 102;
+                    timeToggle3 = true;
+                }
+                break;
+            case 102:
+                pitchSlidesState = 100;
+                pitch.setState(Pitch.PitchState.INITIALIZE);
+                slides.setState(DepoSlides.DepositState.DOWN);
+                if(timeToggle3){
+                    TimeStamp3 = timer3.milliseconds();
+                    timeToggle3 = false;
+                }
+                if(timer.milliseconds() > TimeStamp3 + 500){
+                    scoringState = -1;
+                    timeToggle3 = true;
+                }
+                thisToggle = true;
                 break;
             default:
                 scoringState = -1;

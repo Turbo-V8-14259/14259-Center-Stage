@@ -23,10 +23,10 @@ public class pathVeer extends LinearOpMode {
     int x=0;
     int y=-12;
     //start locs
-    Pose2d startBPose = new Pose2d(-35+x, -65+y, Math.toRadians(-90)); //default position
+    Pose2d startBPose = new Pose2d(-30+x, -65+y, Math.toRadians(-90)); //default position
     Pose2d startFPose = new Pose2d(11+x, -65+y, Math.toRadians(-90));
     //props
-    Pose2d leftBProp = new Pose2d(-35+x, -32+y, Math.toRadians(-180));
+    Pose2d leftBProp = new Pose2d(-40+x, -40+y, Math.toRadians(-180));
     Vector2d leftBPropIntermediate = new Vector2d(-37+x, -32+y);
     Vector2d leftFProp = new Vector2d(10+x, -31+y);
     Vector2d leftFPropIntermediate = new Vector2d(14+x,-31+y);
@@ -75,16 +75,16 @@ public class pathVeer extends LinearOpMode {
                 drive.lineTo(leftBProp.getX(), leftBProp.getY(), leftBProp.getHeading());
                 if(drive.isAtTarget()) a++;
             }
-            else if(a==1){
-                drive.lineTo(leftBPropIntermediate.getX(), leftBPropIntermediate.getY(), leftBProp.getHeading());
-                if(drive.isAtTarget()) a++;
-            }else if(a==2){
-                drive.lineTo(leftBProp.getX(), leftBProp.getY(), leftBProp.getHeading());
-                if(drive.isAtTarget()) a++;
-            }else if(a==3){
-                drive.lineTo(beforeStack.getX(), beforeStack.getY(), leftBProp.getHeading());
-                if(drive.isAtTarget()) a++;
-            }
+//            else if(a==1){
+//                drive.lineTo(leftBPropIntermediate.getX(), leftBPropIntermediate.getY(), leftBProp.getHeading());
+//                if(drive.isAtTarget()) a++;
+//            }else if(a==2){
+//                drive.lineTo(leftBProp.getX(), leftBProp.getY(), leftBProp.getHeading());
+//                if(drive.isAtTarget()) a++;
+//            }else if(a==3){
+//                drive.lineTo(beforeStack.getX(), beforeStack.getY(), leftBProp.getHeading());
+//                if(drive.isAtTarget()) a++;
+//            }
 //            switch(currentState){
 //                case PROP:
 //                    if(randomization==0){

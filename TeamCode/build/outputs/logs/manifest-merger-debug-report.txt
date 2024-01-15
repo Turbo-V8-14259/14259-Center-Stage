@@ -7,7 +7,7 @@ INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Cen
 MERGED from [:FtcRobotController] /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/build/intermediates/merged_manifest/debug/AndroidManifest.xml:2:1-78:12
 MERGED from [org.firstinspires.ftc:OnBotJava:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/0991544edc7f44b0691e8609336c81f6/transformed/jetified-OnBotJava-9.0.0/AndroidManifest.xml:34:1-43:12
 MERGED from [org.firstinspires.ftc:Blocks:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/bf2a075dc09eb4a76be97931b0223afd/transformed/jetified-Blocks-9.0.0/AndroidManifest.xml:2:1-26:12
-MERGED from [com.acmerobotics.dashboard:dashboard:0.4.13] /Users/des_veve/.gradle/caches/transforms-3/2ff08eee1df9095328823e8dfd613d76/transformed/jetified-dashboard-0.4.13/AndroidManifest.xml:2:1-9:12
+MERGED from [com.acmerobotics.dashboard:dashboard:0.4.14] /Users/des_veve/.gradle/caches/transforms-3/8ae06fff8bb6dede9c154e2f005303cb/transformed/jetified-dashboard-0.4.14/AndroidManifest.xml:2:1-9:12
 MERGED from [org.firstinspires.ftc:FtcCommon:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/6e121ca3e04327a21687b7b2ab937599/transformed/jetified-FtcCommon-9.0.0/AndroidManifest.xml:3:1-174:12
 MERGED from [org.firstinspires.ftc:Inspection:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/4374e002afa5b7b8c9f553275496c957/transformed/jetified-Inspection-9.0.0/AndroidManifest.xml:2:1-32:12
 MERGED from [org.firstinspires.ftc:RobotServer:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/3c7ec2b610f0e22de036ef98e1345cc7/transformed/jetified-RobotServer-9.0.0/AndroidManifest.xml:2:1-11:12
@@ -119,8 +119,8 @@ MERGED from [org.firstinspires.ftc:OnBotJava:9.0.0] /Users/des_veve/.gradle/cach
 MERGED from [org.firstinspires.ftc:OnBotJava:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/0991544edc7f44b0691e8609336c81f6/transformed/jetified-OnBotJava-9.0.0/AndroidManifest.xml:39:5-41:41
 MERGED from [org.firstinspires.ftc:Blocks:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/bf2a075dc09eb4a76be97931b0223afd/transformed/jetified-Blocks-9.0.0/AndroidManifest.xml:7:5-9:41
 MERGED from [org.firstinspires.ftc:Blocks:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/bf2a075dc09eb4a76be97931b0223afd/transformed/jetified-Blocks-9.0.0/AndroidManifest.xml:7:5-9:41
-MERGED from [com.acmerobotics.dashboard:dashboard:0.4.13] /Users/des_veve/.gradle/caches/transforms-3/2ff08eee1df9095328823e8dfd613d76/transformed/jetified-dashboard-0.4.13/AndroidManifest.xml:5:5-7:41
-MERGED from [com.acmerobotics.dashboard:dashboard:0.4.13] /Users/des_veve/.gradle/caches/transforms-3/2ff08eee1df9095328823e8dfd613d76/transformed/jetified-dashboard-0.4.13/AndroidManifest.xml:5:5-7:41
+MERGED from [com.acmerobotics.dashboard:dashboard:0.4.14] /Users/des_veve/.gradle/caches/transforms-3/8ae06fff8bb6dede9c154e2f005303cb/transformed/jetified-dashboard-0.4.14/AndroidManifest.xml:5:5-7:41
+MERGED from [com.acmerobotics.dashboard:dashboard:0.4.14] /Users/des_veve/.gradle/caches/transforms-3/8ae06fff8bb6dede9c154e2f005303cb/transformed/jetified-dashboard-0.4.14/AndroidManifest.xml:5:5-7:41
 MERGED from [org.firstinspires.ftc:FtcCommon:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/6e121ca3e04327a21687b7b2ab937599/transformed/jetified-FtcCommon-9.0.0/AndroidManifest.xml:8:5-10:41
 MERGED from [org.firstinspires.ftc:FtcCommon:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/6e121ca3e04327a21687b7b2ab937599/transformed/jetified-FtcCommon-9.0.0/AndroidManifest.xml:8:5-10:41
 MERGED from [org.firstinspires.ftc:Inspection:9.0.0] /Users/des_veve/.gradle/caches/transforms-3/4374e002afa5b7b8c9f553275496c957/transformed/jetified-Inspection-9.0.0/AndroidManifest.xml:7:5-9:41
