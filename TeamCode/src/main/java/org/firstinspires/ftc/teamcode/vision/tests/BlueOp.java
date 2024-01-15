@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.vision.Blue;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous(name="VisionOpBlue")
+@Disabled
 public class BlueOp extends LinearOpMode {
     private Blue.Location location = MIDDLE;
     private Blue bluePropProcessor;

@@ -22,7 +22,7 @@ public class DepoArm {
 
 
     private static final double LEFT_LOWER_BOUND = .8; //0
-    private static final double LEFT_UPPER_BOUND = 0.25; //0.5
+    private static final double LEFT_UPPER_BOUND = 0.1; //0.5
     private static final double RIGHT_LOWER_BOUND = 0;
     private static final double RIGHT_UPPER_BOUND = 1;
 
@@ -60,10 +60,10 @@ public class DepoArm {
                 target = 0;
                 break;
             case SCORE:
-                target = .3 - levelOffset[level];
+                target = .7 - levelOffset[level];
                 break;
             case INTERMEDIATE:
-                target = 1 - levelOffset[level];
+                target = 1;
                 break;
             case ABSOLUTE_INTERMEDIATE:
                 target = 1;

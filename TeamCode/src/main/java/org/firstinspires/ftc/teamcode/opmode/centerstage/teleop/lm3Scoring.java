@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
-@TeleOp(name = "New Tele Op")
+@TeleOp(name = "LM3 Tele Op")
 public class lm3Scoring extends LinearOpMode {
     SampleMecanumDrive drive;
     Intake intake;
@@ -190,7 +190,7 @@ public class lm3Scoring extends LinearOpMode {
                 if(timer.milliseconds() > TimeStamp + 1000){
                     scoringState=2;
                     timeToggle = true;
-                }
+                }//change this to be position of pitch baseed
                 break;
             case 2: // turret move
                 slides.setState(DepoSlides.DepositState.CALCULATED_UP);
@@ -204,8 +204,8 @@ public class lm3Scoring extends LinearOpMode {
                     timeToggle = false;
                     timeToggle2 = false;
                 }
-                if(timer.milliseconds()> TimeStamp + 300){
-                    arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
+                if(timer.milliseconds()> TimeStamp + 400){
+                    arm.setState(DepoArm.DepoArmState.SCORE);
                     timeToggle = true;
                     timeToggle2 = true;
                 }
@@ -213,7 +213,7 @@ public class lm3Scoring extends LinearOpMode {
                     TimeStamp2 = timer2.milliseconds();
                     timeToggle2 = false;
                 }
-                if(timer2.milliseconds()> TimeStamp2 + 450){
+                if(timer2.milliseconds()> TimeStamp2 + 650){
                     scoringState = 3;
                     timeToggle2 = true;
                 }
