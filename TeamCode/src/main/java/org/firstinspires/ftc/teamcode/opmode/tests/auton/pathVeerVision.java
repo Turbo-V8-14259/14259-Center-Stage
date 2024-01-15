@@ -23,7 +23,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import org.firstinspires.ftc.teamcode.drive.posePID2.DT;
 
-@TeleOp(name = "pathVeer")
+@TeleOp(name = "pathVeerVision")
 @Config
 public class pathVeerVision extends LinearOpMode {
 
@@ -95,7 +95,6 @@ public class pathVeerVision extends LinearOpMode {
         telemetry.addLine("Loading Pipeline...");
         telemetry.update();
         initPipeline();
-
         //vision math
         while(randomization == 99){
             telemetry.addLine("Identifying Location...");
@@ -118,16 +117,14 @@ public class pathVeerVision extends LinearOpMode {
         }
 
         telemetry.addData("Location:", ObjectDirection);
-        telemetry.update();
-
         sleep(50);
-
-        webcam.stopRecordingPipeline();
-        webcam.closeCameraDevice();
 
         telemetry.update();
 
         waitForStart();
+
+        webcam.stopRecordingPipeline();
+        webcam.closeCameraDevice();
         while(opModeIsActive()){
             if(a == 0){
                 drive.lineTo(leftBProp.getX(), leftBProp.getY(), leftBProp.getHeading());

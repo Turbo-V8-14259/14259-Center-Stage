@@ -55,7 +55,7 @@ public class Intake{
                 target = 0.2;
                 break;
             case INTAKE_TELE:
-                target = 0.45;
+                target = 0.5;
             case STACK_HIGH:
                 target = 0.3;
                 break;
