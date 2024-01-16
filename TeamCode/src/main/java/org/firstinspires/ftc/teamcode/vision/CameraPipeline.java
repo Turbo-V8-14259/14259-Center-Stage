@@ -65,8 +65,8 @@ public class CameraPipeline extends OpenCvPipeline
 
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV); //Uses HSV Colors
 
-        Scalar lowHSVRed = new Scalar(0,100,20); // lower bound HSV for red 0 100 20
-        Scalar highHSVRed = new Scalar(30, 255, 255); // higher bound HSV for red 10 255 255
+        Scalar lowHSVRed = new Scalar(0,150,20); // lower bound HSV for red 0 100 20
+        Scalar highHSVRed = new Scalar(25, 255, 255); // higher bound HSV for red 10 255 255
 
         Scalar lowHSVBlue = new Scalar(100, 100, 20); // lower bound HSV for blue 110 100 20
         Scalar highHSVBlue = new Scalar(130, 255, 255); // higher bound HSV for blue 130 255 255
