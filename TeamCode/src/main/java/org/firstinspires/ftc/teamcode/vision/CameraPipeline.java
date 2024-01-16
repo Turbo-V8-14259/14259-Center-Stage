@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class CameraPipeline extends OpenCvPipeline
 {
-    public static String color = "BLUE"; //change this every match accordingly
+    public static String color = "RED"; //change this every match accordingly
     //or find some way to change this easier
     //if you want me to make a completely new pipeline for each side just say so
 
@@ -43,7 +43,7 @@ public class CameraPipeline extends OpenCvPipeline
         double height = s.height;
         double width = s.width;
 
-        if(Objects.equals(color, "RED")){
+        if(Objects.equals(color, "BLUE")){
             LEFT_ROI = new Rect(
                     new Point(1.0 / 8 * width, 1.0/4 * height),
                     new Point(width /2, 1.0/2 * height));
@@ -52,21 +52,21 @@ public class CameraPipeline extends OpenCvPipeline
                     new Point(3 * width/4, 1.0/4 * height),
                     new Point(width, 3.0/4 * height));
         }
-        else if (Objects.equals(color, "BLUE")) {
+        else if (Objects.equals(color, "RED")) {
             LEFT_ROI = new Rect(
                     new Point(0, 1.0/4 * height),
                     new Point(width/4, 3.0/4 * height));
 
             RIGHT_ROI = new Rect(
-                    new Point(width/4, 1.0/4 * height),
-                    new Point(width, 1.0/2 * height));
+                    new Point(width/2, 1.0/4 * height),
+                    new Point(7.0/8 * width, 1.0/2 * height));
         }
 
 
         Imgproc.cvtColor(input, mat, Imgproc.COLOR_RGB2HSV); //Uses HSV Colors
 
-        Scalar lowHSVRed = new Scalar(0,50,20); // lower bound HSV for red 0 100 20
-        Scalar highHSVRed = new Scalar(15, 255, 255); // higher bound HSV for red 10 255 255
+        Scalar lowHSVRed = new Scalar(0,150,20); // lower bound HSV for red 0 100 20
+        Scalar highHSVRed = new Scalar(25, 255, 255); // higher bound HSV for red 10 255 255
 
         Scalar lowHSVBlue = new Scalar(100, 100, 20); // lower bound HSV for blue 110 100 20
         Scalar highHSVBlue = new Scalar(130, 255, 255); // higher bound HSV for blue 130 255 255
@@ -75,7 +75,7 @@ public class CameraPipeline extends OpenCvPipeline
 
         Mat left = mat.submat(LEFT_ROI);
         Mat right = mat.submat(RIGHT_ROI);
-        //Mat mid = mat.submat(MID_ROI);
+
 
         if(Objects.equals(color, "RED")){
             Core.inRange(mat, lowHSVRed, highHSVRed, thresh);
@@ -86,9 +86,6 @@ public class CameraPipeline extends OpenCvPipeline
 
         Mat leftT = thresh.submat(LEFT_ROI);
         Mat rightT = thresh.submat(RIGHT_ROI);
-
-        double leftValue = Core.sumElems(left).val[0] / LEFT_ROI.area() / 255;
-        double rightValue = Core.sumElems(right).val[0] / RIGHT_ROI.area() / 255;
 
         double leftValThr = Core.sumElems(leftT).val[0] / LEFT_ROI.area() / 255;
         double rightValThr = Core.sumElems(rightT).val[0] / RIGHT_ROI.area() / 255;
@@ -101,15 +98,11 @@ public class CameraPipeline extends OpenCvPipeline
 
         left.release();
         right.release();
+
+        leftT.release();
+        rightT.release();
+
         //mid.release();
-
-//        telemetry.addData("Left value Thr", leftValThr);
-//        telemetry.addData("Right value Thr",  rightValThr);
-//
-//        telemetry.addData("Left value", leftValue);
-//        telemetry.addData("Right value",  rightValue);
-
-
 
         objLeft = leftPer > perThreshold;
         objRight = rightPer > perThreshold;
@@ -126,10 +119,10 @@ public class CameraPipeline extends OpenCvPipeline
         }
 
         if(objLeft){
-            if (Objects.equals(color, "BLUE")) {
+            if (Objects.equals(color, "RED")) {
                 ObjectDirection = "MIDDLE";
             }
-            if (Objects.equals(color, "RED")) {
+            if (Objects.equals(color, "BLUE")) {
                 ObjectDirection = "MIDDLE";
             }
             Imgproc.rectangle(

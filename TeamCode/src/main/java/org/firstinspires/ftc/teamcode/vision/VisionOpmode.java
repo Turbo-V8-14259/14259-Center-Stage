@@ -38,43 +38,45 @@ public class VisionOpmode extends LinearOpMode
 
             if(leftPer > thresh || rightPer > thresh || midPer > thresh){
                 if(leftPer > rightPer && leftPer > midPer){ //mid
-                    if(color.equals("BLUE")){
+                    if(color.equals("RED")){
                         ObjectDirection = "LEFT";
                     }
-                    else if(color.equals("RED")){
+                    else if(color.equals("BLUE")){
                         ObjectDirection = "MIDDLE";
                     }
                 }
                 else if(rightPer > leftPer && rightPer > midPer){ //right
-                    if(color.equals("BLUE")){
+                    if(color.equals("RED")){
                         ObjectDirection = "MIDDLE";
                     }
-                    else if(color.equals("RED")){
+                    else if(color.equals("BLUE")){
                         ObjectDirection = "RIGHT";
                     }
                 }
             }
-
             else{
-                if(color.equals("BLUE")){
+                if(color.equals("RED")){
                     ObjectDirection = "RIGHT";
                 }
-                else if(color.equals("RED")){
+                else if(color.equals("BLUE")){
                     ObjectDirection = "LEFT";
                 }
             }
 
-            switch (ObjectDirection) {
-                case "LEFT":
-                    randomization = 0;
-                    break;
-                case "RIGHT":
-                    randomization = 2;
-                    break;
-                case "MIDDLE":
-                    randomization = 1;
-                    break;
-            }
+
+//            switch (ObjectDirection) {
+//                case "LEFT":
+//                    randomization = 0;
+//                    break;
+//                case "RIGHT":
+//                    randomization = 2;
+//                    break;
+//                case "MIDDLE":
+//                    randomization = 1;
+//                    break;
+//            }
+
+            randomization = PosToNum(ObjectDirection);
             telemetry.update();
         }
 
@@ -164,7 +166,7 @@ public class VisionOpmode extends LinearOpMode
         sleep(1000);
 
     }
-    public int randomization(){
+    public int randomization(){ //work in progress
         int random = 0;
         if(leftPer > thresh || rightPer > thresh || midPer > thresh){
             if(leftPer > rightPer && leftPer > midPer){ //left
@@ -178,6 +180,21 @@ public class VisionOpmode extends LinearOpMode
             random = 0;
         }
         return random;
+    }
+    public int PosToNum(String ObjectDirection){
+        int randomization = 99;
+        switch (ObjectDirection) {
+            case "LEFT":
+                randomization = 0;
+                break;
+            case "RIGHT":
+                randomization = 2;
+                break;
+            case "MIDDLE":
+                randomization = 1;
+                break;
+        }
+        return randomization;
     }
 
     //            if(leftPer > thresh || rightPer > thresh || midPer > thresh){

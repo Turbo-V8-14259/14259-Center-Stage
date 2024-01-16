@@ -102,27 +102,27 @@ public class pathVeerVision extends LinearOpMode {
             sleep(2500);
             if(leftPer > thresh || rightPer > thresh || midPer > thresh){
                 if(leftPer > rightPer && leftPer > midPer){ //mid
-                    if(color.equals("BLUE")){
+                    if(color.equals("RED")){
                         ObjectDirection = "LEFT";
                     }
-                    else if(color.equals("RED")){
+                    else if(color.equals("BLUE")){
                         ObjectDirection = "MIDDLE";
                     }
                 }
                 else if(rightPer > leftPer && rightPer > midPer){ //right
-                    if(color.equals("BLUE")){
+                    if(color.equals("RED")){
                         ObjectDirection = "MIDDLE";
                     }
-                    else if(color.equals("RED")){
+                    else if(color.equals("BLUE")){
                         ObjectDirection = "RIGHT";
                     }
                 }
             }
             else{
-                if(color.equals("BLUE")){
+                if(color.equals("RED")){
                     ObjectDirection = "RIGHT";
                 }
-                else if(color.equals("RED")){
+                else if(color.equals("BLUE")){
                     ObjectDirection = "LEFT";
                 }
             }
