@@ -58,7 +58,7 @@ public class LM3RedAuton extends LinearOpMode {
         slides.passive = false;
         slides.pidRunning = true;
         slides.manualMode = false;
-        randomization = 0;
+        randomization = 1;
         waitForStart();
         while(opModeIsActive()){
 
@@ -111,30 +111,95 @@ public class LM3RedAuton extends LinearOpMode {
 
             }
             else if(randomization == 1){ //MIDDLE
-
-
-
-
-                if(intermediate1 == 0){
+                if(intermediate0 == 0){
                     drive.lineTo(60, -45, Math.toRadians(-180));
-                    if(drive.isAtTarget()) intermediate1++;
-                }else if(intermediate1==1){
+                    if(drive.isAtTarget()) intermediate0++;
+                }else if(intermediate0==1){
                     intake.setState(Intake.IntakeState.INTAKE_TELE);
-                    drive.lineTo(60, -37.5, Math.toRadians(-180));
+                    drive.lineTo(60, -37, Math.toRadians(-180));
+                    if(drive.isAtTarget()) intermediate0++;
                 }//DRIVES TO THE RANDOMIZATION BOARD LOCATION
 
+                else if(intermediate0==2){ //ARM SCORING
+                    arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+                    timerShit(1000);
+
+                }else if(intermediate0==3){
+                    turret.setState(LM1Turret.TurretState.SCORE);
+                    timerShit(1000);
+                }else if(intermediate0 ==4){
+                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
+                    timerShit(1000);
+                }else if(intermediate0 ==5){
+                    claw.setState(Claw.ClawState.UNLATCHED);
+                    timerShit(500);
+
+                }else if(intermediate0 ==6){
+                    slides.setState(DepoSlides.DepositState.DOWN);
+                    timerShit(1000);
+                }else if(intermediate0 ==7){
+                    turret.setState(LM1Turret.TurretState.INITIALIZE);
+                    timerShit(1000);
+                }else if(intermediate0 ==8){
+                    arm.setState(DepoArm.DepoArmState.INITIALIZE);
+                    timerShit(1000);
+                }else if(intermediate0 == 9){ //GO TO POSITION SPIKE
+                    drive.lineTo(45, -30, Math.toRadians(-180));
+                    if(drive.isAtTarget()) intermediate0++;
+                } else if(intermediate0==10){
+                    intake.intakeMotor.setPower(0.5);
+                    timerShit(1000);
+                }else if(intermediate0 == 11){
+                    drive.lineTo(55,-60,Math.toRadians(-180)); ///PARK
+                }
 
 
 
             }
             else if(randomization == 2){ //RIGHT
-                intake.setState(Intake.IntakeState.INTAKE_TELE);
+                if(intermediate0 == 0){
+                    drive.lineTo(60, -45, Math.toRadians(-180));
+                    if(drive.isAtTarget()) intermediate0++;
+                }else if(intermediate0==1){
+                    intake.setState(Intake.IntakeState.INTAKE_TELE);
+                    drive.lineTo(60, -44, Math.toRadians(-180));
+                    if(drive.isAtTarget()) intermediate0++;
+                }//DRIVES TO THE RANDOMIZATION BOARD LOCATION
 
+                else if(intermediate0==2){ //ARM SCORING
+                    arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+                    timerShit(1000);
 
+                }else if(intermediate0==3){
+                    turret.setState(LM1Turret.TurretState.SCORE);
+                    timerShit(1000);
+                }else if(intermediate0 ==4){
+                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
+                    arm.setState(DepoArm.DepoArmState.SCORE);
+                    timerShit(1000);
+                }else if(intermediate0 ==5){
 
+                    claw.setState(Claw.ClawState.UNLATCHED);
+                    timerShit(500);
 
-                drive.lineTo(60, -45, Math.toRadians(-180));
-                //DRIVES TO THE RANDOMIZATION BOARD LOCATION
+                }else if(intermediate0 ==6){
+                    slides.setState(DepoSlides.DepositState.DOWN);
+                    timerShit(1000);
+                }else if(intermediate0 ==7){
+                    turret.setState(LM1Turret.TurretState.INITIALIZE);
+                    timerShit(1000);
+                }else if(intermediate0 ==8){
+                    arm.setState(DepoArm.DepoArmState.INITIALIZE);
+                    timerShit(1000);
+                }else if(intermediate0 == 9){ //GO TO POSITION SPIKE
+                    drive.lineTo(45, -37, Math.toRadians(-180));
+                    if(drive.isAtTarget()) intermediate0++;
+                } else if(intermediate0==10){
+                    intake.intakeMotor.setPower(0.5);
+                    timerShit(1000);
+                }else if(intermediate0 == 11){
+                    drive.lineTo(55,-60,Math.toRadians(-180)); ///PARK
+                }
 
 
 
