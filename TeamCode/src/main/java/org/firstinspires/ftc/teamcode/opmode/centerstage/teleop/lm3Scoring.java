@@ -229,7 +229,7 @@ public class lm3Scoring extends LinearOpMode {
                     TimeStamp = timer.milliseconds();
                     timeToggle = false;
                 }
-                if(timer.milliseconds() > TimeStamp + 1500){
+                if(timer.milliseconds() > TimeStamp + 1000){
                     scoringState=2;
                     timeToggle = true;
                 }//change this to be position of pitch baseed

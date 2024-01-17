@@ -21,6 +21,7 @@ public class DepoSlides {
 
         CALCULATED_UP,
         RUNTOPOSITION,
+        AUTO_PRELOAD_SCORE
     }
     public DepositState depositFSM = DepositState.STOPPED;
 
@@ -113,6 +114,11 @@ public class DepoSlides {
         switch (depositFSM) {
             case UP:
                 this.targetDepositInches = 27;
+                this.setInches(targetDepositInches);
+                this.pidRunning = true;
+                break;
+            case AUTO_PRELOAD_SCORE:
+                this.targetDepositInches = 8;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
