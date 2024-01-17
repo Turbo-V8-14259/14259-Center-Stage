@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class CameraPipeline extends OpenCvPipeline
 {
-    public static String color = "BLUE"; //change this every match accordingly
+    public static String color = "RED"; //change this every match accordingly
     //or find some way to change this easier
     //if you want me to make a completely new pipeline for each side just say so
 

@@ -76,6 +76,7 @@ public class VisionOpmode extends LinearOpMode
             telemetry.update();
 
             telemetry.addData("Location:", ObjectDirection);
+            telemetry.addData("Color:", color);
             telemetry.update();
 
             sleep(50);

@@ -134,10 +134,7 @@ public class pathVeerVision extends LinearOpMode {
 
 
             telemetry.addData("Location:", ObjectDirection);
-            telemetry.update();
-
-            telemetry.addLine("Ready to Start");
-            telemetry.addData("Location:", ObjectDirection);
+            telemetry.addData("Color:", color);
             telemetry.update();
 
         }
