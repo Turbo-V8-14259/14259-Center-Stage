@@ -54,12 +54,12 @@ public class CameraPipeline extends OpenCvPipeline
         }
         else if (Objects.equals(color, "RED")) {
             LEFT_ROI = new Rect(
-                    new Point(0, 1.0/4 * height),
-                    new Point(width/4, 3.0/4 * height));
+                    new Point(0, 1.0/8 * height),
+                    new Point(width/4, 5.0/8 * height));
 
             RIGHT_ROI = new Rect(
-                    new Point(width/2, 1.0/4 * height),
-                    new Point(7.0/8 * width, 1.0/2 * height));
+                    new Point(width/2, 1.0/8 * height),
+                    new Point(7.0/8 * width, 1.0/4 * height));
         }
 
 
