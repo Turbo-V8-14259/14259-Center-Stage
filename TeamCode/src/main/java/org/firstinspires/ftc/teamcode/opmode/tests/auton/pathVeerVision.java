@@ -77,7 +77,7 @@ public class pathVeerVision extends LinearOpMode {
     public String ObjectDirection;
 
     private VisionPortal visionPortal;
-    public double thresh = 15;
+    public double thresh = 10;
 
     State currentState;
 
@@ -97,37 +97,30 @@ public class pathVeerVision extends LinearOpMode {
         initPipeline();
 
         //vision math
-        while(ObjectDirection == null){
-            telemetry.addLine("Identifying Location...");
-            sleep(2500);
-            if(leftPer > thresh || rightPer > thresh || midPer > thresh){
-                if(leftPer > rightPer && leftPer > midPer){ //mid
-                    if(color.equals("RED")){
+        while(opModeInInit()) {
+            if (leftPer > thresh || rightPer > thresh || midPer > thresh) {
+                if (leftPer > rightPer && leftPer > midPer) { //mid
+                    if (color.equals("RED")) {
                         ObjectDirection = "LEFT";
-                    }
-                    else if(color.equals("BLUE")){
+                    } else if (color.equals("BLUE")) {
                         ObjectDirection = "MIDDLE";
                     }
-                }
-                else if(rightPer > leftPer && rightPer > midPer){ //right
-                    if(color.equals("RED")){
+                } else if (rightPer > leftPer && rightPer > midPer) { //right
+                    if (color.equals("RED")) {
                         ObjectDirection = "MIDDLE";
-                    }
-                    else if(color.equals("BLUE")){
+                    } else if (color.equals("BLUE")) {
                         ObjectDirection = "RIGHT";
                     }
                 }
-            }
-            else{
-                if(color.equals("RED")){
+            } else {
+                if (color.equals("RED")) {
                     ObjectDirection = "RIGHT";
-                }
-                else if(color.equals("BLUE")){
+                } else if (color.equals("BLUE")) {
                     ObjectDirection = "LEFT";
                 }
             }
 
-            switch (ObjectDirection){
+            switch (ObjectDirection) {
                 case "LEFT":
                     randomization = 0;
                     break;
@@ -138,23 +131,22 @@ public class pathVeerVision extends LinearOpMode {
                     randomization = 1;
                     break;
             }
+
+
+            telemetry.addData("Location:", ObjectDirection);
             telemetry.update();
+
+            telemetry.addLine("Ready to Start");
+            telemetry.addData("Location:", ObjectDirection);
+            telemetry.update();
+
         }
-
-        telemetry.addData("Location:", ObjectDirection);
-        telemetry.update();
-
-        webcam.stopRecordingPipeline();
-        webcam.closeCameraDevice();
-
-        telemetry.addLine("Ready to Start");
-        telemetry.addData("Location:", ObjectDirection);
-        telemetry.update();
 
         waitForStart();
 
-
         while(opModeIsActive()){
+            webcam.stopRecordingPipeline();
+            webcam.closeCameraDevice();
             if(a == 0){
                 drive.lineTo(leftBProp.getX(), leftBProp.getY(), leftBProp.getHeading());
                 if(drive.isAtTarget()) a++;

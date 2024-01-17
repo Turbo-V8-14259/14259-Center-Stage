@@ -32,10 +32,7 @@ public class VisionOpmode extends LinearOpMode
         telemetry.update();
         initPipeline();
 
-        while(ObjectDirection == null){
-            telemetry.addLine("Identifying Location...");
-            sleep(2500);
-
+        while(opModeInInit()){
             if(leftPer > thresh || rightPer > thresh || midPer > thresh){
                 if(leftPer > rightPer && leftPer > midPer){ //mid
                     if(color.equals("RED")){
@@ -63,8 +60,7 @@ public class VisionOpmode extends LinearOpMode
                 }
             }
 
-
-//            switch (ObjectDirection) {
+            //            switch (ObjectDirection) {
 //                case "LEFT":
 //                    randomization = 0;
 //                    break;
@@ -78,30 +74,32 @@ public class VisionOpmode extends LinearOpMode
 
             randomization = PosToNum(ObjectDirection);
             telemetry.update();
-        }
 
-        telemetry.addData("Location:", ObjectDirection);
-        telemetry.update();
+            telemetry.addData("Location:", ObjectDirection);
+            telemetry.update();
 
-        sleep(50);
+            sleep(50);
 
-        webcam.stopRecordingPipeline();
-        webcam.closeCameraDevice();
-
-        telemetry.update();
+            telemetry.update();
 //        telemetry.addLine("Loading AprilTagDetections...");
 //        telemetry.update();
 //
 //        initAprilTag();
 //        visionPortal.setProcessorEnabled(aprilTag, true);
 
-        telemetry.addLine("Ready to Start");
-        telemetry.addData("Location:", ObjectDirection);
-        telemetry.update();
+            telemetry.addLine("Ready to Start");
+            telemetry.addData("Location:", ObjectDirection);
+            telemetry.update();
+        }
+
+
         waitForStart();
+
 
         while (opModeIsActive())
         {
+            webcam.stopRecordingPipeline();
+            webcam.closeCameraDevice();
             // AprilTag (wont need until later)
 //            if(Objects.equals(ObjectDirection, "LEFT")){
 //                if(Red){
