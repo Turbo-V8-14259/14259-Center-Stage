@@ -54,10 +54,10 @@ public class DepoArm {
         this.depoArmFSM = state;
         switch (depoArmFSM){
             case INITIALIZE:
-                target = 0;//.1
+                target = 0.05;//.1
                 break;
             case TRANSFER:
-                target = 0;
+                target = 0.05;
                 break;
             case SCORE:
                 target = .7 - levelOffset[level];
@@ -71,6 +71,7 @@ public class DepoArm {
                 break;
             case RUNTOPOSITION:
                 target = manualPosition;
+                break;
                 //TODO add sanity check to make sure that it is between 0 and 1;
         }
     }

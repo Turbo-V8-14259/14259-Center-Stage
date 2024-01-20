@@ -13,7 +13,9 @@
         android:label="Tests for com.qualcomm.ftcrobotcontroller"
         android:targetPackage="com.qualcomm.ftcrobotcontroller" />
 
-    <application android:debuggable="true" >
+    <application
+        android:debuggable="true"
+        android:extractNativeLibs="true" >
         <uses-library android:name="android.test.runner" />
     </application>
 

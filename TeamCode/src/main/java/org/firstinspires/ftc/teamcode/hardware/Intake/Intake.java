@@ -55,7 +55,8 @@ public class Intake{
                 target = 0.2;
                 break;
             case INTAKE_TELE:
-                target = 0.55;
+                target = 0.45;
+                break;
             case STACK_HIGH:
                 target = 0.3;
                 break;
@@ -63,10 +64,10 @@ public class Intake{
                 target = 0.1;
                 break;
             case INCRIMENT_UP:
-                target+=.05;
+                target-=.05;
                 break;
             case INCRIMENT_DOWN:
-                target-=.05;
+                target+=.05;
                 break;
             case AUTO_HIGH:
                 target = .3;
@@ -85,6 +86,9 @@ public class Intake{
         return intakeFSM;
     }
 
+    public double getPosition(){
+        return target;
+    }
     public void update() {
         this.intakeMotor.setPower(intakePower);
         this.intakePivot.setPosition(target);

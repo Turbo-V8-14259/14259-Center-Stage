@@ -27,9 +27,9 @@ public class LM1Turret {
     private static final double LEFT_LOWER_BOUND = .95;
     private static final double LEFT_UPPER_BOUND = .11;
 
-    private static final double LEFT_90_DEGREES = 0.86;
+    private static final double LEFT_90_DEGREES = .34;
 
-    private static final double RIGHT_90_DEGREES = 0.42; //tune ALLO?
+    private static final double RIGHT_90_DEGREES = .99; //tune ALLO?
 
     private ServoMotorBetter turret;
 
@@ -69,6 +69,10 @@ public class LM1Turret {
             case RUNTOPOSITION:
                 target = manualPosition;
         }
+    }
+
+    public double getPosition(){
+        return target;
     }
 
     public void update(){

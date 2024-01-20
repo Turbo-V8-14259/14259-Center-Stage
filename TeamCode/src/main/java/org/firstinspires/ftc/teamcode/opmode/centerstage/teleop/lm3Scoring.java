@@ -74,7 +74,7 @@ public class lm3Scoring extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
 
         intake = new Intake(hardwareMap.get(DcMotorEx.class, "Intake"), new ServoMotorBetter(hardwareMap.get(Servo.class, "intakeArm")));
-        intake.setState(Intake.IntakeState.INITIALIZE);
+        intake.setState(Intake.IntakeState.INTAKE_TELE);
         intake.update();
 
         turret = new LM1Turret(new ServoMotorBetter(hardwareMap.get(Servo.class, "turret")));
@@ -122,7 +122,7 @@ public class lm3Scoring extends LinearOpMode {
 
     public void telemetryData(){
         telemetry.addData("claw state", claw.getState());
-        telemetry.addData("intake state", intake.getState());
+        telemetry.addData("intake pos", intake.getPosition());
         telemetry.addData("color", led.getPattern());
         telemetry.addData("level", level);
         telemetry.addData("extension", extension);
@@ -202,13 +202,14 @@ public class lm3Scoring extends LinearOpMode {
         }
         switch (scoringState){
             case -1: //Init
-                intake.setState(Intake.IntakeState.INTAKE_TELE);
 //                slides.setState(DepoSlides.DepositState.DOWN);
                 pitchSlidesState = -1;
                 claw.setState(Claw.ClawState.INTAKE);
                 if(climbSafe!=3&&climbSafe!=4){
 //                    pitch.setState(Pitch.PitchState.INITIALIZE);
-                    arm.setState(DepoArm.DepoArmState.TRANSFER);
+                    if(slides.isAtTarget){
+                        arm.setState(DepoArm.DepoArmState.TRANSFER);
+                    }
                 }
                 break;
             case 0:
