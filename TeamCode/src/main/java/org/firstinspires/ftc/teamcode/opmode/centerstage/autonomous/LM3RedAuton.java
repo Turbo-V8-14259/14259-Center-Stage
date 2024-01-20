@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.color;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.setColor;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -82,6 +83,7 @@ public class LM3RedAuton extends LinearOpMode {
 
         //vision
         telemetry.addLine("Loading Pipeline...");
+        setColor("RED");
         telemetry.update();
         initPipeline();
 

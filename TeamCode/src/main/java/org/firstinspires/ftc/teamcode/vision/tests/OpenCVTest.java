@@ -41,8 +41,11 @@ public class OpenCVTest extends LinearOpMode
             }
         });
 
+        CameraPipeline.setColor("BLUE");
+
         telemetry.addLine("Waiting for start");
         telemetry.addData("Current Detection", CameraPipeline.ObjectDirection);
+        telemetry.addData("Color", CameraPipeline.color);
         telemetry.update();
 
         /*
