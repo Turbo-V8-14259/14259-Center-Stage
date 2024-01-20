@@ -269,7 +269,7 @@ public class LM3RedAuton extends LinearOpMode {
                     arm.setState(DepoArm.DepoArmState.INITIALIZE);
                     timerShit(1000);
                 }else if(intermediate0 == 9){ //GO TO POSITION SPIKE
-                    drive.lineTo(45, -37, Math.toRadians(-180));
+                    drive.lineTo(41, -37, Math.toRadians(-180));//fucked up
                     if(drive.isAtTarget()) intermediate0++;
                 } else if(intermediate0==10){
                     intake.intakeMotor.setPower(0.5);
