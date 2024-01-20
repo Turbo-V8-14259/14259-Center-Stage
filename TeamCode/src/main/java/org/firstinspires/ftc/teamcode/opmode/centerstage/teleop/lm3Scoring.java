@@ -381,10 +381,12 @@ public class lm3Scoring extends LinearOpMode {
         if(climbSafe==3){
             pitch.setState(Pitch.PitchState.CLIMB);
             arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
+            intake.setState(Intake.IntakeState.INITIALIZE);
         }else if (climbSafe == 4){
             arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
             pitch.manualMode = true;
             pitch.setPowerManual(-gamepad2.left_stick_y);
+            intake.setState(Intake.IntakeState.INITIALIZE);
         }else if(climbSafe > 4){
             climbSafe = 0;
             pitch.manualMode = false;

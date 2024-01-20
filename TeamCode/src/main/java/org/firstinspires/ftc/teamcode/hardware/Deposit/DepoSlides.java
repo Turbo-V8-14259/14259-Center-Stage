@@ -38,8 +38,8 @@ public class DepoSlides {
     public int level = 0;
     public double manualPosition = 0;
     public int extension = 0;
-    public double[] levels = {0,0.1,0.2,0.3,0.4,0.5};
-    public double[] extensions = {0,0.2,0.4,0.6,0.8,1};
+    public double[] levels = {0,0.1,0.2,0.25,0.3,0.5};
+    public double[] extensions = {0,0.2,0.3,0.4,0.8,1};
 
 
     public DcMotorBetter leftMotor;
@@ -118,7 +118,7 @@ public class DepoSlides {
                 this.pidRunning = true;
                 break;
             case AUTO_PRELOAD_SCORE:
-                this.targetDepositInches = 8;
+                this.targetDepositInches = 6;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
