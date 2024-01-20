@@ -31,9 +31,8 @@ public class DepoArm {
 
     public double target = 0;
     public double manualPosition = 0;
-
     public int level = 0;
-    public double[] levelOffset = {0.05,0.05,0.1,0.2,0.24,-0.2,-0.2};
+    public double[] levelOffset = {.2,.3,.4,0.2,0.24,-0.2,-0.2};
 
     public DepoArm(ServoMotorBetter leftArm, ServoMotorBetter rightArm) {
         this.leftArm = leftArm;
@@ -60,7 +59,7 @@ public class DepoArm {
                 target = 0.05;
                 break;
             case SCORE:
-                target = .7 - levelOffset[level];
+                target = 1 - levelOffset[level];
                 break;
             case INTERMEDIATE:
                 target = 1;

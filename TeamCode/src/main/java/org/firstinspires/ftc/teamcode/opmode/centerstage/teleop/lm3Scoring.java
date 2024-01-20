@@ -248,24 +248,26 @@ public class lm3Scoring extends LinearOpMode {
                     timeToggle = false;
                     timeToggle2 = false;
                 }
-                if(timer.milliseconds()> TimeStamp + 400){
-                    arm.setState(DepoArm.DepoArmState.SCORE);
-                    timeToggle = true;
-                    timeToggle2 = true;
-                }
-                if(timeToggle2){//timeToggle starts at true by default
-                    TimeStamp2 = timer2.milliseconds();
-                    timeToggle2 = false;
-                }
-                if(timer2.milliseconds() > TimeStamp2 + 650){
+                if(timer.milliseconds()> TimeStamp + 600){
                     scoringState = 3;
-                    timeToggle2 = true;
+                    timeToggle = true;
+//                    timeToggle2 = true;
                 }
+//                if(timeToggle2){//timeToggle starts at true by default
+//                    TimeStamp2 = timer2.milliseconds();
+//                    timeToggle2 = false;
+//                }
+//                if(timer2.milliseconds() > TimeStamp2 + 650){
+//                    scoringState = 3;
+//                    timeToggle2 = true;
+//                }
 
                 break;
             case 3:
+                arm.setState(DepoArm.DepoArmState.SCORE);
                 break;
             case 4:
+                arm.setState(DepoArm.DepoArmState.SCORE);
                 claw.setState(Claw.ClawState.UNLATCHED);
                 break;
             case 5: // raising ARM
