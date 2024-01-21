@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.opmode.centerstage.autonomous;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -33,6 +34,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 
 @Autonomous(name = "bad blue autonomy")
+@Disabled
 public class AutoBlue extends LinearOpMode {
 
     private Blue.Location location = Blue.Location.MIDDLE;

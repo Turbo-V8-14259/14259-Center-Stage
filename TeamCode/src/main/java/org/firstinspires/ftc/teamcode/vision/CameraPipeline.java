@@ -179,4 +179,7 @@ public class CameraPipeline extends OpenCvPipeline
          */
 
     }
+    public static void setColor(String color) {
+        CameraPipeline.color = color;
+    }
 }

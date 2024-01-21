@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.color;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.setColor;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -50,7 +51,8 @@ public class LM3RedAuton extends LinearOpMode {
     LM1Turret turret;
     DepoArm arm;
     DT drive;
-    Pose2d startBPose = new Pose2d(20, -65, Math.toRadians(-90)); //default position
+    int x =0;
+    Pose2d startBPose = new Pose2d(19+x, -65, Math.toRadians(-90)); //default position
     int randomization;
     int intermediate0 = 0;
     int intermediate1 = 0;
@@ -82,6 +84,7 @@ public class LM3RedAuton extends LinearOpMode {
 
         //vision
         telemetry.addLine("Loading Pipeline...");
+        setColor("RED");
         telemetry.update();
         initPipeline();
 
@@ -131,13 +134,13 @@ public class LM3RedAuton extends LinearOpMode {
 
             if(randomization == 0){ //LEFT
                 if(intermediate0 == 0){
-                    drive.lineTo(62, -45, Math.toRadians(-180));
+                    drive.lineTo(60+x, -45, Math.toRadians(-180));
                     if(drive.isAtTarget()) intermediate0++;
                 }else if(intermediate0==1){
                     intake.setState(Intake.IntakeState.INITIALIZE);
                     arm.setState(DepoArm.DepoArmState.AUTO_PRELOAD);
-                    drive.lineTo(62, -31.5, Math.toRadians(-180));
-                    if(drive.isAtTarget()) intermediate0++;
+                    drive.lineTo(60+x, -31.5, Math.toRadians(-180));
+                    timerShit(2000);
                 }//DRIVES TO THE RANDOMIZATION BOARD LOCATION
 
                 else if(intermediate0==2){ //ARM SCORING
@@ -152,10 +155,13 @@ public class LM3RedAuton extends LinearOpMode {
                     timerShit(1);
                 }else if(intermediate0 ==4){
 //                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE); //merged to previous state
-                    timerShit(1);
-                }else if(intermediate0 ==5){
                     claw.setState(Claw.ClawState.UNLATCHED);
+
                     timerShit(500);
+                }else if(intermediate0 ==5){
+                    drive.lineTo(56+x, -31.5, Math.toRadians(-180));
+
+                    timerShit(1000);
                 }else if(intermediate0 ==6){
                     slides.setState(DepoSlides.DepositState.DOWN);
                     intake.setState(Intake.IntakeState.INITIALIZE);
@@ -167,13 +173,13 @@ public class LM3RedAuton extends LinearOpMode {
                     arm.setState(DepoArm.DepoArmState.INITIALIZE);
                     timerShit(1000);
                 }else if(intermediate0 == 9){ //GO TO POSITION SPIKE
-                    drive.lineTo(30, -37, Math.toRadians(-180));
+                    drive.lineTo(30+x, -37, Math.toRadians(-180));
                     if(drive.isAtTarget()) intermediate0++;
                 } else if(intermediate0==10){
                     intake.intakeMotor.setPower(0.5);
                     timerShit(1000);
                 }else if(intermediate0 == 11){
-                    drive.lineTo(55,-60,Math.toRadians(-180)); ///PARK
+                    drive.lineTo(54+x,-60,Math.toRadians(-180)); ///PARK
                 }
 
 
@@ -184,13 +190,13 @@ public class LM3RedAuton extends LinearOpMode {
             }
             else if(randomization == 1){ //MIDDLE
                 if(intermediate0 == 0){
-                    drive.lineTo(61, -45, Math.toRadians(-180));
+                    drive.lineTo(60+x, -45, Math.toRadians(-180));
                     if(drive.isAtTarget()) intermediate0++;
                 }else if(intermediate0==1){
                     arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
                     intake.setState(Intake.IntakeState.INITIALIZE);
-                    drive.lineTo(61, -37, Math.toRadians(-180));
-                    if(drive.isAtTarget()) intermediate0++;
+                    drive.lineTo(60+x, -37, Math.toRadians(-180));
+                    timerShit(2000);
                 }//DRIVES TO THE RANDOMIZATION BOARD LOCATION
 
                 else if(intermediate0==2){ //ARM SCORING
@@ -200,14 +206,16 @@ public class LM3RedAuton extends LinearOpMode {
                     timerShit(1000);
 
                 }else if(intermediate0==3){
+                    claw.setState(Claw.ClawState.UNLATCHED);
 //                    turret.setState(LM1Turret.TurretState.SCORE);
 //                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
-                    timerShit(1);
+                    timerShit(500);
                 }else if(intermediate0 ==4){
 //                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
-                    timerShit(1);
+                    drive.lineTo(56+x, -37, Math.toRadians(-180));
+
+                    timerShit(1000);
                 }else if(intermediate0 ==5){
-                    claw.setState(Claw.ClawState.UNLATCHED);
                     timerShit(500);
                 }else if(intermediate0 ==6){
                     slides.setState(DepoSlides.DepositState.DOWN);
@@ -215,18 +223,19 @@ public class LM3RedAuton extends LinearOpMode {
                     timerShit(1000);
                 }else if(intermediate0 ==7){
 //                    turret.setState(LM1Turret.TurretState.INITIALIZE);
+
                     timerShit(1);
                 }else if(intermediate0 ==8){
                     arm.setState(DepoArm.DepoArmState.INITIALIZE);
                     timerShit(1000);
                 }else if(intermediate0 == 9){ //GO TO POSITION SPIKE
-                    drive.lineTo(41, -26, Math.toRadians(-180));
+                    drive.lineTo(40+x, -27, Math.toRadians(-180));
                     if(drive.isAtTarget()) intermediate0++;
                 } else if(intermediate0==10){
                     intake.intakeMotor.setPower(0.65);
                     timerShit(1000);
                 }else if(intermediate0 == 11){
-                    drive.lineTo(55,-60,Math.toRadians(-180)); ///PARK
+                    drive.lineTo(54+x,-60,Math.toRadians(-180)); ///PARK
                 }
 
 
@@ -236,12 +245,13 @@ public class LM3RedAuton extends LinearOpMode {
 
 
                 if(intermediate0 == 0){
-                    drive.lineTo(61, -45, Math.toRadians(-180));
+                    drive.lineTo(60+x, -45, Math.toRadians(-180));
                     if(drive.isAtTarget()) intermediate0++;
                 }else if(intermediate0==1){
                     arm.setState(DepoArm.DepoArmState.ABSOLUTE_INTERMEDIATE);
-                    drive.lineTo(61, -43.5, Math.toRadians(-180));
-                    if(drive.isAtTarget()) intermediate0++;
+                    drive.lineTo(60+x, -43.5, Math.toRadians(-180));
+//                    if(drive.isAtTarget()) intermediate0++;
+                    timerShit(2000);
                 }//DRIVES TO THE RANDOMIZATION BOARD LOCATION
 
                 else if(intermediate0==2){ //ARM SCORING
@@ -253,11 +263,15 @@ public class LM3RedAuton extends LinearOpMode {
                     slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
                     timerShit(1000);
                 }else if(intermediate0 ==4){
+                    claw.setState(Claw.ClawState.UNLATCHED);
+
 //                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
-                    timerShit(1);
+                    timerShit(500);
                 }else if(intermediate0 ==5){
                     claw.setState(Claw.ClawState.UNLATCHED);
-                    timerShit(500);
+                    drive.lineTo(56+x, -43.5, Math.toRadians(-180));
+
+                    timerShit(2000);
                 }else if(intermediate0 ==6){
                     slides.setState(DepoSlides.DepositState.DOWN);
                     turret.setState(LM1Turret.TurretState.INITIALIZE);
@@ -269,13 +283,13 @@ public class LM3RedAuton extends LinearOpMode {
                     arm.setState(DepoArm.DepoArmState.INITIALIZE);
                     timerShit(1000);
                 }else if(intermediate0 == 9){ //GO TO POSITION SPIKE
-                    drive.lineTo(41, -37, Math.toRadians(-180));//fucked up
+                    drive.lineTo(44+x, -37, Math.toRadians(-180));//fucked up
                     if(drive.isAtTarget()) intermediate0++;
                 } else if(intermediate0==10){
                     intake.intakeMotor.setPower(0.5);
                     timerShit(1000);
                 }else if(intermediate0 == 11){
-                    drive.lineTo(55,-60,Math.toRadians(-180)); ///PARK
+                    drive.lineTo(54+x,-60,Math.toRadians(-180)); ///PARK
                 }
 
 

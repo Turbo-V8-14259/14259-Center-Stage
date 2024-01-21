@@ -33,7 +33,7 @@ public class DepoArm {
     public double target = 0;
     public double manualPosition = 0;
     public int level = 0;
-    public double[] levelOffset = {.15,.2,.35,.4,.45,.5,.5};
+    public double[] levelOffset = {.15,.2,.35,.4,.37,.5,.5};
 
     public DepoArm(ServoMotorBetter leftArm, ServoMotorBetter rightArm) {
         this.leftArm = leftArm;

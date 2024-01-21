@@ -171,6 +171,18 @@ public class lm3Scoring extends LinearOpMode {
         if(gamepadOne.right_bumper) scoringState++;
         if(gamepadOne.left_bumper) scoringState--;
         if(gamepadOne.b) scoringState = 100; //full reset
+        if(gamepadOne.y){
+            level = 4;
+            extension = 0;
+        }
+        if(gamepadOne.x){
+            level = 1;
+            extension = 1;
+        }
+        if(gamepadOne.a){
+            level = 1;
+            extension = 2;
+        }
     }
     public void scoringStateMachine(){
         switch(pitchSlidesState){
