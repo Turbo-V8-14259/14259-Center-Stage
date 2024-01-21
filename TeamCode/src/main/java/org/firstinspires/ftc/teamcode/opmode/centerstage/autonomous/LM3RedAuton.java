@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.opmode.centerstage.autonomous;
 
-import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.color;
-import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
-import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
-import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
-import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.setColor;
+//import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.color;
+//import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
+//import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
+//import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
+//import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.setColor;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.hardware.Intake.Intake;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
-import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
+//import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -324,8 +324,8 @@ public class LM3RedAuton extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        CameraPipeline s = new CameraPipeline(telemetry);
-        webcam.setPipeline(s);
+//        CameraPipeline s = new CameraPipeline(telemetry);
+//        webcam.setPipeline(s);
 
         webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
