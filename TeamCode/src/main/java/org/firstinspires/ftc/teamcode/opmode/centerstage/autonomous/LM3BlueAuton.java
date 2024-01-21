@@ -86,7 +86,7 @@ public class LM3BlueAuton extends LinearOpMode {
 
         //vision
         telemetry.addLine("Loading Pipeline...");
-        setColor("BLUE");
+//        setColor("BLUE");
         telemetry.update();
         initPipeline();
 
