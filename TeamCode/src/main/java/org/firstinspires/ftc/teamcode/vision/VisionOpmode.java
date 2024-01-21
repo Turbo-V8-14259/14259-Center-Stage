@@ -195,6 +195,34 @@ public class VisionOpmode extends LinearOpMode
         }
         return randomization;
     }
+    public void randomizationMethod(){
+        if(leftPer > thresh || rightPer > thresh || midPer > thresh){
+            if(leftPer > rightPer && leftPer > midPer){ //mid
+                if(color.equals("RED")){
+                    ObjectDirection = "LEFT";
+                }
+                else if(color.equals("BLUE")){
+                    ObjectDirection = "MIDDLE";
+                }
+            }
+            else if(rightPer > leftPer && rightPer > midPer){ //right
+                if(color.equals("RED")){
+                    ObjectDirection = "MIDDLE";
+                }
+                else if(color.equals("BLUE")){
+                    ObjectDirection = "RIGHT";
+                }
+            }
+        }
+        else{
+            if(color.equals("RED")){
+                ObjectDirection = "RIGHT";
+            }
+            else if(color.equals("BLUE")){
+                ObjectDirection = "LEFT";
+            }
+        }
+    }
 
     //            if(leftPer > thresh || rightPer > thresh || midPer > thresh){
 //                if(leftPer > rightPer && leftPer > midPer){ //left
