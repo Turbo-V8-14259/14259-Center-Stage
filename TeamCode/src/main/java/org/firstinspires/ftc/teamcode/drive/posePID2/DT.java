@@ -36,6 +36,9 @@ public class DT{
 
     private boolean isAtXYTarget;
 
+    private double maxPower = 1;
+    private double flPower, frPower, blPower, brPower;
+
     public DT(HardwareMap hardwareMap){
         this.vs = hardwareMap.voltageSensor.iterator().next();
         this.drive = new SampleMecanumDrive(hardwareMap);
@@ -84,10 +87,14 @@ public class DT{
     }
     public void setPowers(double y, double x, double r){
         double normalize = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(r),1);
-        leftFront.setPower(((y+x+r)/normalize));
-        leftRear.setPower(((y-x+r)/normalize));
-        rightRear.setPower(((y+x-r)/normalize));
-        rightFront.setPower(((y-x-r)/normalize));
+        flPower = ((y+x+r)/normalize);
+        blPower = ((y-x+r)/normalize);
+        brPower = ((y+x-r)/normalize);
+        frPower = ((y-x-r)/normalize);
+        leftFront.setPower(Math.min(flPower, maxPower/normalize));
+        leftRear.setPower(Math.min(blPower, maxPower/normalize));
+        rightRear.setPower(Math.min(brPower, maxPower/normalize));
+        rightFront.setPower(Math.min(frPower, maxPower/normalize));
     }
     public void update(){
         drive.updatePoseEstimate();
@@ -121,15 +128,6 @@ public class DT{
         else yPower += DTConstants.XYBasePower * Math.signum(yPower); // doesnt work since y becomes x and x becomes y
         if (Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
         else rOut += DTConstants.RBasePower * Math.signum(rOut); //this works tho
-//        if((Math.abs(deltaX) < DTConstants.allowedAxialError) && (Math.abs(deltaY) < DTConstants.allowedAxialError)) {
-//            isAtXYTarget = true;
-//            xPower = 0;
-//            yPower = 0;
-//        } else {
-//            isAtXYTarget = false;
-//            xPower += DTConstants.XYBasePower * Math.signum(xPower);
-//            yPower += DTConstants.XYBasePower * Math.signum(yPower);
-//        }
         compensator = vs.getVoltage() / 12.5;
         xPower/=compensator;
         yPower/=compensator;
@@ -232,5 +230,8 @@ public class DT{
         if(condition){
             setRTarget(r);
         }
+    }
+    public void setMaxPower(double maxPower){
+        this.maxPower = maxPower;
     }
 }
