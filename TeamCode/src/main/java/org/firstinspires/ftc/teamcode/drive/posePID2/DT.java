@@ -91,10 +91,10 @@ public class DT{
         blPower = ((y-x+r)/normalize);
         brPower = ((y+x-r)/normalize);
         frPower = ((y-x-r)/normalize);
-        leftFront.setPower(Math.min(flPower, maxPower/normalize));
-        leftRear.setPower(Math.min(blPower, maxPower/normalize));
-        rightRear.setPower(Math.min(brPower, maxPower/normalize));
-        rightFront.setPower(Math.min(frPower, maxPower/normalize));
+        leftFront.setPower(flPower * maxPower);
+        leftRear.setPower(blPower * maxPower);
+        rightRear.setPower(brPower * maxPower);
+        rightFront.setPower(frPower * maxPower);
     }
     public void update(){
         drive.updatePoseEstimate();
