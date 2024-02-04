@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.opmode.centerstage.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -23,6 +24,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
 @TeleOp(name = "LM3 Tele Op")
+@Disabled
 public class lm3Scoring extends LinearOpMode {
     SampleMecanumDrive drive;
     Intake intake;

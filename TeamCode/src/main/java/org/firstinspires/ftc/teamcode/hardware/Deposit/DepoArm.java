@@ -16,14 +16,15 @@ public class DepoArm {
         INTERMEDIATE,
         STOPPED,
         RUNTOPOSITION,
-        AUTO_PRELOAD
+        AUTO_PRELOAD,
+        LT_SCORE
     }
 
     public DepoArmState depoArmFSM = DepoArmState.STOPPED;
 
 
-    private static final double LEFT_LOWER_BOUND = .8; //0
-    private static final double LEFT_UPPER_BOUND = 0.1; //0.5
+    private static final double LEFT_LOWER_BOUND = 0; //0
+    private static final double LEFT_UPPER_BOUND = 1; //0.5
     private static final double RIGHT_LOWER_BOUND = 0;
     private static final double RIGHT_UPPER_BOUND = 1;
 
@@ -54,13 +55,13 @@ public class DepoArm {
         this.depoArmFSM = state;
         switch (depoArmFSM){
             case INITIALIZE:
-                target = 0.05;//.1
+                target = 1;//.1
                 break;
             case TRANSFER:
-                target = 0.05;
+                target = 1;
                 break;
             case SCORE:
-                target = 1 - levelOffset[level];
+                target = 0 + levelOffset[level];
                 break;
             case INTERMEDIATE:
                 target = 1;
@@ -74,6 +75,8 @@ public class DepoArm {
                 break;
             case AUTO_PRELOAD:
                 target = .95;
+            case LT_SCORE:
+                target = 0;
                 //TODO add sanity check to make sure that it is between 0 and 1;
         }
     }
