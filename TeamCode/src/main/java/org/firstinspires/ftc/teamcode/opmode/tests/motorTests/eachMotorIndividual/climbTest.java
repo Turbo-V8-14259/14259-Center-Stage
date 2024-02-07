@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode.tests.motorTests;
+package org.firstinspires.ftc.teamcode.opmode.tests.motorTests.eachMotorIndividual;
 
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -10,8 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
-@TeleOp
-@Disabled
+@TeleOp(name = "CLIMB AND DRIVE TEST")
 
 public class climbTest extends LinearOpMode {
     public DcMotorEx climb;
