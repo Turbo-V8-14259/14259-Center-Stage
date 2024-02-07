@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 
 
-@TeleOp(name = "Devesh intake test use this one")
+@TeleOp(name = "INTAKE TEST")
 public class IntakeTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

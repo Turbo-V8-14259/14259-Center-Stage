@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 
-@TeleOp
+@TeleOp(name = "DEPOSITING END AFFECTOR")
 public class EndAffector extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
