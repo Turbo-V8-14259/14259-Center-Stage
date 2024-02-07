@@ -27,7 +27,7 @@ public class Pitch {
     public double target = 0;
     private static final double DEGREES_TO_TICKS = 0;
     private static final double LOWER_BOUND = 0;
-    private static final double UPPER_BOUND = 7250;
+    private static final double UPPER_BOUND = 6000;
     private static final double INIT_DEGREES = 0;
 
     private double targetPitchPosition = 0;

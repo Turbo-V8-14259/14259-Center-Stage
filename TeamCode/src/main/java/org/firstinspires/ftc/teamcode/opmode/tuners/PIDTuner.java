@@ -18,27 +18,27 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
 @Config
-@TeleOp
-@Disabled
+@TeleOp(name = "pitch PID Tuner")
+//@Disabled
 
 public class PIDTuner extends LinearOpMode {
     public static double setTarget = 0;
     Pitch pitch;
-    LM1Turret turret;
-    DepoArm arm;
+//    LM1Turret turret;
+//    DepoArm arm;
 
     @Override
     public void runOpMode() throws InterruptedException {
         //initalize here
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "Pitch")));
-        turret = new LM1Turret(new ServoMotorBetter(hardwareMap.get(Servo.class, "turret")));
-        arm = new DepoArm(new ServoMotorBetter(hardwareMap.get(Servo.class, "arm")), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
+//        turret = new LM1Turret(new ServoMotorBetter(hardwareMap.get(Servo.class, "turret")));
+//        arm = new DepoArm(new ServoMotorBetter(hardwareMap.get(Servo.class, "arm")), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
         waitForStart();
 
         while(opModeIsActive()){
-            arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
-            turret.setState(LM1Turret.TurretState.INITIALIZE);
+//            arm.setState(DepoArm.DepoArmState.INTERMEDIATE);
+//            turret.setState(LM1Turret.TurretState.INITIALIZE);
             pitch.manualMode = false;
             pitch.target = setTarget;
 
@@ -48,8 +48,8 @@ public class PIDTuner extends LinearOpMode {
             //add data here
             telemetry.update();
             pitch.update();
-            arm.update();
-            turret.update();
+//            arm.update();
+//            turret.update();
         }
     }
 }

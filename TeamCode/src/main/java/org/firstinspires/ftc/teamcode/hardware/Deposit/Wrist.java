@@ -17,7 +17,10 @@ public class Wrist {
         STOPPED,
         RUNTOPOSITION,
         AUTO_PRELOAD,
-        LT_SCORE
+        LT_SCORE,
+        Manual,
+        ABOVE_TRANSFER,
+
     }
 
     public WristState wristFSM = WristState.STOPPED;
@@ -27,7 +30,7 @@ public class Wrist {
     private ServoMotorBetter wrist;
 
     public double target = 0;
-    public double manualPosition = 0;
+    public double manualPosition = 0.5;
     public int level = 0;
     public double[] levelOffset = {.15,.2,.35,.4,.37,.5,.5};
 
@@ -40,22 +43,24 @@ public class Wrist {
         return wristFSM;
     }
 
-
+    public void setManualPosition(double position){
+        manualPosition = position;
+    }
 
     public void setState(WristState state){
         this.wristFSM = state;
         switch (wristFSM){
             case INITIALIZE:
-                target = 0;//.1
+                target = 0.35;//.1
                 break;
             case TRANSFER:
-                target = 0;
+                target = 0.0;
                 break;
             case SCORE:
                 target = 1 - levelOffset[level];
                 break;
             case INTERMEDIATE:
-                target = 1;
+                target = .55; //when arm is at 0.6 wrist must rotate
                 break;
             case ABSOLUTE_INTERMEDIATE:
                 target = 1;
@@ -66,8 +71,17 @@ public class Wrist {
                 break;
             case AUTO_PRELOAD:
                 target = .95;
+                break;
             case LT_SCORE:
                 target = 1;
+                break;
+            case Manual:
+                target = manualPosition;
+                break;
+            case ABOVE_TRANSFER:
+                target = .05;
+                break;
+
                 //TODO add sanity check to make sure that it is between 0 and 1;
         }
     }

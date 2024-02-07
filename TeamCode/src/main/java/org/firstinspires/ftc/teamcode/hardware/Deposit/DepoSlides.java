@@ -62,15 +62,15 @@ public class DepoSlides {
         this.leftMotor.setLowerBound(DepoSlides.LOWER_BOUND);
         this.leftMotor.setUpperBound(DepoSlides.UPPER_BOUND);
         this.leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        this.leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.leftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         this.rightMotor = rightMotor;
         this.rightMotor.setLowerBound(DepoSlides.LOWER_BOUND);
         this.rightMotor.setUpperBound(DepoSlides.UPPER_BOUND);
         this.rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-//        this.rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        this.rightMotor.setDirection(DcMotor.Direction.REVERSE);
         this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
-                () -> (this.leftMotor.getCurrentPosition()*-1) - this.targetLinSlidePosition,
+                () -> (this.leftMotor.getCurrentPosition()) - this.targetLinSlidePosition,
                 factor -> {
                     this.leftMotor.setPower(M.clamp(factor, 1, -1));
                     this.rightMotor.setPower(M.clamp(-factor, 1, -1));

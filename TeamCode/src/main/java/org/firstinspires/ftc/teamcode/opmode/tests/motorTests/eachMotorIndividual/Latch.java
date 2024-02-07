@@ -26,6 +26,7 @@ public class Latch extends LinearOpMode {
                 claw.setState(Claw.ClawState.UNLATCHED);
             }
 //            telemetry.addData("claw position", claw.getPosition()); //0.44 is open, 0.35 is closed
+            telemetry.addData("claw state", claw.getState());
             telemetry.update();
             claw.update();
             gamepad.update();
