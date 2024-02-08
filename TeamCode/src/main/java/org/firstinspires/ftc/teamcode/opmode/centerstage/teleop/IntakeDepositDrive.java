@@ -24,7 +24,7 @@ public class IntakeDepositDrive extends LinearOpMode {
     boolean timeToggle = true;
     double TimeStamp = 0;
     ElapsedTime timer = new ElapsedTime();
-    int scoringState = 0;
+    int scoringState = 5;
     Pitch pitch;
     @Override
     public void runOpMode() throws InterruptedException {
