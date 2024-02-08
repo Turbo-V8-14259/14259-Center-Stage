@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 @Config
-@TeleOp
+@TeleOp(name = "SLIDES PID")
 
 public class depoSlidesTest extends LinearOpMode {
     public static double targetSet = 0;

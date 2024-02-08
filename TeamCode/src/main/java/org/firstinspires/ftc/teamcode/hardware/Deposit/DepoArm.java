@@ -19,14 +19,15 @@ public class DepoArm {
         AUTO_PRELOAD,
         LT_SCORE,
         Manual,
+        ABOVE_TRANSFER
     }
 
     public DepoArmState depoArmFSM = DepoArmState.STOPPED;
 
 
-    private static final double LEFT_LOWER_BOUND = 0.1; //0
+    private static final double LEFT_LOWER_BOUND = 0; //0
     private static final double LEFT_UPPER_BOUND = 1; //0.5
-    private static final double RIGHT_LOWER_BOUND = 0.1;
+    private static final double RIGHT_LOWER_BOUND = 0;
     private static final double RIGHT_UPPER_BOUND = 1;
 
     private ServoMotorBetter leftArm;
@@ -35,7 +36,7 @@ public class DepoArm {
     public double target = 0;
     public double manualPosition = .5;
     public int level = 0;
-    public double[] levelOffset = {.15,.2,.35,.4,.37,.5,.5};
+    public double[] levelOffset = {0,0,0,0,0,0,0,0};
 
     public DepoArm(ServoMotorBetter leftArm, ServoMotorBetter rightArm) {
         this.leftArm = leftArm;
@@ -54,6 +55,10 @@ public class DepoArm {
         manualPosition = position;
     }
 
+    public void setLevel(int level){
+        this.level = level;
+    }
+
 
 
     public void setState(DepoArmState state){
@@ -65,11 +70,14 @@ public class DepoArm {
             case TRANSFER:
                 target = .84;
                 break;
+            case ABOVE_TRANSFER:
+                target = .74;
+                break;
             case SCORE:
                 target = 0 + levelOffset[level];
                 break;
             case INTERMEDIATE:
-                target = .6; //WRIST MUST ROTATE HERE
+                target = .5; //WRIST MUST ROTATE HERE
                 break;
             case ABSOLUTE_INTERMEDIATE:
                 target = 1;

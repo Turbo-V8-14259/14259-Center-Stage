@@ -32,7 +32,7 @@ public class Wrist {
     public double target = 0;
     public double manualPosition = 0.5;
     public int level = 0;
-    public double[] levelOffset = {.15,.2,.35,.4,.37,.5,.5};
+    public double[] levelOffset = {0,0,0,0,0,0,.1};
 
     public Wrist(ServoMotorBetter wrist) {
         this.wrist = wrist;
@@ -41,6 +41,14 @@ public class Wrist {
     }
     public Wrist.WristState getState(){
         return wristFSM;
+    }
+
+    public void setLevel(int level){
+        this.level = level;
+    }
+
+    public int getLevel(){
+        return this.level;
     }
 
     public void setManualPosition(double position){
@@ -73,13 +81,13 @@ public class Wrist {
                 target = .95;
                 break;
             case LT_SCORE:
-                target = 1;
+                target = .9 - levelOffset[level];
                 break;
             case Manual:
                 target = manualPosition;
                 break;
             case ABOVE_TRANSFER:
-                target = .05;
+                target = .025;
                 break;
 
                 //TODO add sanity check to make sure that it is between 0 and 1;
