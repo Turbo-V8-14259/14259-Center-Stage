@@ -10,6 +10,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -34,6 +35,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous
+@Disabled
 public class LM3RedAuton extends LinearOpMode {
     double TimeStamp = 0;
     double TimeStamp2 = 0;
@@ -90,42 +92,6 @@ public class LM3RedAuton extends LinearOpMode {
 
         //vision math
         while(opModeInInit()) {
-//            if (leftPer > thresh || rightPer > thresh || midPer > thresh) {
-//                if (leftPer > rightPer && leftPer > midPer) { //mid
-//                    if (color.equals("RED")) {
-//                        ObjectDirection = "LEFT";
-//                    } else if (color.equals("BLUE")) {
-//                        ObjectDirection = "MIDDLE";
-//                    }
-//                } else if (rightPer > leftPer && rightPer > midPer) { //right
-//                    if (color.equals("RED")) {
-//                        ObjectDirection = "MIDDLE";
-//                    } else if (color.equals("BLUE")) {
-//                        ObjectDirection = "RIGHT";
-//                    }
-//                }
-//            } else {
-//                if (color.equals("RED")) {
-//                    ObjectDirection = "RIGHT";
-//                } else if (color.equals("BLUE")) {
-//                    ObjectDirection = "LEFT";
-//                }
-//            }
-
-            switch (ObjectDirection) {
-                case "LEFT":
-                    randomization = 0;
-                    break;
-                case "RIGHT":
-                    randomization = 2;
-                    break;
-                case "MIDDLE":
-                    randomization = 1;
-                    break;
-            }
-            telemetry.addData("Location:", ObjectDirection);
-//            telemetry.addData("Color:", color);
-            telemetry.update();
 
         }
 

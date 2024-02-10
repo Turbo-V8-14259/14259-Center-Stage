@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
-@TeleOp
+@TeleOp(name = "!R for REDEMPTION!")
 public class IntakeDepositDrive extends LinearOpMode {
     DepoSlides slides;
     boolean timeToggle = true;
@@ -26,7 +26,6 @@ public class IntakeDepositDrive extends LinearOpMode {
     ElapsedTime timer = new ElapsedTime();
     int scoringState = 5;
     Pitch pitch;
-
     int climbSafe = 0;
 
     boolean intakingDriveMove = true;
@@ -127,7 +126,7 @@ public class IntakeDepositDrive extends LinearOpMode {
                     TimeStamp = timer.milliseconds();
                     timeToggle = false;
                 }
-                if(timer.milliseconds() > TimeStamp + 100){
+                if(timer.milliseconds() > TimeStamp + 150){
                     scoringState=2;
                     timeToggle = true;
                 }
@@ -208,7 +207,14 @@ public class IntakeDepositDrive extends LinearOpMode {
                 slides.setState(DepoSlides.DepositState.OVER_IN);
             }else if(scoringState == 9){
                 claw.setState(Claw.ClawState.LATCHED);
-                scoringState = 1;
+                if(timeToggle){//timeToggle starts at true by default
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds() > TimeStamp + 300){
+                    scoringState = 1;
+                    timeToggle = true;
+                }
             }else if(scoringState == 10){
                 arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
                 if(timeToggle){//timeToggle starts at true by default
@@ -235,8 +241,8 @@ public class IntakeDepositDrive extends LinearOpMode {
             }
             telemetry.addData("pitch level ",pitch.getAngle());
             telemetry.addData("slides level ", slides.getSpaceInInches());
-            telemetry.addData("scoring state", scoringState);
             telemetry.addData("intake forward? ", intakingDriveMove);
+            telemetry.addData("scoring state", scoringState);
             telemetry.update();
         }
     }

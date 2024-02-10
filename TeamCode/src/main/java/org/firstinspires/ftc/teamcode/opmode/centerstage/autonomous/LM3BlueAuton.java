@@ -11,6 +11,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -36,6 +37,8 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 @Autonomous
 @Config
+@Disabled
+
 public class LM3BlueAuton extends LinearOpMode {
     double TimeStamp = 0;
     double TimeStamp2 = 0;

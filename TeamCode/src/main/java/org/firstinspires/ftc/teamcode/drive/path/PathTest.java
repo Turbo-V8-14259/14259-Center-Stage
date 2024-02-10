@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drive.posePID2;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.drive.path.PurePursuitUtil;
 
 @TeleOp (name = "PPTest")
 @Config
-
+@Disabled
 public class PathTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.vision.tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
@@ -14,6 +15,7 @@ import android.util.Size;
 import java.util.List;
 
 @TeleOp
+@Disabled
 public class TensorflowTest extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera

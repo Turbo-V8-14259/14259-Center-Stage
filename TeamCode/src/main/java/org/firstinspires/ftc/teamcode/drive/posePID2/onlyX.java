@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp
 @Config
 @Disabled
+
 public class onlyX extends LinearOpMode {
     public static double x = 0.0;
     @Override

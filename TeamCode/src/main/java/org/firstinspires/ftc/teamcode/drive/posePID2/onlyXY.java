@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp
 @Config
 @Disabled
+
 public class onlyXY extends LinearOpMode {
     public static double y = 0.0, x = 0.0;
     @Override
@@ -20,6 +21,8 @@ public class onlyXY extends LinearOpMode {
         while(opModeIsActive()){
             drive.setYTarget(y);
             drive.setXTarget(x);
+            drive.setRTarget(0);
+            drive.setMaxPower(.5);
             drive.update();
             telemetry.addData("y pos", drive.getY());
             telemetry.addData("y output raw", drive.getRawY());

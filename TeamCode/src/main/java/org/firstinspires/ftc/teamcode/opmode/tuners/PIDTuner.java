@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
 @Config
 @TeleOp(name = "pitch PID Tuner")
-//@Disabled
+@Disabled
 
 public class PIDTuner extends LinearOpMode {
     public static double setTarget = 0;

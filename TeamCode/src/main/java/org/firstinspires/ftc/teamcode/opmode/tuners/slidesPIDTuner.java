@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
 @Config
 @TeleOp
-
+@Disabled
 public class slidesPIDTuner extends LinearOpMode {
     public static double setTarget = 0;
     Pitch pitch;

@@ -4,7 +4,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 
 @Config
 public class DTConstants {
-    public static double xyP = 0.15, xyI = 0, xyD = .2;
+    public static double xyP = 0.15, xyI = 0, xyD = .025;
     public static double rP = 0.4, rI = 0, rD = 0;
 
     public static double RBasePower = .18;

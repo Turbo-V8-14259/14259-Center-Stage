@@ -60,8 +60,8 @@ public class LTIntake{
                 target = manualPosition;
                 break;
             case INITIALIZE:
-                target2 = .3;
-                target = .7;
+                target2 = .2;
+                target = .8;
                 break;
             case INTAKE_TELE:
                 target2= .6;

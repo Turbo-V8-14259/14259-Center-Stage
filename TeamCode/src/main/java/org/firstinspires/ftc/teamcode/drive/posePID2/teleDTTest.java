@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 @TeleOp
+@Disabled
 public class teleDTTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {

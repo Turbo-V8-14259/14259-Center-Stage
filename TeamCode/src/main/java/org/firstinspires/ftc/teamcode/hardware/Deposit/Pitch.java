@@ -16,7 +16,8 @@ public class Pitch {
         CLIMB,
         STOPPED,
         SCOREATLEVEL,
-        CALCULATED_UP
+        CALCULATED_UP,
+        AUTON_PRELOAD
     }
 
     public int level = 0;
@@ -115,6 +116,9 @@ public class Pitch {
         switch (pitchFSM){
             case INITIALIZE:
                 target = 0;
+                break;
+            case AUTON_PRELOAD:
+                target = .2;
                 break;
             case SCORE_MIDDLE:
                 target = 0.2;
