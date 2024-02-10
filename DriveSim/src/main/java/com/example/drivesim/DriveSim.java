@@ -315,12 +315,12 @@ public class DriveSim {
 //                                .lineTo(FFirstR)
 //                                  <-- front right bottom
 //
-//                                .lineTo(FFirstM)
-//                                .turn(nninetyTurn)
-//                                .lineTo(middleFProp)
-//                                .lineTo(FStackI2)
-//                                .lineTo(FStackI1)
-//                                .lineTo(FStack)
+                                .lineTo(FFirstM)
+                                .turn(nninetyTurn)
+                                .lineTo(middleFProp)
+                                .lineTo(FStackI2)
+                                .lineTo(FStackI1)
+                                .lineTo(FStack)
 //                                .lineTo(FStackI1)
 //                                .lineTo(FStackI2)
 //                                .lineTo(FFirstM)
@@ -359,7 +359,7 @@ public class DriveSim {
 
 
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_DARK)
+        meepMeep.setBackground(MeepMeep.Background.FIELD_CENTERSTAGE_JUICE_LIGHT)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 .addEntity(myBot)

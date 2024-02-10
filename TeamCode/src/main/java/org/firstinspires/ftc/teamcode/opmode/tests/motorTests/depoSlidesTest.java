@@ -13,8 +13,7 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 @Config
-@TeleOp
-@Disabled
+@TeleOp(name = "SLIDES PID")
 
 public class depoSlidesTest extends LinearOpMode {
     public static double targetSet = 0;
@@ -25,6 +24,7 @@ public class depoSlidesTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"rightSlides")));
+        slides.stopAndResetEncoder();
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         gamepadOne = new stickyGamepad(gamepad1);
         waitForStart();

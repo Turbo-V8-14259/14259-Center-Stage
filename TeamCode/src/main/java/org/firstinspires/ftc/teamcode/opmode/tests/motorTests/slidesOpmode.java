@@ -35,7 +35,7 @@ public class slidesOpmode extends LinearOpMode {
                 slides.setState(DepoSlides.DepositState.DOWN);
             }
             if(gamepada.dpad_up){
-                slides.setState(DepoSlides.DepositState.INTERMEDIATE_INCRIMENT);
+//                slides.setState(DepoSlides.DepositState.INTERMEDIATE_INCRIMENT);
                 slides.setState(DepoSlides.DepositState.INCREMENT_UP);
             }else if(gamepada.dpad_down){
                 slides.setState(DepoSlides.DepositState.INCREMENT_DOWN);

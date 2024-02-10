@@ -14,6 +14,7 @@ public class DepoSlides {
     public enum DepositState {
         UP,
         DOWN,
+        OVER_IN,
         STOPPED,
         INTERMEDIATE_INCRIMENT,
         INCREMENT_UP,
@@ -38,8 +39,9 @@ public class DepoSlides {
     public int level = 0;
     public double manualPosition = 0;
     public int extension = 0;
-    public double[] levels = {0,0.1,0.2,0.25,0.3,0.5};
-    public double[] extensions = {0,0.2,0.3,0.4,0.8,1};
+    public int[] inches = {0,5,10,15,20,25,30};
+    public int spaceInInches = 0;
+//    public double[] extensions = {0,0.2,0.3,0.4,0.8,1};
 
 
     public DcMotorBetter leftMotor;
@@ -70,7 +72,7 @@ public class DepoSlides {
         this.rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.rightMotor.setDirection(DcMotor.Direction.REVERSE);
         this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
-                () -> (this.leftMotor.getCurrentPosition()*-1) - this.targetLinSlidePosition,
+                () -> (this.leftMotor.getCurrentPosition()) - this.targetLinSlidePosition,
                 factor -> {
                     this.leftMotor.setPower(M.clamp(factor, 1, -1));
                     this.rightMotor.setPower(M.clamp(-factor, 1, -1));
@@ -118,12 +120,17 @@ public class DepoSlides {
                 this.pidRunning = true;
                 break;
             case AUTO_PRELOAD_SCORE:
-                this.targetDepositInches = 6;
+                this.targetDepositInches = 5;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
             case DOWN:
-                this.targetDepositInches = 0;
+                this.targetDepositInches = 1;
+                this.setInches(targetDepositInches);
+                this.pidRunning = true;
+                break;
+            case OVER_IN:
+                this.targetDepositInches = -1;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
@@ -134,7 +141,8 @@ public class DepoSlides {
             case INTERMEDIATE_INCRIMENT:
                 break;
             case CALCULATED_UP:
-                this.targetDepositInches = calculateExtension();
+                this.targetDepositInches = inches[spaceInInches];
+//                this.targetDepositInches = calculateExtension();
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
@@ -150,6 +158,13 @@ public class DepoSlides {
     }
     public void setPowerManual(double power) {
         this.manualPower = power;
+    }
+
+    public void setSpaceInInches(int space){
+        this.spaceInInches = space;
+    }
+    public int getSpaceInInches(){
+        return this.spaceInInches;
     }
     public void update() {
         if(pidRunning) {
@@ -172,9 +187,9 @@ public class DepoSlides {
             isAtTarget = false;
         }
     }
-    public double calculateExtension(){ //returns inches
-        double toInches =  (maxTargetInches*(levels[level])) + (maxTargetInches*(extensions[extension]));
-        return Math.min(toInches, maxTargetInches);
-    }
+//    public double calculateExtension(){ //returns inches
+//        double toInches =  (maxTargetInches*(levels[level])) + (maxTargetInches*(extensions[extension]));
+//        return Math.min(toInches, maxTargetInches);
+//    }
 }
 

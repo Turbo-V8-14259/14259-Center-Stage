@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.vision.Red.Location.RIGHT;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -29,6 +30,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 
 @Autonomous(name = "red autonomy")
+@Disabled
 public class AutoRed extends LinearOpMode {
 
     private Red.Location location = MIDDLE;

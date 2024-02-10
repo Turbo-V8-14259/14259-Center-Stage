@@ -15,10 +15,16 @@ public class Pitch {
         SCORE_MIDDLE,
         CLIMB,
         STOPPED,
-        SCOREATLEVEL
+        SCOREATLEVEL,
+        CALCULATED_UP
     }
 
     public int level = 0;
+
+    public int angle = 0;
+    public double[] angles = {0,0.25,0.35,0.45,0.65,.75,.9,1};
+
+
 
     public double[] levels = {0,0.25,0.3,0.35,0.37,0.4,0.55};
 
@@ -27,7 +33,7 @@ public class Pitch {
     public double target = 0;
     private static final double DEGREES_TO_TICKS = 0;
     private static final double LOWER_BOUND = 0;
-    private static final double UPPER_BOUND = 7250;
+    private static final double UPPER_BOUND = 6000;
     private static final double INIT_DEGREES = 0;
 
     private double targetPitchPosition = 0;
@@ -80,6 +86,14 @@ public class Pitch {
         return this.pitchMotor.isBusy();
     }
 
+    public void setAngle(int angle){
+        this.angle = angle;
+    }
+    public int getAngle(){
+        return this.angle;
+    }
+
+
     public double getCurrentPosition() {
         return this.pitchMotor.getCurrentPosition();
     }
@@ -112,6 +126,9 @@ public class Pitch {
                 break;
             case SCOREATLEVEL:
                 target = levels[level];
+                break;
+            case CALCULATED_UP:
+                target = angles[angle];
                 break;
         }
     }

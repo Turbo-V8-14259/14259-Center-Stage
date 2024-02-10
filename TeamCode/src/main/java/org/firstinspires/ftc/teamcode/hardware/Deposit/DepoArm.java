@@ -16,14 +16,17 @@ public class DepoArm {
         INTERMEDIATE,
         STOPPED,
         RUNTOPOSITION,
-        AUTO_PRELOAD
+        AUTO_PRELOAD,
+        LT_SCORE,
+        Manual,
+        ABOVE_TRANSFER
     }
 
     public DepoArmState depoArmFSM = DepoArmState.STOPPED;
 
 
-    private static final double LEFT_LOWER_BOUND = .8; //0
-    private static final double LEFT_UPPER_BOUND = 0.1; //0.5
+    private static final double LEFT_LOWER_BOUND = 0; //0
+    private static final double LEFT_UPPER_BOUND = 1; //0.5
     private static final double RIGHT_LOWER_BOUND = 0;
     private static final double RIGHT_UPPER_BOUND = 1;
 
@@ -31,9 +34,9 @@ public class DepoArm {
     private ServoMotorBetter rightArm;
 
     public double target = 0;
-    public double manualPosition = 0;
+    public double manualPosition = .5;
     public int level = 0;
-    public double[] levelOffset = {.15,.2,.35,.4,.45,.5,.5};
+    public double[] levelOffset = {0,0,0,0,0,0,0,0};
 
     public DepoArm(ServoMotorBetter leftArm, ServoMotorBetter rightArm) {
         this.leftArm = leftArm;
@@ -48,22 +51,33 @@ public class DepoArm {
         return depoArmFSM;
     }
 
+    public void setManualPosition(double position){
+        manualPosition = position;
+    }
+
+    public void setLevel(int level){
+        this.level = level;
+    }
+
 
 
     public void setState(DepoArmState state){
         this.depoArmFSM = state;
         switch (depoArmFSM){
             case INITIALIZE:
-                target = 0.05;//.1
+                target = .85;//.1
                 break;
             case TRANSFER:
-                target = 0.05;
+                target = .84;
+                break;
+            case ABOVE_TRANSFER:
+                target = .74;
                 break;
             case SCORE:
-                target = 1 - levelOffset[level];
+                target = 0 + levelOffset[level];
                 break;
             case INTERMEDIATE:
-                target = 1;
+                target = .5; //WRIST MUST ROTATE HERE
                 break;
             case ABSOLUTE_INTERMEDIATE:
                 target = 1;
@@ -74,6 +88,13 @@ public class DepoArm {
                 break;
             case AUTO_PRELOAD:
                 target = .95;
+                break;
+            case LT_SCORE:
+                target = 0.05;
+                break;
+            case Manual:
+                target = manualPosition;
+                break;
                 //TODO add sanity check to make sure that it is between 0 and 1;
         }
     }
