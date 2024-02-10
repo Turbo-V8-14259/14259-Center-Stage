@@ -74,8 +74,8 @@ public class DepoSlides {
         this.linSlideController = new PID(new PID.Coefficients(Kp, Ki, Kd),
                 () -> (this.leftMotor.getCurrentPosition()) - this.targetLinSlidePosition,
                 factor -> {
-                    this.leftMotor.setPower(M.clamp(factor, .8, -.8));
-                    this.rightMotor.setPower(M.clamp(-factor, .8, -.8));
+                    this.leftMotor.setPower(M.clamp(factor, 1, -1));
+                    this.rightMotor.setPower(M.clamp(-factor, 1, -1));
                 });
     }
     public void setInches(double inches) {

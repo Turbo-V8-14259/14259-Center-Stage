@@ -38,7 +38,7 @@ public class Claw {
         this.clawFSM = state;
         switch (clawFSM){
             case LATCHED:
-                target = .75;
+                target = 1;
                 break;
             case INTAKE:
                 target = 0;
