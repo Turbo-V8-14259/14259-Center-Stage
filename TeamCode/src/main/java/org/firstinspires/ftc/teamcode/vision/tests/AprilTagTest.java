@@ -31,7 +31,7 @@ public class AprilTagTest extends LinearOpMode{
     private final AprilTagPipeline ac = new AprilTagPipeline();
     private VisionPortal visionPortal;
     public AprilTagDetection detection;
-    int toi = 5;
+    int toi = 2;
 //Motor Stuff
     private DcMotorBetter sampleMotor; //no motors yet here for reasons
     //Dashboard
@@ -100,11 +100,13 @@ public class AprilTagTest extends LinearOpMode{
         telemetry.addData("# AprilTags Detected", currentDetections.size());
         if(AprilTagPipeline.detectSpecificTag(aprilTag,toi)){
             if(detection != null) {
+                telemetry.addData("Giving Data for AprilTag#", toi);
                 telemetry.addData("Distance from AprilTag (Inches): ", detection.ftcPose.y);
             }
         }
         else{
-            telemetry.addLine("no lmao");
+            telemetry.addLine("Specific Tag Data not detected" +
+                    "");
         }
 
         telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");

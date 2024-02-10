@@ -115,6 +115,24 @@ public class AprilTagPipeline{
         }
     }
 
+    public static AprilTagDetection[] getSpecificTagDatas(AprilTagProcessor aprilTag, int[] tag){
+        AprilTagDetection[] specificTags = new AprilTagDetection[tag.length];
+        for(int j = 0; j<99; j++){
+            if(detectSpecificTag(aprilTag,j)){
+                ArrayList<AprilTagDetection> detections = aprilTag.getDetections();
+                for(int i = 0; i<detections.size(); i++){
+                    if(detections.get(i).id == j){
+                        specificTags[j] = detections.get(i);
+                    }
+                    else{
+                        specificTags[j] = null;
+                    }
+                }
+            }
+        }
+        return specificTags;
+    }
+
     public int amountDetected(AprilTagProcessor aprilTag){
         return aprilTag.getDetections().size();
     }
