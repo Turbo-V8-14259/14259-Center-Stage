@@ -78,44 +78,44 @@ public class LTRed extends LinearOpMode {
 
         CameraPipeline.setColor("RED");
         while(opModeInInit()){
-            if (leftPer > thresh || rightPer > thresh || midPer > thresh) {
-                if (leftPer > rightPer && leftPer > midPer) { //mid
-                    if (color.equals("RED")) {
-                        ObjectDirection = "LEFT";
-                    } else if (color.equals("BLUE")) {
-                        ObjectDirection = "MIDDLE";
-                    }
-                } else if (rightPer > leftPer && rightPer > midPer) { //right
-                    if (color.equals("RED")) {
-                        ObjectDirection = "MIDDLE";
-                    } else if (color.equals("BLUE")) {
-                        ObjectDirection = "RIGHT";
-                    }
-                }
-            } else {
-                if (color.equals("RED")) {
-                    ObjectDirection = "RIGHT";
-                } else if (color.equals("BLUE")) {
-                    ObjectDirection = "LEFT";
-                }
-            }
-
-            switch (ObjectDirection) {
-                case "LEFT":
-                    randomization = 0;
-                    break;
-                case "RIGHT":
-                    randomization = 2;
-                    break;
-                case "MIDDLE":
-                    randomization = 1;
-                    break;
-            }
-
-
-            telemetry.addData("Location:", ObjectDirection);
-            telemetry.addData("Color:", color);
-            telemetry.update();
+//            if (leftPer > thresh || rightPer > thresh || midPer > thresh) {
+//                if (leftPer > rightPer && leftPer > midPer) { //mid
+//                    if (color.equals("RED")) {
+//                        ObjectDirection = "LEFT";
+//                    } else if (color.equals("BLUE")) {
+//                        ObjectDirection = "MIDDLE";
+//                    }
+//                } else if (rightPer > leftPer && rightPer > midPer) { //right
+//                    if (color.equals("RED")) {
+//                        ObjectDirection = "MIDDLE";
+//                    } else if (color.equals("BLUE")) {
+//                        ObjectDirection = "RIGHT";
+//                    }
+//                }
+//            } else {
+//                if (color.equals("RED")) {
+//                    ObjectDirection = "RIGHT";
+//                } else if (color.equals("BLUE")) {
+//                    ObjectDirection = "LEFT";
+//                }
+//            }
+//
+//            switch (ObjectDirection) {
+//                case "LEFT":
+//                    randomization = 0;
+//                    break;
+//                case "RIGHT":
+//                    randomization = 2;
+//                    break;
+//                case "MIDDLE":
+//                    randomization = 1;
+//                    break;
+//            }
+//
+//
+//            telemetry.addData("Location:", ObjectDirection);
+//            telemetry.addData("Color:", color);
+//            telemetry.update();
         }
         waitForStart();
         while(opModeIsActive()){
@@ -177,7 +177,7 @@ public class LTRed extends LinearOpMode {
                     }
                 }else if (currentState == 6){
                     drive.setMaxPower(.5);
-                    drive.lineTo(36,-37,Math.toRadians(-180));
+                    drive.lineTo(34,-37,Math.toRadians(-180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }
@@ -440,7 +440,7 @@ public class LTRed extends LinearOpMode {
                     }
                 }else if (currentState == 6){
                     drive.setMaxPower(.5);
-                    drive.lineTo(12.5,-37,Math.toRadians(-180));
+                    drive.lineTo(14.5,-37,Math.toRadians(-180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }
@@ -455,7 +455,7 @@ public class LTRed extends LinearOpMode {
                         timeToggle = true;
                     }
                 }else if(currentState == 8){
-                    intake.setPower(0);
+                    intake.setPower(-.1);
                     slides.setState(DepoSlides.DepositState.DOWN);
                     arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
                     wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);

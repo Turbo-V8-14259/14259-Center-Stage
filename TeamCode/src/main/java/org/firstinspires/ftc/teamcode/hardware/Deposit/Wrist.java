@@ -33,7 +33,7 @@ public class Wrist {
     public double target = 0;
     public double manualPosition = 0.5;
     public int level = 0;
-    public double[] levelOffset = {0.1,0.08,0,0,0,0,.1};
+    public double[] levelOffset = {0.1,0.08,0.04,0,0,0,.1};
 
     public Wrist(ServoMotorBetter wrist) {
         this.wrist = wrist;
@@ -88,7 +88,7 @@ public class Wrist {
                 target = manualPosition;
                 break;
             case ABOVE_TRANSFER:
-                target = .025;
+                target = 0.03;
                 break;
             case CLIMB:
                 target = 0.4;
