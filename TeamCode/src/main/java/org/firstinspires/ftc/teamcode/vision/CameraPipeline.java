@@ -45,6 +45,7 @@ public class CameraPipeline extends OpenCvPipeline
 
         if(Objects.equals(color, "BLUE")){
             LEFT_ROI = new Rect(
+<<<<<<< HEAD
                     new Point(1.0 / 8 * width, 3.0/8 * height),
                     new Point(3.0/8 * width, 5.0/8 * height));
 
@@ -60,6 +61,23 @@ public class CameraPipeline extends OpenCvPipeline
             RIGHT_ROI = new Rect(
                     new Point(3.0/4 * width, 3.0/8 * height),
                     new Point(width, 5.0/8 * height));
+=======
+                    new Point(0.0 * width, 3.0 / 8 * height),
+                    new Point(width / 4, 1.0/2 * height));
+
+            RIGHT_ROI = new Rect(
+                    new Point(5.0 * width/8, 3.0/8 * height),
+                    new Point(7.0/8 * width, 1.0/2 * height));
+        }
+        else if (Objects.equals(color, "RED")) {
+            LEFT_ROI = new Rect(
+                    new Point(3.0/8 * width, 3.0/8 * height),
+                    new Point(5.0/8 * width, 1.0/2 * height));
+
+            RIGHT_ROI = new Rect(
+                    new Point(3.0/4 *width, 3.0/8 * height),
+                    new Point(width, 1.0/2 * height));
+>>>>>>> b139d3a909942ccc59ad36263f929290f5bc9f63
         }
 
 
@@ -125,10 +143,6 @@ public class CameraPipeline extends OpenCvPipeline
             if (Objects.equals(color, "BLUE")) {
                 ObjectDirection = "MIDDLE";
             }
-            Imgproc.rectangle(
-                    input, //mat
-                    LEFT_ROI,
-                    new Scalar(255, 0, 0), 4);
         }
         else if(objRight){
             if (color == "BLUE") {
@@ -137,10 +151,6 @@ public class CameraPipeline extends OpenCvPipeline
             if (color == "RED") {
                 ObjectDirection = "RIGHT";
             }
-            Imgproc.rectangle(
-                    input, //mat
-                    RIGHT_ROI,
-                    new Scalar(255, 0, 0), 4);
         }
         else{
             if(Objects.equals(color, "BLUE")){

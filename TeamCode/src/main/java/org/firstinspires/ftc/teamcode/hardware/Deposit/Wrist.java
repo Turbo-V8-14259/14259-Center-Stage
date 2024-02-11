@@ -20,7 +20,6 @@ public class Wrist {
         LT_SCORE,
         Manual,
         ABOVE_TRANSFER,
-        CLIMB
 
     }
 
@@ -33,7 +32,11 @@ public class Wrist {
     public double target = 0;
     public double manualPosition = 0.5;
     public int level = 0;
+<<<<<<< HEAD
     public double[] levelOffset = {0.1,0.08,0.04,0,0,0,.1};
+=======
+    public double[] levelOffset = {0,0,0,0,0,0,.1};
+>>>>>>> b139d3a909942ccc59ad36263f929290f5bc9f63
 
     public Wrist(ServoMotorBetter wrist) {
         this.wrist = wrist;
@@ -82,16 +85,13 @@ public class Wrist {
                 target = .95;
                 break;
             case LT_SCORE:
-                target = 1 - levelOffset[level];
+                target = .9 - levelOffset[level];
                 break;
             case Manual:
                 target = manualPosition;
                 break;
             case ABOVE_TRANSFER:
                 target = 0.03;
-                break;
-            case CLIMB:
-                target = 0.4;
                 break;
 
                 //TODO add sanity check to make sure that it is between 0 and 1;

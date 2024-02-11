@@ -23,7 +23,7 @@ public class Pitch {
     public int level = 0;
 
     public int angle = 0;
-    public double[] angles = {0,0.25,0.35,0.45,0.55,.65,.9,1};
+    public double[] angles = {0,0.25,0.35,0.45,0.65,.75,.9,1};
 
 
 
