@@ -26,12 +26,10 @@ public class IntakeDepositDrive extends LinearOpMode {
     ElapsedTime timer = new ElapsedTime();
     int scoringState = 5;
     Pitch pitch;
-<<<<<<< HEAD
     int climbSafe = 0;
 
     boolean intakingDriveMove = true;
-=======
->>>>>>> b139d3a909942ccc59ad36263f929290f5bc9f63
+
     @Override
     public void runOpMode() throws InterruptedException {
         pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "Pitch")));
@@ -181,7 +179,6 @@ public class IntakeDepositDrive extends LinearOpMode {
                 slides.setState(DepoSlides.DepositState.OVER_IN);
             }else if(scoringState == 9){
                 claw.setState(Claw.ClawState.LATCHED);
-<<<<<<< HEAD
                 if(timeToggle){//timeToggle starts at true by default
                     TimeStamp = timer.milliseconds();
                     timeToggle = false;
@@ -208,23 +205,18 @@ public class IntakeDepositDrive extends LinearOpMode {
                 intake.setState(LTIntake.IntakeState.INITIALIZE);
                 pitch.manualMode = true;
                 pitch.setPowerManual(-gamepad2.left_stick_y);
-=======
                 scoringState = 1;
->>>>>>> b139d3a909942ccc59ad36263f929290f5bc9f63
             }
             if(gamepad.dpad_up){
                 intake.setState(LTIntake.IntakeState.INITIALIZE);
             }else if(gamepad.dpad_down) {
                 intake.setState(LTIntake.IntakeState.INTAKE_TELE);
             }
-<<<<<<< HEAD
             telemetry.addData("pitch level ",pitch.getAngle());
             telemetry.addData("slides level ", slides.getSpaceInInches());
             telemetry.addData("intake forward? ", intakingDriveMove);
             telemetry.addData("scoring state", scoringState);
             telemetry.update();
-=======
->>>>>>> b139d3a909942ccc59ad36263f929290f5bc9f63
         }
     }
 }

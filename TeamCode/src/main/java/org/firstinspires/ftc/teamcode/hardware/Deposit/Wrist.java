@@ -32,11 +32,8 @@ public class Wrist {
     public double target = 0;
     public double manualPosition = 0.5;
     public int level = 0;
-<<<<<<< HEAD
     public double[] levelOffset = {0.1,0.08,0.04,0,0,0,.1};
-=======
-    public double[] levelOffset = {0,0,0,0,0,0,.1};
->>>>>>> b139d3a909942ccc59ad36263f929290f5bc9f63
+//    public double[] levelOffset = {0,0,0,0,0,0,.1};
 
     public Wrist(ServoMotorBetter wrist) {
         this.wrist = wrist;

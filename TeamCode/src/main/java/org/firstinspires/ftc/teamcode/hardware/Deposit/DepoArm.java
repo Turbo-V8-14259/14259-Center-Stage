@@ -19,7 +19,8 @@ public class DepoArm {
         AUTO_PRELOAD,
         LT_SCORE,
         Manual,
-        ABOVE_TRANSFER
+        ABOVE_TRANSFER,
+        CLIMB
     }
 
     public DepoArmState depoArmFSM = DepoArmState.STOPPED;
@@ -95,6 +96,8 @@ public class DepoArm {
             case Manual:
                 target = manualPosition;
                 break;
+            case CLIMB:
+                target = 0.9;
                 //TODO add sanity check to make sure that it is between 0 and 1;
         }
     }
