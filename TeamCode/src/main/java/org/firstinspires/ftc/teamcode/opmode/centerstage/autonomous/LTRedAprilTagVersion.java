@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.posePID2.DT;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.Claw;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
@@ -22,11 +23,19 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.Wrist;
 import org.firstinspires.ftc.teamcode.hardware.Intake.LTIntake;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
+import org.firstinspires.ftc.teamcode.vision.AprilTagPipeline;
 import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
+import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 @Config
 @Autonomous
-public class LTRed extends LinearOpMode {
+public class LTRedAprilTagVersion extends LinearOpMode {
     boolean timeToggle = true;
     double TimeStamp = 0;
     ElapsedTime timer = new ElapsedTime();
@@ -48,8 +57,19 @@ public class LTRed extends LinearOpMode {
     Pitch pitch;
 
     //vision
+
+    OpenCvWebcam webcam;
+
     public static String ObjectDirection = "";
     public double thresh = 10;
+
+    //AprilTag
+
+    private AprilTagProcessor aprilTag;
+
+    private final AprilTagPipeline ac = new AprilTagPipeline();
+    private VisionPortal visionPortal;
+    public AprilTagDetection detection;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -112,14 +132,21 @@ public class LTRed extends LinearOpMode {
                     break;
             }
 
-
             telemetry.addData("Location:", ObjectDirection);
             telemetry.addData("Color:", color);
             telemetry.update();
         }
         waitForStart();
+
+        webcam.stopRecordingPipeline();
+        webcam.closeCameraDevice();
+        initAprilTag();
+
         while(opModeIsActive()){
             //right (farthest to the center of the feild)
+
+
+
             if(randomization == 2){
                 if(currentState == 0){
                     drive.setMaxPower(.7);
@@ -247,11 +274,6 @@ public class LTRed extends LinearOpMode {
                     wrist1.setState(Wrist.WristState.TRANSFER);
                     slides.setState(DepoSlides.DepositState.OVER_IN);
                 }
-
-
-
-
-
 
             }else if(randomization == 1){ //middle
                     if(currentState == 0){
@@ -524,5 +546,41 @@ public class LTRed extends LinearOpMode {
             intake.update();
             claw.update();
         }
+    }
+    private void initAprilTag() {
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+
+        aprilTag = ac.initAprilTag();
+        visionPortal = ac.initVision(webcamName);
+
+        visionPortal.setProcessorEnabled(aprilTag, false);
+    }
+    private void initPipeline(){
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+
+        CameraPipeline s = new CameraPipeline(telemetry);
+        webcam.setPipeline(s);
+
+        webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+                /*
+                 * This will be called if the camera could not be opened
+                 */
+            }
+        });
+
+        sleep(1000);
+
     }
 }
