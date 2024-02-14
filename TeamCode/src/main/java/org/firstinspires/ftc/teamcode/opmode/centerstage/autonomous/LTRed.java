@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.posePID2.DT;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.Claw;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoArm;
@@ -23,6 +24,10 @@ import org.firstinspires.ftc.teamcode.hardware.Intake.LTIntake;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 import org.firstinspires.ftc.teamcode.vision.CameraPipeline;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 @Config
 @Autonomous
@@ -48,6 +53,7 @@ public class LTRed extends LinearOpMode {
     Pitch pitch;
 
     //vision
+    OpenCvWebcam webcam;
     public static String ObjectDirection = "";
     public double thresh = 10;
 
@@ -77,6 +83,7 @@ public class LTRed extends LinearOpMode {
 //        pitch.update();
 
         CameraPipeline.setColor("RED");
+        CameraPipeline.initPipeline(webcam, hardwareMap, telemetry);
         while(opModeInInit()){
             if (leftPer > thresh || rightPer > thresh || midPer > thresh) {
                 if (leftPer > rightPer && leftPer > midPer) { //mid
@@ -525,4 +532,26 @@ public class LTRed extends LinearOpMode {
             claw.update();
         }
     }
+//    private void initPipeline() {
+//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+//
+//        CameraPipeline s = new CameraPipeline(telemetry);
+//        webcam.setPipeline(s);
+//
+//        webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
+//        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//            @Override
+//            public void onOpened() {
+//                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+//            }
+//
+//            @Override
+//            public void onError(int errorCode) {
+//                /*
+//                 * This will be called if the camera could not be opened
+//                 */
+//            }
+//        });
+//    }
 }
