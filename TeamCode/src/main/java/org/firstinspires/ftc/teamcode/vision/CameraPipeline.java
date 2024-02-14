@@ -188,20 +188,6 @@ public class CameraPipeline extends OpenCvPipeline
         CameraPipeline s = new CameraPipeline(telemetry);
         webcam.setPipeline(s);
 
-        webcam.setMillisecondsPermissionTimeout(5000); 
-        OpenCvWebcam finalWebcam = webcam;
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                finalWebcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode) {
-                /*
-                 * This will be called if the camera could not be opened
-                 */
-            }
-        });
+        webcam.setMillisecondsPermissionTimeout(5000);
     }
 }

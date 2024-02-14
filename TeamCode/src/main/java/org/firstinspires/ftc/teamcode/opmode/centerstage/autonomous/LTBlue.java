@@ -85,6 +85,13 @@ public class LTBlue extends LinearOpMode {
 
         CameraPipeline.setColor("BLUE");
         CameraPipeline.initPipeline(webcam, hardwareMap, telemetry);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() { webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT); }
+            @Override
+            public void onError(int errorCode) {}
+        });
+
         while(opModeInInit()){
             if (leftPer > thresh || rightPer > thresh || midPer > thresh) {
                 if (leftPer > rightPer && leftPer > midPer) { //mid
