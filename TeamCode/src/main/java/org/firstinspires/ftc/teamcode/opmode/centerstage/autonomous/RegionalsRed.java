@@ -29,19 +29,17 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @Config
 @Autonomous
-public class LTRedAprilTagVersion extends LinearOpMode {
+public class RegionalsRed extends LinearOpMode {
     boolean timeToggle = true;
     double TimeStamp = 0;
     ElapsedTime timer = new ElapsedTime();
     Claw claw;
     DepoSlides slides;
-    public static int randomization = 1;
     DT drive;
     Pose2d startBPose = new Pose2d(19, -65, Math.toRadians(-90)); //default position
     DcMotorEx intakeMotor;
@@ -57,19 +55,16 @@ public class LTRedAprilTagVersion extends LinearOpMode {
     Pitch pitch;
 
     //vision
-
     OpenCvWebcam webcam;
+    public String ObjectDirection;
+    public int randomization = 99;
+    public double thresh = CameraPipeline.perThreshold;
 
-    public static String ObjectDirection = "";
-    public double thresh = 10;
-
-    //AprilTag
-
-    private AprilTagProcessor aprilTag;
-
+    //apriltag
     private final AprilTagPipeline ac = new AprilTagPipeline();
     private VisionPortal visionPortal;
-    public AprilTagDetection detection;
+    private AprilTagProcessor aprilTag;
+    private AprilTagDetection detection;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -97,56 +92,35 @@ public class LTRedAprilTagVersion extends LinearOpMode {
 //        pitch.update();
 
         CameraPipeline.setColor("RED");
-        while(opModeInInit()){
-            if (leftPer > thresh || rightPer > thresh || midPer > thresh) {
-                if (leftPer > rightPer && leftPer > midPer) { //mid
-                    if (color.equals("RED")) {
-                        ObjectDirection = "LEFT";
-                    } else if (color.equals("BLUE")) {
-                        ObjectDirection = "MIDDLE";
-                    }
-                } else if (rightPer > leftPer && rightPer > midPer) { //right
-                    if (color.equals("RED")) {
-                        ObjectDirection = "MIDDLE";
-                    } else if (color.equals("BLUE")) {
-                        ObjectDirection = "RIGHT";
-                    }
-                }
-            } else {
-                if (color.equals("RED")) {
-                    ObjectDirection = "RIGHT";
-                } else if (color.equals("BLUE")) {
-                    ObjectDirection = "LEFT";
-                }
-            }
+        telemetry.update();
+        webcam = CameraPipeline.initPipeline(hardwareMap, telemetry);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() { webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT); }
+            @Override
+            public void onError(int errorCode) {}
+        });
 
-            switch (ObjectDirection) {
-                case "LEFT":
-                    randomization = 0;
-                    break;
-                case "RIGHT":
-                    randomization = 2;
-                    break;
-                case "MIDDLE":
-                    randomization = 1;
-                    break;
-            }
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        aprilTag = ac.initAprilTag();
+        visionPortal = AprilTagPipeline.initVision(webcamName);
+        telemetry.update();
+
+        while(opModeInInit()){
+            ObjectDirection = CameraPipeline.randomization(thresh);
+            randomization = CameraPipeline.PosToNum(ObjectDirection);
 
             telemetry.addData("Location:", ObjectDirection);
             telemetry.addData("Color:", color);
             telemetry.update();
         }
         waitForStart();
-
         webcam.stopRecordingPipeline();
         webcam.closeCameraDevice();
-        initAprilTag();
+        visionPortal.setProcessorEnabled(aprilTag, true);
 
         while(opModeIsActive()){
             //right (farthest to the center of the feild)
-
-
-
             if(randomization == 2){
                 if(currentState == 0){
                     drive.setMaxPower(.7);
@@ -274,6 +248,11 @@ public class LTRedAprilTagVersion extends LinearOpMode {
                     wrist1.setState(Wrist.WristState.TRANSFER);
                     slides.setState(DepoSlides.DepositState.OVER_IN);
                 }
+
+
+
+
+
 
             }else if(randomization == 1){ //middle
                     if(currentState == 0){
@@ -547,40 +526,26 @@ public class LTRedAprilTagVersion extends LinearOpMode {
             claw.update();
         }
     }
-    private void initAprilTag() {
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        aprilTag = ac.initAprilTag();
-        visionPortal = ac.initVision(webcamName);
-
-        visionPortal.setProcessorEnabled(aprilTag, false);
-    }
-    private void initPipeline(){
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
-        CameraPipeline s = new CameraPipeline(telemetry);
-        webcam.setPipeline(s);
-
-        webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode)
-            {
-                /*
-                 * This will be called if the camera could not be opened
-                 */
-            }
-        });
-
-        sleep(1000);
-
-    }
+//    private void initPipeline() {
+//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+//        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+//
+//        CameraPipeline s = new CameraPipeline(telemetry);
+//        webcam.setPipeline(s);
+//
+//        webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
+//        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+//            @Override
+//            public void onOpened() {
+//                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+//            }
+//
+//            @Override
+//            public void onError(int errorCode) {
+//                /*
+//                 * This will be called if the camera could not be opened
+//                 */
+//            }
+//        });
+//    }
 }
