@@ -1,29 +1,36 @@
 package org.firstinspires.ftc.teamcode.vision;
 
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
-import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.color;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@TeleOp
+@Autonomous
 public class VisionOpmode extends LinearOpMode
 {
-    //it would probably be simpler to port this from the camerapipeline but shhh this was made a while ago im only updating it now.
+    //Regular Vision
     OpenCvWebcam webcam;
     public String ObjectDirection;
     public int randomization = 99;
+    public double thresh = CameraPipeline.perThreshold;
+
+    //AprilTag
+    private final AprilTagPipeline ac = new AprilTagPipeline();
     private VisionPortal visionPortal;
-    public double thresh = 10;
+    private AprilTagProcessor aprilTag;
+    private AprilTagDetection detection;
+
 
     @Override
     public void runOpMode()
@@ -31,78 +38,40 @@ public class VisionOpmode extends LinearOpMode
         telemetry.addLine("Loading Pipeline...");
         CameraPipeline.setColor("RED");
         telemetry.update();
-        initPipeline();
+        webcam = CameraPipeline.initPipeline(hardwareMap, telemetry);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() { webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT); }
+            @Override
+            public void onError(int errorCode) {}
+        });
+
+        telemetry.addLine("Loading AprilTagDetections...");
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        aprilTag = ac.initAprilTag();
+        visionPortal = AprilTagPipeline.initVision(webcamName);
+        telemetry.update();
 
         while(opModeInInit()){
-            if(leftPer > thresh || rightPer > thresh || midPer > thresh){
-                if(leftPer > rightPer && leftPer > midPer){ //mid
-                    if(color.equals("RED")){
-                        ObjectDirection = "MIDDLE";
-                    }
-                    else if(color.equals("BLUE")){
-                        ObjectDirection = "LEFT";
-                    }
-                }
-                else if(rightPer > leftPer && rightPer > midPer){ //right
-                    if(color.equals("RED")){
-                        ObjectDirection = "RIGHT";
-                    }
-                    else if(color.equals("BLUE")){
-                        ObjectDirection = "MIDDLE";
-                    }
-                }
-            }
-            else{
-                if(color.equals("RED")){
-                    ObjectDirection = "LEFT";
-                }
-                else if(color.equals("BLUE")){
-                    ObjectDirection = "RIGHT";
-                }
-            }
-
-            //            switch (ObjectDirection) {
-//                case "LEFT":
-//                    randomization = 0;
-//                    break;
-//                case "RIGHT":
-//                    randomization = 2;
-//                    break;
-//                case "MIDDLE":
-//                    randomization = 1;
-//                    break;
-//            }
-
-            randomization = PosToNum(ObjectDirection);
-            telemetry.update();
-
-            telemetry.addData("Location:", ObjectDirection);
-            telemetry.addData("Color:", color);
-            telemetry.update();
-
-            sleep(50);
-
-            telemetry.update();
-//        telemetry.addLine("Loading AprilTagDetections...");
-//        telemetry.update();
-//
-//        initAprilTag();
-//        visionPortal.setProcessorEnabled(aprilTag, true);
+            ObjectDirection = CameraPipeline.randomization(thresh);
+            randomization = CameraPipeline.PosToNum(ObjectDirection);
 
             telemetry.addLine("Ready to Start");
             telemetry.addData("Location:", ObjectDirection);
+            telemetry.addData("Color:", color);
+            telemetry.addData("Right:", rightPer);
+            telemetry.addData("Left:", leftPer);
             telemetry.update();
         }
 
-
         waitForStart();
-
+        webcam.stopRecordingPipeline();
+        webcam.closeCameraDevice();
+        visionPortal.setProcessorEnabled(aprilTag, true);
 
         while (opModeIsActive())
         {
-            webcam.stopRecordingPipeline();
-            webcam.closeCameraDevice();
-            // AprilTag (wont need until later)
+            // AprilTag
 //            if(Objects.equals(ObjectDirection, "LEFT")){
 //                if(Red){
 //                    detection = AprilTagPipeline.getSpecificTagData(aprilTag,4);
@@ -138,104 +107,4 @@ public class VisionOpmode extends LinearOpMode
             telemetry.update();
         }
     }
-    private void initPipeline(){
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
-        CameraPipeline s = new CameraPipeline(telemetry);
-        webcam.setPipeline(s);
-
-        webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode)
-            {
-                /*
-                 * This will be called if the camera could not be opened
-                 */
-            }
-        });
-
-        sleep(1000);
-
-    }
-    public int randomization(){ //work in progress
-        int random = 0;
-        if(leftPer > thresh || rightPer > thresh || midPer > thresh){
-            if(leftPer > rightPer && leftPer > midPer){ //left
-                random = 1;
-            }
-            else if(rightPer > leftPer && rightPer > midPer){ //right
-                random = 2;
-            }
-        }
-        else{
-            random = 0;
-        }
-        return random;
-    }
-    public int PosToNum(String ObjectDirection){
-        int randomization = 99;
-        switch (ObjectDirection) {
-            case "LEFT":
-                randomization = 0;
-                break;
-            case "RIGHT":
-                randomization = 2;
-                break;
-            case "MIDDLE":
-                randomization = 1;
-                break;
-        }
-        return randomization;
-    }
-    public void randomizationMethod(){
-        if (leftPer > thresh || rightPer > thresh || midPer > thresh) {
-            if (leftPer > rightPer && leftPer > midPer) { //left side >
-                if (color.equals("RED")) {
-                    ObjectDirection = "MIDDLE";
-                } else if (color.equals("BLUE")) {
-                    ObjectDirection = "LEFT";
-                }
-            } else if (rightPer > leftPer && rightPer > midPer) { //right
-                if (color.equals("RED")) {
-                    ObjectDirection = "RIGHT";
-                } else if (color.equals("BLUE")) {
-                    ObjectDirection = "MIDDLE";
-                }
-            }
-        } else {
-            if (color.equals("RED")) {
-                ObjectDirection = "LEFT";
-            } else if (color.equals("BLUE")) {
-                ObjectDirection = "RIGHT";
-            }
-        }
-    }
-
-    //            if(leftPer > thresh || rightPer > thresh || midPer > thresh){
-//                if(leftPer > rightPer && leftPer > midPer){ //left
-//                    ObjectDirection = "LEFT";
-//                }
-//                else if(rightPer > leftPer && rightPer > midPer){ //right
-//                    ObjectDirection = "RIGHT";
-//                }
-//                else if(midPer > rightPer && midPer > leftPer){ //mid
-//                    ObjectDirection = "MIDDLE";
-//                }
-//            }
-//            else{
-//                thresh--;
-//                telemetry.addLine("Retrying...");
-//                telemetry.addData("Value L:", leftPer);
-//                telemetry.addData("Location R:", rightPer);
-//                telemetry.addData("Location M:", midPer);
-//            }
 }

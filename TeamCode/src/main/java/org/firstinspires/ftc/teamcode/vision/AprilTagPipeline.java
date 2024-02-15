@@ -16,7 +16,7 @@ public class AprilTagPipeline{
     public boolean ifDetectingApriltag(AprilTagProcessor aprilTag){
         return !aprilTag.getDetections().isEmpty();
     }
-    public AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
+    public static AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
             .setDrawAxes(true)
             .setDrawCubeProjection(false)
             .setDrawTagOutline(true)
@@ -31,7 +31,7 @@ public class AprilTagPipeline{
 //        visionPortal.setProcessorEnabled(aprilTag, true);
     }
 
-    public VisionPortal initVision(WebcamName webcamName){
+    public static VisionPortal initVision(WebcamName webcamName){
         VisionPortal.Builder builder = new VisionPortal.Builder()
                 .setCamera(webcamName)
                 .setCameraResolution(new Size(800, 600))

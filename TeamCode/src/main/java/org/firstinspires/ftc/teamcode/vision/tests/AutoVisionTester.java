@@ -126,15 +126,6 @@ public class AutoVisionTester extends LinearOpMode
             telemetry.update();
         }
     }
-
-    private void initAprilTag() {
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        aprilTag = ac.initAprilTag();
-        visionPortal = ac.initVision(webcamName);
-
-        visionPortal.setProcessorEnabled(aprilTag, false);
-    }
     private void initPipeline(){
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);

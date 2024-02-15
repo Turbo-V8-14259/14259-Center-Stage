@@ -11,9 +11,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
@@ -54,16 +52,16 @@ public class CameraPipeline extends OpenCvPipeline
 
             RIGHT_ROI = new Rect(
                     new Point(5.0/8 * width, 3.0/8 * height),
-                    new Point(8.0/8 * width, 7.0/8 * height));
+                    new Point(7.0/8 * width, 7.0/8 * height));
         }
         else if (Objects.equals(color, "RED")) {
             LEFT_ROI = new Rect(
-                    new Point(1.0/8 * width, 3.0/8 * height),
-                    new Point(1.0 * width/2, 7.0/8 * height));
+                    new Point(1.0/8 * width, 4.0/8 * height),
+                    new Point(1.0 * width/2, 6.0/8 * height));
 
             RIGHT_ROI = new Rect(
-                    new Point(5.0 * width/8, 3.0/8 * height),
-                    new Point(7.0/8 * width, 1.0/2 * height));
+                    new Point(6.0 * width/8, 4.0/8 * height),
+                    new Point(8.0/8 * width, 7.0/8 * height));
         }
 
 
@@ -144,15 +142,16 @@ public class CameraPipeline extends OpenCvPipeline
             }else if(Objects.equals(color, "RED")){
                 ObjectDirection = "LEFT";
             }
-            Imgproc.rectangle(
-                    thresh,
-                    LEFT_ROI,
-                    new Scalar(255, 255, 255), 4);
-            Imgproc.rectangle(
-                    thresh,
-                    RIGHT_ROI,
-                    new Scalar(255, 255, 255), 4);
         }
+
+        Imgproc.rectangle(
+                thresh,
+                LEFT_ROI,
+                new Scalar(255, 255, 255), 4);
+        Imgproc.rectangle(
+                thresh,
+                RIGHT_ROI,
+                new Scalar(255, 255, 255), 4);
 
 
 
@@ -166,7 +165,7 @@ public class CameraPipeline extends OpenCvPipeline
 
 
 
-        return input; //input
+        return thresh; //input
 
         /**
          * NOTE: to see how to get data from your pipeline to your OpMode as well as how
@@ -178,13 +177,60 @@ public class CameraPipeline extends OpenCvPipeline
     public static void setColor(String color){
         CameraPipeline.color = color;
     }
-    public static void initPipeline(OpenCvWebcam webcam, HardwareMap hardwareMap, Telemetry telemetry) {
+    public static OpenCvWebcam initPipeline(HardwareMap hardwareMap, Telemetry telemetry) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        OpenCvWebcam webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
         CameraPipeline s = new CameraPipeline(telemetry);
         webcam.setPipeline(s);
 
         webcam.setMillisecondsPermissionTimeout(5000);
+
+        return webcam;
+    }
+    public static String randomization(double thresh){
+        String ObjectDirection = "";
+        if(leftPer > thresh || rightPer > thresh || midPer > thresh){
+            if(leftPer > rightPer && leftPer > midPer){ //mid
+                if(color.equals("RED")){
+                    ObjectDirection = "MIDDLE";
+                }
+                else if(color.equals("BLUE")){
+                    ObjectDirection = "LEFT";
+                }
+            }
+            else if(rightPer > leftPer && rightPer > midPer){ //right
+                if(color.equals("RED")){
+                    ObjectDirection = "RIGHT";
+                }
+                else if(color.equals("BLUE")){
+                    ObjectDirection = "MIDDLE";
+                }
+            }
+        }
+        else{
+            if(color.equals("RED")){
+                ObjectDirection = "LEFT";
+            }
+            else if(color.equals("BLUE")){
+                ObjectDirection = "RIGHT";
+            }
+        }
+        return ObjectDirection;
+    }
+    public static int PosToNum(String ObjectDirection){
+        int randomization = 99;
+        switch (ObjectDirection) {
+            case "LEFT":
+                randomization = 0;
+                break;
+            case "RIGHT":
+                randomization = 2;
+                break;
+            case "MIDDLE":
+                randomization = 1;
+                break;
+        }
+        return randomization;
     }
 }
