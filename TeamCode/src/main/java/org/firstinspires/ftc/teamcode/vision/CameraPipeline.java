@@ -21,10 +21,7 @@ import java.util.Objects;
 
 public class CameraPipeline extends OpenCvPipeline
 {
-    public static String color = "RED"; //change this every match accordingly
-    //or find some way to change this easier
-    //if you want me to make a completely new pipeline for each side just say so
-
+    public static String color = "RED";
     public static double perThreshold = 15;
     Telemetry telemetry;
     static Rect LEFT_ROI = null;
@@ -56,13 +53,13 @@ public class CameraPipeline extends OpenCvPipeline
                     new Point(3.0/8 * width, 5.0/8 * height));
 
             RIGHT_ROI = new Rect(
-                    new Point(5.0 * width/8, 3.0/8 * height),
-                    new Point(7.0/8 * width, 5.0/8 * height));
+                    new Point(5.0/8 * width, 3.0/8 * height),
+                    new Point(8.0/8 * width, 7.0/8 * height));
         }
         else if (Objects.equals(color, "RED")) {
             LEFT_ROI = new Rect(
-                    new Point(1.0/4 * width, 3.0/8 * height),
-                    new Point(1.0 * width/2, 5.0/8 * height));
+                    new Point(1.0/8 * width, 3.0/8 * height),
+                    new Point(1.0 * width/2, 7.0/8 * height));
 
             RIGHT_ROI = new Rect(
                     new Point(5.0 * width/8, 3.0/8 * height),
