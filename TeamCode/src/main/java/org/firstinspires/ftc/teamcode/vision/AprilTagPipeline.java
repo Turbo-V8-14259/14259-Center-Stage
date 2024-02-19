@@ -111,18 +111,17 @@ public class AprilTagPipeline{
         if(detection != null){
             x = 59 - detection.ftcPose.y;
             if(CameraPipeline.isBlue()){
-                switch (detection.metadata.id){
+                switch (detection.metadata.id) {
                     case 1:
-                        y = tileLength + (double) 3 /4 * tileLength;
+                        y = tileLength + (double) 3 / 4 * tileLength;
                         break;
                     case 2:
-                        y = tileLength + (double) 1 /2 * tileLength;
+                        y = tileLength + (double) 1 / 2 * tileLength;
                         break;
                     case 3:
-                        y = tileLength + (double) 1 /4 * tileLength;
+                        y = tileLength + (double) 1 / 4 * tileLength;
                         break;
                 }
-                y += -detection.ftcPose.x;
             }
             else if(CameraPipeline.isRed()){
                 switch (detection.metadata.id){
@@ -137,8 +136,8 @@ public class AprilTagPipeline{
                         break;
                 }
                 y = -y;
-                y += detection.ftcPose.x;
             }
+            y += -detection.ftcPose.x;
             return new double[]{x,y};
         }
         else{
