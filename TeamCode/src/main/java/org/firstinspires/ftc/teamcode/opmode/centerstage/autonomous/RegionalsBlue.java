@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmode.centerstage.autonomous;
 
 import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.color;
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.midPer;
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -38,7 +41,7 @@ public class RegionalsBlue extends LinearOpMode {
     Claw claw;
     DepoSlides slides;
     DT drive;
-    Pose2d startBPose = new Pose2d(19, -65, Math.toRadians(-90)); //default position
+    Pose2d startBPose = new Pose2d(19, 65, Math.toRadians(90)); //default position
     DcMotorEx intakeMotor;
     LTIntake intake;
     Servo intakeArm2;
@@ -115,13 +118,14 @@ public class RegionalsBlue extends LinearOpMode {
         webcam.stopRecordingPipeline();
         webcam.closeCameraDevice();
         visionPortal.setProcessorEnabled(aprilTag, true);
+        int aprilTagNum = randomization + 1;
 
         while(opModeIsActive()){
-            //right (farthest to the center of the feild)
+            //left (farthest to the center of the feild)
             if(randomization == 2){
                 if(currentState == 0){
                     drive.setMaxPower(.7);
-                    drive.lineTo(50, -45, Math.toRadians(-180));
+                    drive.lineTo(50, 45, Math.toRadians(180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }
@@ -164,7 +168,7 @@ public class RegionalsBlue extends LinearOpMode {
                     }
                 }else if (currentState == 5){
                     drive.setMaxPower(.2);
-                    drive.lineTo(47, -45, Math.toRadians(-180));
+                    drive.lineTo(47, 45, Math.toRadians(180));
                     if(timeToggle){//timeToggle starts at true by default
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
@@ -175,7 +179,7 @@ public class RegionalsBlue extends LinearOpMode {
                     }
                 }else if (currentState == 6){
                     drive.setMaxPower(.5);
-                    drive.lineTo(34,-37,Math.toRadians(-180));
+                    drive.lineTo(34,37,Math.toRadians(180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }
@@ -195,12 +199,12 @@ public class RegionalsBlue extends LinearOpMode {
                     arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
                     wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
                     drive.setMaxPower(.5);
-                    drive.lineTo(45,-37,Math.toRadians(-180));
+                    drive.lineTo(45,37,Math.toRadians(180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }
                 }else if(currentState == 9){
-                    drive.lineTo(50, -60,Math.toRadians(-180));
+                    drive.lineTo(50, 60,Math.toRadians(180));
                     intake.setState(LTIntake.IntakeState.INTAKE_TELE);
                     if(drive.isAtTarget()){
                         currentState++;
@@ -252,139 +256,9 @@ public class RegionalsBlue extends LinearOpMode {
 
 
             }else if(randomization == 1){ //middle
-                    if(currentState == 0){
-                        drive.setMaxPower(.7);
-                        drive.lineTo(50, -37, Math.toRadians(-180));
-                        if(drive.isAtTarget()){
-                            currentState++;
-                        }
-                    }else if(currentState == 1){
-                        pitch.setState(Pitch.PitchState.AUTON_PRELOAD);
-                        if(Math.abs(pitch.getCurrentPosition() - pitch.target) < .05){
-                            currentState++;
-                        }
-                    }else if(currentState == 2){
-                        arm1.setState(DepoArm.DepoArmState.LT_SCORE);
-                        wrist1.setState(Wrist.WristState.LT_SCORE);
-                        if(timeToggle){//timeToggle starts at true by default
-                            TimeStamp = timer.milliseconds();
-                            timeToggle = false;
-                        }
-                        if(timer.milliseconds() > TimeStamp + 500){
-                            currentState++;
-                            timeToggle = true;
-                        }
-                    }else if(currentState == 3){
-                        slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
-//                    intake.setState(LTIntake.IntakeState.INTAKE_TELE);
-                        if(timeToggle){//timeToggle starts at true by default
-                            TimeStamp = timer.milliseconds();
-                            timeToggle = false;
-                        }
-                        if(timer.milliseconds() > TimeStamp + 1000){
-                            currentState++;
-                            timeToggle = true;
-                        }
-                    }else if(currentState == 4){
-                        claw.setState(Claw.ClawState.UNLATCHED);
-                        if(timeToggle){//timeToggle starts at true by default
-                            TimeStamp = timer.milliseconds();
-                            timeToggle = false;
-                        }
-                        if(timer.milliseconds() > TimeStamp + 750){
-                            currentState++;
-                            timeToggle = true;
-                        }
-                    }else if (currentState == 5){
-                        drive.setMaxPower(.2);
-                        drive.lineTo( 47, -37, Math.toRadians(-180));
-                        if(timeToggle){//timeToggle starts at true by default
-                            TimeStamp = timer.milliseconds();
-                            timeToggle = false;
-                        }
-                        if(timer.milliseconds() > TimeStamp + 1500){
-                            currentState++;
-                            timeToggle = true;
-                        }
-                    }else if (currentState == 6){
-                        drive.setMaxPower(.5);
-                        drive.lineTo(25,-25,Math.toRadians(-180));
-                        if(drive.isAtTarget()){
-                            currentState++;
-                        }
-                    }else if(currentState == 7){
-                        intake.setPower(.35);
-                        if(timeToggle){//timeToggle starts at true by default
-                            TimeStamp = timer.milliseconds();
-                            timeToggle = false;
-                        }
-                        if(timer.milliseconds() > TimeStamp + 2000){
-                            currentState++;
-                            timeToggle = true;
-                        }
-                    }else if(currentState == 8){
-                        intake.setPower(0);
-                        slides.setState(DepoSlides.DepositState.DOWN);
-                        arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
-                        wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
-                        drive.setMaxPower(.5);
-                        drive.lineTo(45,-37,Math.toRadians(-180));
-                        if(drive.isAtTarget()){
-                            currentState++;
-                        }
-                    }else if(currentState == 9){
-                        drive.lineTo(50, -60,Math.toRadians(-180));
-                        intake.setState(LTIntake.IntakeState.INTAKE_TELE);
-                        if(drive.isAtTarget()){
-                            currentState++;
-                        }
-                    }else if(currentState == 10){ //retraction sequence
-                        slides.setState(DepoSlides.DepositState.DOWN);
-                        pitch.setState(Pitch.PitchState.INITIALIZE);
-                        arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
-                        wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
-                        if(Math.abs(pitch.getCurrentPosition() - pitch.target) < .05){
-                            if(timeToggle){//timeToggle starts at true by default
-                                TimeStamp = timer.milliseconds();
-                                timeToggle = false;
-                            }
-                            if(timer.milliseconds() > TimeStamp + 500){
-                                currentState++;
-                                timeToggle = true;
-                            }
-                        }
-                    }else if(currentState == 10){
-                        arm1.setState(DepoArm.DepoArmState.ABOVE_TRANSFER);
-                        if(timeToggle){//timeToggle starts at true by default
-                            TimeStamp = timer.milliseconds();
-                            timeToggle = false;
-                        }
-                        if(timer.milliseconds() > TimeStamp + 500){
-                            currentState++;
-                            timeToggle = true;
-                        }
-                    }else if(currentState == 11){
-                        arm1.setState(DepoArm.DepoArmState.TRANSFER);
-                        wrist1.setState(Wrist.WristState.TRANSFER); //when new guide gets added
-                        if(timeToggle){//timeToggle starts at true by default
-                            TimeStamp = timer.milliseconds();
-                            timeToggle = false;
-                        }
-                        if(timer.milliseconds() > TimeStamp + 500){
-                            currentState++;
-                            timeToggle = true;
-                        }
-                    }else if(currentState == 12){
-                        wrist1.setState(Wrist.WristState.TRANSFER);
-                        slides.setState(DepoSlides.DepositState.OVER_IN);
-                    }
-
-
-
-            }else if(randomization == 0){ //left (closest to center of feild)
                 if(currentState == 0){
                     drive.setMaxPower(.7);
-                    drive.lineTo(50, -33, Math.toRadians(-180));
+                    drive.lineTo(50, 37, Math.toRadians(180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }
@@ -427,7 +301,7 @@ public class RegionalsBlue extends LinearOpMode {
                     }
                 }else if (currentState == 5){
                     drive.setMaxPower(.2);
-                    drive.lineTo(47, -29, Math.toRadians(-180));
+                    drive.lineTo( 47, 37, Math.toRadians(180));
                     if(timeToggle){//timeToggle starts at true by default
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
@@ -438,7 +312,7 @@ public class RegionalsBlue extends LinearOpMode {
                     }
                 }else if (currentState == 6){
                     drive.setMaxPower(.5);
-                    drive.lineTo(14.5,-37,Math.toRadians(-180));
+                    drive.lineTo(25,25,Math.toRadians(180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }
@@ -453,17 +327,147 @@ public class RegionalsBlue extends LinearOpMode {
                         timeToggle = true;
                     }
                 }else if(currentState == 8){
+                    intake.setPower(0);
+                    slides.setState(DepoSlides.DepositState.DOWN);
+                    arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
+                    wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
+                    drive.setMaxPower(.5);
+                    drive.lineTo(45,37,Math.toRadians(180));
+                    if(drive.isAtTarget()){
+                        currentState++;
+                    }
+                }else if(currentState == 9){
+                    drive.lineTo(50, 60,Math.toRadians(180));
+                    intake.setState(LTIntake.IntakeState.INTAKE_TELE);
+                    if(drive.isAtTarget()){
+                        currentState++;
+                    }
+                }else if(currentState == 10){ //retraction sequence
+                    slides.setState(DepoSlides.DepositState.DOWN);
+                    pitch.setState(Pitch.PitchState.INITIALIZE);
+                    arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
+                    wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
+                    if(Math.abs(pitch.getCurrentPosition() - pitch.target) < .05){
+                        if(timeToggle){//timeToggle starts at true by default
+                            TimeStamp = timer.milliseconds();
+                            timeToggle = false;
+                        }
+                        if(timer.milliseconds() > TimeStamp + 500){
+                            currentState++;
+                            timeToggle = true;
+                        }
+                    }
+                }else if(currentState == 10){
+                    arm1.setState(DepoArm.DepoArmState.ABOVE_TRANSFER);
+                    if(timeToggle){//timeToggle starts at true by default
+                        TimeStamp = timer.milliseconds();
+                        timeToggle = false;
+                    }
+                    if(timer.milliseconds() > TimeStamp + 500){
+                        currentState++;
+                        timeToggle = true;
+                    }
+                }else if(currentState == 11){
+                    arm1.setState(DepoArm.DepoArmState.TRANSFER);
+                    wrist1.setState(Wrist.WristState.TRANSFER); //when new guide gets added
+                    if(timeToggle){//timeToggle starts at true by default
+                        TimeStamp = timer.milliseconds();
+                        timeToggle = false;
+                    }
+                    if(timer.milliseconds() > TimeStamp + 500){
+                        currentState++;
+                        timeToggle = true;
+                    }
+                }else if(currentState == 12){
+                    wrist1.setState(Wrist.WristState.TRANSFER);
+                    slides.setState(DepoSlides.DepositState.OVER_IN);
+                }
+
+
+
+            }else if(randomization == 0){ //left (closest to center of feild)
+                if(currentState == 0){
+                    drive.setMaxPower(.7);
+                    drive.lineTo(50, 33, Math.toRadians(180));
+                    if(drive.isAtTarget()){
+                        currentState++;
+                    }
+                }else if(currentState == 1){
+                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD);
+                    if(Math.abs(pitch.getCurrentPosition() - pitch.target) < .05){
+                        currentState++;
+                    }
+                }else if(currentState == 2){
+                    arm1.setState(DepoArm.DepoArmState.LT_SCORE);
+                    wrist1.setState(Wrist.WristState.LT_SCORE);
+                    if(timeToggle){//timeToggle starts at true by default
+                        TimeStamp = timer.milliseconds();
+                        timeToggle = false;
+                    }
+                    if(timer.milliseconds() > TimeStamp + 500){
+                        currentState++;
+                        timeToggle = true;
+                    }
+                }else if(currentState == 3){
+                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
+//                    intake.setState(LTIntake.IntakeState.INTAKE_TELE);
+                    if(timeToggle){//timeToggle starts at true by default
+                        TimeStamp = timer.milliseconds();
+                        timeToggle = false;
+                    }
+                    if(timer.milliseconds() > TimeStamp + 1000){
+                        currentState++;
+                        timeToggle = true;
+                    }
+                }else if(currentState == 4){
+                    claw.setState(Claw.ClawState.UNLATCHED);
+                    if(timeToggle){//timeToggle starts at true by default
+                        TimeStamp = timer.milliseconds();
+                        timeToggle = false;
+                    }
+                    if(timer.milliseconds() > TimeStamp + 750){
+                        currentState++;
+                        timeToggle = true;
+                    }
+                }else if (currentState == 5){
+                    drive.setMaxPower(.2);
+                    drive.lineTo(47, 29, Math.toRadians(180));
+                    if(timeToggle){//timeToggle starts at true by default
+                        TimeStamp = timer.milliseconds();
+                        timeToggle = false;
+                    }
+                    if(timer.milliseconds() > TimeStamp + 1500){
+                        currentState++;
+                        timeToggle = true;
+                    }
+                }else if (currentState == 6){
+                    drive.setMaxPower(.5);
+                    drive.lineTo(14.5,37,Math.toRadians(180));
+                    if(drive.isAtTarget()){
+                        currentState++;
+                    }
+                }else if(currentState == 7){
+                    intake.setPower(.7);
+                    if(timeToggle){//timeToggle starts at true by default
+                        TimeStamp = timer.milliseconds();
+                        timeToggle = false;
+                    }
+                    if(timer.milliseconds() > TimeStamp + 2000){
+                        currentState++;
+                        timeToggle = true;
+                    }
+                }else if(currentState == 8){
                     intake.setPower(-.1);
                     slides.setState(DepoSlides.DepositState.DOWN);
                     arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
                     wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
                     drive.setMaxPower(.5);
-                    drive.lineTo(45,-37,Math.toRadians(-180));
+                    drive.lineTo(45,37,Math.toRadians(180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }
                 }else if(currentState == 9){
-                    drive.lineTo(50, -60,Math.toRadians(-180));
+                    drive.lineTo(50, 60,Math.toRadians(180));
                     intake.setState(LTIntake.IntakeState.INTAKE_TELE);
                     if(drive.isAtTarget()){
                         currentState++;
@@ -523,26 +527,4 @@ public class RegionalsBlue extends LinearOpMode {
             claw.update();
         }
     }
-//    private void initPipeline() {
-//        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-//        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-//
-//        CameraPipeline s = new CameraPipeline(telemetry);
-//        webcam.setPipeline(s);
-//
-//        webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
-//        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-//            @Override
-//            public void onOpened() {
-//                webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
-//            }
-//
-//            @Override
-//            public void onError(int errorCode) {
-//                /*
-//                 * This will be called if the camera could not be opened
-//                 */
-//            }
-//        });
-//    }
 }

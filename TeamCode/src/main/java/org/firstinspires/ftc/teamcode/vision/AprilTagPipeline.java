@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import android.util.Size;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -40,9 +41,7 @@ public class AprilTagPipeline{
                 .setAutoStopLiveView(false)
                 .addProcessor(aprilTag);
 
-        VisionPortal visionPortal1 = builder.build();
-
-        return visionPortal1;
+        return builder.build();
     }
 
     private void disableAprilTag(AprilTagProcessor aprilTag, VisionPortal visionPortal){
@@ -62,40 +61,10 @@ public class AprilTagPipeline{
                     tagDetect = true;
                     break;
                 }
-                else{
-                    tagDetect = false;
-                }
-            }
-            else{
-                tagDetect = false;
             }
         }
         return tagDetect;
     }
-
-    //TO DO:
-
-
-    //dont really need this anymore
-    //still could use this i guess
-    public double[] AprilTagPosition(AprilTagProcessor aprilTag, int tag){
-        ArrayList<AprilTagDetection> detections = aprilTag.getDetections();
-        double[] coords = new double[2];
-        for(AprilTagDetection detection : detections){
-            if(detection.metadata != null){
-                if(detectSpecificTag(aprilTag,tag)){
-                    coords[0] = detection.ftcPose.x;
-                    coords[1] = detection.ftcPose.y;
-                    coords[2] = detection.ftcPose.z;
-                }
-            }
-            else{
-                return null;
-            }
-        }
-        return coords;
-    }
-
     public static AprilTagDetection getSpecificTagData(AprilTagProcessor aprilTag, int tag){
         AprilTagDetection specificTag = null;
         if(detectSpecificTag(aprilTag,tag)){
@@ -104,9 +73,6 @@ public class AprilTagPipeline{
                 if(detections.get(i).id == tag){
                     specificTag = detections.get(i);
                 }
-                else{
-
-                }
             }
             return specificTag;
         }
@@ -114,7 +80,6 @@ public class AprilTagPipeline{
             return null;
         }
     }
-
     public static AprilTagDetection[] getSpecificTagDatas(AprilTagProcessor aprilTag, int[] tag){
         AprilTagDetection[] specificTags = new AprilTagDetection[tag.length];
         for(int j = 0; j<99; j++){
@@ -132,13 +97,53 @@ public class AprilTagPipeline{
         }
         return specificTags;
     }
-
     public int amountDetected(AprilTagProcessor aprilTag){
         return aprilTag.getDetections().size();
     }
-
-//    public ArrayList<AprilTagDetection> getDetections() {
-//        return this.aprilTag.getDetections();
-//    }
+    //x location : 58
+    //apriltag 1 & 6: y = +- 41
+    //apriltag 2 & 5: y = +- 35
+    //apriltag 3 & 4: y = +-  29
+    public double[] getCoordsRelToAprilTag(AprilTagDetection detection){
+        double x;
+        double y = 0;
+        double tileLength = 23.5;
+        if(detection != null){
+            x = 59 - detection.ftcPose.y;
+            if(CameraPipeline.isBlue()){
+                switch (detection.metadata.id){
+                    case 1:
+                        y = tileLength + (double) 3 /4 * tileLength;
+                        break;
+                    case 2:
+                        y = tileLength + (double) 1 /2 * tileLength;
+                        break;
+                    case 3:
+                        y = tileLength + (double) 1 /4 * tileLength;
+                        break;
+                }
+                y += -detection.ftcPose.x;
+            }
+            else if(CameraPipeline.isRed()){
+                switch (detection.metadata.id){
+                    case 4:
+                        y = tileLength + (double) 1 /4 * tileLength;
+                        break;
+                    case 5:
+                        y = tileLength + (double) 1 /2 * tileLength;
+                        break;
+                    case 6:
+                        y = tileLength + (double) 3 /4 * tileLength;
+                        break;
+                }
+                y = -y;
+                y += detection.ftcPose.x;
+            }
+            return new double[]{x,y};
+        }
+        else{
+            return null;
+        }
+    }
 }
 
