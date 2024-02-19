@@ -15,7 +15,9 @@ public class Intake{
         INCRIMENT_UP,
         INCRIMENT_DOWN,
         AUTO_HIGH,
-        AUTO_STACK_DROPPED,
+        AUTO_STACK_HIGH,
+        AUTO_STACK_MID,
+        AUTO_STACK_LOW,
         LEVEL2,
         STOPPED
     }
@@ -45,6 +47,11 @@ public class Intake{
         intakePower = p;
         return this;
     }
+    public Intake eject(){
+        intakePower = 0.7;//random value
+        intakeFSM = IntakeState.AUTO_STACK_LOW;
+        return this;
+    }
     public void setState(IntakeState state){
         this.intakeFSM = state;
         switch (intakeFSM){
@@ -69,14 +76,21 @@ public class Intake{
             case INCRIMENT_DOWN:
                 target+=.05;
                 break;
-            case AUTO_HIGH:
-                target = .3;
-                break;
             case LEVEL2:
                 target = .15;
                 break;
-            case AUTO_STACK_DROPPED:
+            case AUTO_STACK_HIGH:
                 target = .23;
+                break;
+            case AUTO_STACK_MID:
+                target = .33;
+                break;
+            case AUTO_STACK_LOW:
+                target = .43;
+                break;
+            case AUTO_HIGH:
+                target = .3;
+                break;
             case STOPPED:
                 break;
         }
@@ -85,7 +99,6 @@ public class Intake{
     public IntakeState getState(){
         return intakeFSM;
     }
-
     public double getPosition(){
         return target;
     }
