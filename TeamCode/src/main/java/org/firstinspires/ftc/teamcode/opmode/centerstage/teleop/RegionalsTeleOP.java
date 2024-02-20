@@ -174,14 +174,13 @@ public class RegionalsTeleOP extends LinearOpMode {
                 slides.setState(DepoSlides.DepositState.CALCULATED_UP);
             }else if(scoringState == 4){
                 claw.setState(Claw.ClawState.UNLATCHED);
-//                if(timeToggle){//timeToggle starts at true by default
-//                    TimeStamp = timer.milliseconds();
-//                    timeToggle = false;
-//                }
-//                if(timer.milliseconds() > TimeStamp + 500){
-//                    scoringState=5;
-//                    timeToggle = true;
-//                }
+                if(timeToggle){//timeToggle starts at true by default
+                    TimeStamp = timer.milliseconds();
+                    timeToggle = false;
+                }
+                if(timer.milliseconds() > TimeStamp + 500){
+                    pitch.setState(Pitch.PitchState.SLIGHT_UP);
+                }
             }else if(scoringState == 5){
                 pitch.setState(Pitch.PitchState.INITIALIZE);
                 slides.setState(DepoSlides.DepositState.DOWN);

@@ -54,21 +54,17 @@ public class VisionOpmode extends LinearOpMode
         telemetry.update();
 
         while(opModeInInit()){
-            ObjectDirection = CameraPipeline.randomization(thresh);
-            randomization = CameraPipeline.PosToNum(ObjectDirection);
+            if(!isStopRequested()){
+                ObjectDirection = CameraPipeline.randomization(thresh);
+                randomization = CameraPipeline.PosToNum(ObjectDirection);
 
-            telemetry.addLine("Ready to Start");
-            telemetry.addData("Location:", ObjectDirection);
-            telemetry.addData("Color:", color);
-            telemetry.addData("Right:", rightPer);
-            telemetry.addData("Left:", leftPer);
+                telemetry.addLine("Ready to Start");
+                telemetry.addData("Location:", ObjectDirection);
+                telemetry.addData("Color:", color);
+                telemetry.addData("Right:", rightPer);
+                telemetry.addData("Left:", leftPer);
 
-            telemetry.update();
-
-            if(isStopRequested()){
-                webcam.stopRecordingPipeline();
-                webcam.closeCameraDevice();
-                return;
+                telemetry.update();
             }
         }
 

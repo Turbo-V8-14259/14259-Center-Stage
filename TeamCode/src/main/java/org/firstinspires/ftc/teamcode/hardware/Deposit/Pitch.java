@@ -17,7 +17,8 @@ public class Pitch {
         STOPPED,
         SCOREATLEVEL,
         CALCULATED_UP,
-        AUTON_PRELOAD
+        AUTON_PRELOAD,
+        SLIGHT_UP
     }
 
     public int level = 0;
@@ -134,6 +135,8 @@ public class Pitch {
             case CALCULATED_UP:
                 target = angles[angle];
                 break;
+            case SLIGHT_UP:
+                target = angles[angle] + .05;
         }
     }
 
