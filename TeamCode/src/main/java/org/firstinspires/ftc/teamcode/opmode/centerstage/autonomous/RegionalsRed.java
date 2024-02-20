@@ -118,9 +118,12 @@ public class RegionalsRed extends LinearOpMode {
         webcam.stopRecordingPipeline();
         webcam.closeCameraDevice();
         visionPortal.setProcessorEnabled(aprilTag, true);
+        int aprilTagNum = randomization + 1;
+        aprilTagNum += 3; //RED ONLY
 
         while(opModeIsActive()){
             //right (farthest to the center of the feild)
+            detection = AprilTagPipeline.getSpecificTagData(aprilTag, aprilTagNum);
             if(randomization == 2){
                 if(currentState == 0){
                     drive.setMaxPower(.7);

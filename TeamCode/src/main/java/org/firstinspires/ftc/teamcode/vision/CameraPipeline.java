@@ -233,4 +233,11 @@ public class CameraPipeline extends OpenCvPipeline
         }
         return randomization;
     }
+
+    public static boolean isBlue(){
+        return color.equals("BLUE");
+    }
+    public static boolean isRed(){
+        return color.equals("RED");
+    }
 }
