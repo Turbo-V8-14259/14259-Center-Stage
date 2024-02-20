@@ -47,6 +47,7 @@ public class VisionOpmode extends LinearOpMode
         });
 
         telemetry.addLine("Loading AprilTagDetections...");
+
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
         aprilTag = ac.initAprilTag();
         visionPortal = AprilTagPipeline.initVision(webcamName);
@@ -61,7 +62,14 @@ public class VisionOpmode extends LinearOpMode
             telemetry.addData("Color:", color);
             telemetry.addData("Right:", rightPer);
             telemetry.addData("Left:", leftPer);
+
             telemetry.update();
+
+            if(isStopRequested()){
+                webcam.stopRecordingPipeline();
+                webcam.closeCameraDevice();
+                return;
+            }
         }
 
         waitForStart();
@@ -106,5 +114,8 @@ public class VisionOpmode extends LinearOpMode
             telemetry.addData("Location", ObjectDirection);
             telemetry.update();
         }
+
+        visionPortal.setProcessorEnabled(aprilTag, false);
+        visionPortal.close();
     }
 }

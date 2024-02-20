@@ -15,8 +15,8 @@ public class Claw {
     public ClawState clawFSM = ClawState.LATCHED;
 
 
-    private static final double LOWER_BOUND = .35;
-    private static final double UPPER_BOUND = .4;
+    private static final double LOWER_BOUND = .43;
+    private static final double UPPER_BOUND = .40;
 
 
     private ServoMotorBetter claw;
@@ -38,13 +38,13 @@ public class Claw {
         this.clawFSM = state;
         switch (clawFSM){
             case LATCHED:
-                target = 1;
+                target = 0;
                 break;
             case INTAKE:
-                target = 0;
+                target = 1;
                 break;
             case UNLATCHED:
-                target = 0;
+                target = 1;
                 break;
         }
     }

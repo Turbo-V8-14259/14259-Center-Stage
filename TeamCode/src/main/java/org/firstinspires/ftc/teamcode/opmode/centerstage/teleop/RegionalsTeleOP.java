@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.opmode.centerstage.teleop;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -13,6 +15,8 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.DepoSlides;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.Pitch;
 import org.firstinspires.ftc.teamcode.hardware.Deposit.Wrist;
 import org.firstinspires.ftc.teamcode.hardware.Intake.LTIntake;
+import org.firstinspires.ftc.teamcode.hardware.Sensors.Blinkdin;
+import org.firstinspires.ftc.teamcode.hardware.Sensors.PixelSensor;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
@@ -23,17 +27,25 @@ public class RegionalsTeleOP extends LinearOpMode {
     boolean timeToggle = true;
     double TimeStamp = 0;
     ElapsedTime timer = new ElapsedTime();
+    ElapsedTime pixelTimer = new ElapsedTime();
     int scoringState = 5;
     Pitch pitch;
     int climbSafe = 0;
 
+    int ledState = 0;
+    Blinkdin led;
     boolean intakingDriveMove = true;
+    PixelSensor sensor1;
+    PixelSensor sensor2;
     @Override
     public void runOpMode() throws InterruptedException {
         pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "Pitch")));
         slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"rightSlides")));
+        led = new Blinkdin(hardwareMap.get(RevBlinkinLedDriver.class, "led"));
         DcMotorEx intakeMotor = hardwareMap.get(DcMotorEx.class, "Intake");
         Claw claw = new Claw(new ServoMotorBetter(hardwareMap.get(Servo.class, "claw")));
+        sensor1 = new PixelSensor(hardwareMap.get(ColorSensor.class, "Color1"));
+        sensor2 = new PixelSensor(hardwareMap.get(ColorSensor.class, "Color2"));
         Servo intakeArm1 = hardwareMap.get(Servo.class, "intakeArm");
         Servo intakeArm2 = hardwareMap.get(Servo.class, "intakeArm2");
         LTIntake intake = new LTIntake(intakeMotor, new ServoMotorBetter(intakeArm2), new ServoMotorBetter(intakeArm1));
@@ -106,6 +118,21 @@ public class RegionalsTeleOP extends LinearOpMode {
                     pitch.setAngle(0);
                 }
             }
+
+            if(Gamepad2.b){
+                ledState++;
+            }
+            if(ledState == 0){
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.WHITE);
+            }else if(ledState == 1){
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.VIOLET);
+            }else if(ledState == 2) {
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            }else if(ledState == 3) {
+                led.changePattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
+            }else if(ledState >3){
+                ledState = 0;
+            }
             drive.update();
             if(gamepadOne.a || Gamepad2.a){
                 scoringState ++;
@@ -119,6 +146,7 @@ public class RegionalsTeleOP extends LinearOpMode {
             slides.update();
             pitch.update();
             Gamepad2.update();
+            led.update();
             if(scoringState == 1){
                 arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
                 if(timeToggle){//timeToggle starts at true by default
@@ -204,6 +232,11 @@ public class RegionalsTeleOP extends LinearOpMode {
             }else if(scoringState == 8){
                 wrist1.setState(Wrist.WristState.TRANSFER);
                 slides.setState(DepoSlides.DepositState.OVER_IN);
+                if(!sensor1.getColor().equals("NOTHING")&&!sensor2.getColor().equals("NOTHING")){
+
+                    claw.setState(Claw.ClawState.LATCHED);
+                }
+
             }else if(scoringState == 9){
                 claw.setState(Claw.ClawState.LATCHED);
                 if(timeToggle){//timeToggle starts at true by default
@@ -238,6 +271,7 @@ public class RegionalsTeleOP extends LinearOpMode {
             }else if(gamepad.dpad_down) {
                 intake.setState(LTIntake.IntakeState.INTAKE_TELE);
             }
+
             telemetry.addData("pitch level ",pitch.getAngle());
             telemetry.addData("slides level ", slides.getSpaceInInches());
             telemetry.addData("intake forward? ", intakingDriveMove);

@@ -81,7 +81,7 @@ public class LTRed extends LinearOpMode {
 //        pitch.update();
 
         CameraPipeline.setColor("RED");
-        CameraPipeline.initPipeline(hardwareMap, telemetry);
+        webcam = CameraPipeline.initPipeline(hardwareMap, telemetry);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
             public void onOpened() { webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT); }

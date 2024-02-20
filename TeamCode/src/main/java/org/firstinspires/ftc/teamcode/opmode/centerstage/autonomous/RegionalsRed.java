@@ -56,7 +56,7 @@ public class RegionalsRed extends LinearOpMode {
 
     //vision
     OpenCvWebcam webcam;
-    public String ObjectDirection;
+    public String ObjectDirection; //change
     public int randomization = 99;
     public double thresh = CameraPipeline.perThreshold;
 
@@ -108,13 +108,19 @@ public class RegionalsRed extends LinearOpMode {
 
         while(opModeInInit()){
             ObjectDirection = CameraPipeline.randomization(thresh);
-            randomization = CameraPipeline.PosToNum(ObjectDirection);
 
+            if(isStopRequested()){
+                webcam.stopRecordingPipeline();
+                webcam.closeCameraDevice();
+                return;
+            }
+
+            randomization = CameraPipeline.PosToNum(ObjectDirection);
             telemetry.addData("Location:", ObjectDirection);
             telemetry.addData("Color:", color);
             telemetry.update();
         }
-        waitForStart();
+         waitForStart();
         webcam.stopRecordingPipeline();
         webcam.closeCameraDevice();
         visionPortal.setProcessorEnabled(aprilTag, true);
@@ -123,7 +129,7 @@ public class RegionalsRed extends LinearOpMode {
 
         while(opModeIsActive()){
             //right (farthest to the center of the feild)
-            detection = AprilTagPipeline.getSpecificTagData(aprilTag, aprilTagNum);
+            //detection = AprilTagPipeline.getSpecificTagData(aprilTag, aprilTagNum);
             if(randomization == 2){
                 if(currentState == 0){
                     drive.setMaxPower(.7);
@@ -528,6 +534,10 @@ public class RegionalsRed extends LinearOpMode {
             intake.update();
             claw.update();
         }
+
+        //close vision
+        visionPortal.setProcessorEnabled(aprilTag, false);
+        visionPortal.close();
     }
 //    private void initPipeline() {
 //        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

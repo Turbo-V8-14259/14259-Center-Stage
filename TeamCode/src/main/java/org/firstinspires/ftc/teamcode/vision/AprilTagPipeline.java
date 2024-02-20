@@ -104,7 +104,7 @@ public class AprilTagPipeline{
     //apriltag 1 & 6: y = +- 41
     //apriltag 2 & 5: y = +- 35
     //apriltag 3 & 4: y = +-  29
-    public double[] getCoordsRelToAprilTag(AprilTagDetection detection){
+    public static double[] getCoordsRelToAprilTag(AprilTagDetection detection){
         double x;
         double y = 0;
         double tileLength = 23.5;

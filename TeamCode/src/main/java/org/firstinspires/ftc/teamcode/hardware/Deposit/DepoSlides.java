@@ -130,7 +130,7 @@ public class DepoSlides {
                 this.pidRunning = true;
                 break;
             case OVER_IN:
-                this.targetDepositInches = 1;
+                this.targetDepositInches = .75;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;

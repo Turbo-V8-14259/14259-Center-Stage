@@ -23,7 +23,6 @@ import java.util.List;
  */
 
 @TeleOp(name = "AprilTag Detection Software")
-@Disabled
 //@Disabled
 public class AprilTagTest extends LinearOpMode{
 
@@ -33,49 +32,59 @@ public class AprilTagTest extends LinearOpMode{
     private final AprilTagPipeline ac = new AprilTagPipeline();
     private VisionPortal visionPortal;
     public AprilTagDetection detection;
-    int toi = 2;
+    int toi = 5;
 //Motor Stuff
     private DcMotorBetter sampleMotor; //no motors yet here for reasons
+
+    double x = 0;
+    double y = 0;
     //Dashboard
     //soon
 
 
     public void runOpMode() {
 
-        initAll();
-
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        aprilTag = ac.initAprilTag();
+        visionPortal = AprilTagPipeline.initVision(webcamName);
 
         telemetry.update();
+
         waitForStart();
+        visionPortal.setProcessorEnabled(aprilTag, true);
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
 
                 telemetryAprilTag();
-                telemetry.update();
+
 
                 detection = AprilTagPipeline.getSpecificTagData(aprilTag,toi);
-                if(detection != null){
 
+                double[] coords;
+                if(detection != null){
+                    coords = AprilTagPipeline.getCoordsRelToAprilTag(detection);
+                    x = coords[0];
+                    y = coords[1];
                 }
                 else{
 
                 }
-
                 sleep(20);
+                telemetry.update();
+
             }
         }
-
         // Save more CPU resources when camera is no longer needed.
+        visionPortal.setProcessorEnabled(aprilTag, false);
         visionPortal.close();
-
     }
 
     private void initAprilTag() {
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         aprilTag = ac.initAprilTag();
-        visionPortal = ac.initVision(webcamName);
+        visionPortal = AprilTagPipeline.initVision(webcamName);
 
 //        VisionPortal.Builder builder = new VisionPortal.Builder()
 //                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))
@@ -104,16 +113,23 @@ public class AprilTagTest extends LinearOpMode{
             if(detection != null) {
                 telemetry.addData("Giving Data for AprilTag#", toi);
                 telemetry.addData("Distance from AprilTag (Inches): ", detection.ftcPose.y);
+
+                telemetry.addData("X:", detection.ftcPose.x);
+                telemetry.addData("Y:", detection.ftcPose.y);
+                telemetry.addData("Pitch: ", detection.ftcPose.pitch);
+
+                telemetry.addData("Coords X:", x);
+                telemetry.addData("Coords Y:", y);
             }
         }
         else{
-            telemetry.addLine("Specific Tag Data not detected" +
-                    "");
+            telemetry.addLine("Specific Tag Data not detected");
         }
-
-        telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
-        telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
-        telemetry.addLine("RBE = Range, Bearing & Elevation");
+        telemetry.addLine();
+//
+//        telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
+//        telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
+//        telemetry.addLine("RBE = Range, Bearing & Elevation");
 
         //telemetry.addLine(String.format(" ID %6.1f Detected, X Y Z %6.1f %6.1f %6.1f  (Inch)", detection.id, detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
     }
