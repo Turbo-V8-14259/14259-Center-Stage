@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.opmode.centerstage.teleop;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -18,7 +19,8 @@ import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
 
-@TeleOp(name = "!R for REDEMPTION!")
+@TeleOp(name = "IntakeDeposit")
+@Disabled
 public class IntakeDepositDrive extends LinearOpMode {
     DepoSlides slides;
     boolean timeToggle = true;
@@ -29,7 +31,6 @@ public class IntakeDepositDrive extends LinearOpMode {
     int climbSafe = 0;
 
     boolean intakingDriveMove = true;
-
     @Override
     public void runOpMode() throws InterruptedException {
         pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "Pitch")));
@@ -56,9 +57,45 @@ public class IntakeDepositDrive extends LinearOpMode {
         intake.update();
         waitForStart();
         while (opModeIsActive()){
+            if(Gamepad2.x){
+                climbSafe++;
+            }
+            if(climbSafe == 3){
+                scoringState = 10;
+            }else if(climbSafe == 5){
+                scoringState = 12;
+            }
+            if(gamepadOne.left_bumper){
+                intakingDriveMove = true;
+            }else if(gamepadOne.right_bumper){
+                intakingDriveMove = false;
+            }
+            if(intakingDriveMove){
+                drive.setWeightedDrivePower(
+                        new Pose2d(
+                                -gamepad1.left_stick_y,
+                                -gamepad1.left_stick_x,
+                                gamepad1.right_stick_x
+                        )
+                );
+            }else{
+                drive.setWeightedDrivePower(
+                        new Pose2d(
+                                gamepad1.left_stick_y,
+                                gamepad1.left_stick_x,
+                                gamepad1.right_stick_x
+                        )
+                );
+            }
+            if(Gamepad2.y){
+                slides.setSpaceInInches(0);
+                pitch.setAngle(0);
+            }
             if(Gamepad2.left_bumper){
-                slides.setSpaceInInches(slides.getSpaceInInches()+1);
-                if(slides.getSpaceInInches()+1 >= slides.inches.length){
+//                slides.setSpaceInInches(slides.getSpaceInInches()+1);
+                if(!(slides.getSpaceInInches()+1 >= slides.inches.length)){
+                    slides.setSpaceInInches(slides.getSpaceInInches()+1);
+                }else{
                     slides.setSpaceInInches(0);
                 }
             }
@@ -66,24 +103,17 @@ public class IntakeDepositDrive extends LinearOpMode {
 //                arm1.setLevel(pitch.getAngle());
                 wrist1.setLevel(pitch.getAngle());
 
-                if(!(pitch.getAngle()+1 >= pitch.angles.length)){
+                if(!(pitch.getAngle()+1 >= 5)){
                     pitch.setAngle(pitch.getAngle() + 1);
                 }else {
                     pitch.setAngle(0);
                 }
             }
-            drive.setWeightedDrivePower(
-                    new Pose2d(
-                            -gamepad1.left_stick_y,
-                            -gamepad1.left_stick_x,
-                            -gamepad1.right_stick_x
-                    )
-            );
             drive.update();
-            if(gamepadOne.a){
+            if(gamepadOne.a || Gamepad2.a){
                 scoringState ++;
             }
-            intake.setPower(gamepad1.left_trigger - gamepad1.right_trigger);
+            intake.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
             gamepadOne.update();
             arm1.update();
             wrist1.update();
@@ -119,14 +149,14 @@ public class IntakeDepositDrive extends LinearOpMode {
                 slides.setState(DepoSlides.DepositState.CALCULATED_UP);
             }else if(scoringState == 4){
                 claw.setState(Claw.ClawState.UNLATCHED);
-                if(timeToggle){//timeToggle starts at true by default
-                    TimeStamp = timer.milliseconds();
-                    timeToggle = false;
-                }
-                if(timer.milliseconds() > TimeStamp + 500){
-                    scoringState=5;
-                    timeToggle = true;
-                }
+//                if(timeToggle){//timeToggle starts at true by default
+//                    TimeStamp = timer.milliseconds();
+//                    timeToggle = false;
+//                }
+//                if(timer.milliseconds() > TimeStamp + 500){
+//                    scoringState=5;
+//                    timeToggle = true;
+//                }
             }else if(scoringState == 5){
                 pitch.setState(Pitch.PitchState.INITIALIZE);
                 slides.setState(DepoSlides.DepositState.DOWN);
@@ -205,7 +235,6 @@ public class IntakeDepositDrive extends LinearOpMode {
                 intake.setState(LTIntake.IntakeState.INITIALIZE);
                 pitch.manualMode = true;
                 pitch.setPowerManual(-gamepad2.left_stick_y);
-                scoringState = 1;
             }
             if(gamepad.dpad_up){
                 intake.setState(LTIntake.IntakeState.INITIALIZE);

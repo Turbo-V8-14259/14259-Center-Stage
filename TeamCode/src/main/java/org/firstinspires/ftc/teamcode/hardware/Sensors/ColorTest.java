@@ -27,7 +27,6 @@ public class ColorTest extends LinearOpMode{
         telemetry.addData("red/blue", ratiorb);
         telemetry.addData("green/blue", ratiogb);
         if(Math.abs(ratiorb-2.672)<=tolerance && Math.abs(ratiogb-3.78)<=tolerance){
-
             return "YELLOW";
         }
         if(Math.abs(ratiorb-0.5)<=tolerance && Math.abs(ratiogb-0.7)<=tolerance){
