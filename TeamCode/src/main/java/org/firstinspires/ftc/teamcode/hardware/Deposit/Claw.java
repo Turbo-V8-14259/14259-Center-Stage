@@ -16,7 +16,7 @@ public class Claw {
 
 
     private static final double LOWER_BOUND = .35;
-    private static final double UPPER_BOUND = .44;
+    private static final double UPPER_BOUND = .4;
 
 
     private ServoMotorBetter claw;
