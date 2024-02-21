@@ -1,12 +1,15 @@
 package org.firstinspires.ftc.teamcode.hardware.Sensors;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 public class PixelSensor {
 
     ColorSensor sensor;
 
     String color;
 
+    ElapsedTime timer = new ElapsedTime();
 
     public PixelSensor(ColorSensor c){
         sensor = c;
@@ -73,4 +76,25 @@ public class PixelSensor {
         color = "NOTHING";
         return color;
     }
+
+    public boolean present(){
+        boolean signal = true;
+        int currentTry = 0;
+        int tries = 2;
+        double timeStamp = timer.milliseconds();
+        while(timer.milliseconds()<timeStamp+250){
+            if(!getColor().equals("NOTHING")&&currentTry<=tries){
+                signal=true;
+            }else{
+                signal = false;
+                if(currentTry<=tries){
+                    currentTry++;
+                }else{
+                    break;
+                }
+            }
+        }
+        return signal;
+    }
+
 }

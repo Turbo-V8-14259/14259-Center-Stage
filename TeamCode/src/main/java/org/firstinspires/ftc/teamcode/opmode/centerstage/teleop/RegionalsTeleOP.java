@@ -232,8 +232,9 @@ public class RegionalsTeleOP extends LinearOpMode {
                 wrist1.setState(Wrist.WristState.TRANSFER);
                 slides.setState(DepoSlides.DepositState.OVER_IN);
                 if(!sensor1.getColor().equals("NOTHING")&&!sensor2.getColor().equals("NOTHING")){
-
-                    claw.setState(Claw.ClawState.LATCHED);
+                    if(sensor1.present()&&sensor2.present()) {
+                        claw.setState(Claw.ClawState.LATCHED);
+                    }
                 }
 
             }else if(scoringState == 9){
