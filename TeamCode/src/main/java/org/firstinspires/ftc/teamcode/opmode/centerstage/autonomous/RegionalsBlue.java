@@ -101,12 +101,7 @@ public class RegionalsBlue extends LinearOpMode {
             public void onError(int errorCode) {}
         });
 
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-        aprilTag = ac.initAprilTag();
-        visionPortal = AprilTagPipeline.initVision(webcamName);
-        telemetry.update();
-
-        while(opModeInInit()){
+        while(opModeInInit() && !isStopRequested()){
             ObjectDirection = CameraPipeline.randomization(thresh);
             randomization = CameraPipeline.PosToNum(ObjectDirection);
 
@@ -114,10 +109,16 @@ public class RegionalsBlue extends LinearOpMode {
             telemetry.addData("Color:", color);
             telemetry.update();
         }
+
         waitForStart();
         webcam.stopRecordingPipeline();
         webcam.closeCameraDevice();
+
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        aprilTag = AprilTagPipeline.initAprilTag();
+        visionPortal = AprilTagPipeline.initVision(webcamName, aprilTag);
         visionPortal.setProcessorEnabled(aprilTag, true);
+        telemetry.update();
         int aprilTagNum = randomization + 1;
 
         while(opModeIsActive()){

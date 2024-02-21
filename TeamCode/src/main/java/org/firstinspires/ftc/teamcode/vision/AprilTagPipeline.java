@@ -17,22 +17,23 @@ public class AprilTagPipeline{
     public boolean ifDetectingApriltag(AprilTagProcessor aprilTag){
         return !aprilTag.getDetections().isEmpty();
     }
-    public static AprilTagProcessor aprilTag = new AprilTagProcessor.Builder()
-            .setDrawAxes(true)
-            .setDrawCubeProjection(false)
-            .setDrawTagOutline(true)
-            .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
-            .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
-            .build();;
+
     public VisionPortal visionPortal;
     //public WebcamName webcamName;
 
-    public AprilTagProcessor initAprilTag() { //add second webcam if we use 2
-        return this.aprilTag;
+    public static AprilTagProcessor initAprilTag() { //add second webcam if we use 2
+
+        return new AprilTagProcessor.Builder()
+                .setDrawAxes(true)
+                .setDrawCubeProjection(false)
+                .setDrawTagOutline(true)
+                .setTagFamily(AprilTagProcessor.TagFamily.TAG_36h11)
+                .setOutputUnits(DistanceUnit.INCH, AngleUnit.DEGREES)
+                .build();
 //        visionPortal.setProcessorEnabled(aprilTag, true);
     }
 
-    public static VisionPortal initVision(WebcamName webcamName){
+    public static VisionPortal initVision(WebcamName webcamName, AprilTagProcessor aprilTag){
         VisionPortal.Builder builder = new VisionPortal.Builder()
                 .setCamera(webcamName)
                 .setCameraResolution(new Size(800, 600))

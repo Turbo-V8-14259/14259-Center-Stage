@@ -16,6 +16,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import java.net.SocketTimeoutException;
+
 @Autonomous
 public class VisionOpmode extends LinearOpMode
 {
@@ -46,31 +48,30 @@ public class VisionOpmode extends LinearOpMode
             public void onError(int errorCode) {}
         });
 
+        while(opModeInInit() && !isStopRequested()){
+            ObjectDirection = CameraPipeline.randomization(thresh);
+            randomization = CameraPipeline.PosToNum(ObjectDirection);
+
+            telemetry.addLine("Ready to Start");
+            telemetry.addData("Location:", ObjectDirection);
+            telemetry.addData("Color:", color);
+            telemetry.addData("Right:", rightPer);
+            telemetry.addData("Left:", leftPer);
+
+            telemetry.update();
+        }
+        webcam.stopStreaming();
+        webcam.closeCameraDevice();
+
+        waitForStart();
+
         telemetry.addLine("Loading AprilTagDetections...");
 
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-        aprilTag = ac.initAprilTag();
-        visionPortal = AprilTagPipeline.initVision(webcamName);
+
+        aprilTag = AprilTagPipeline.initAprilTag();
+        visionPortal = AprilTagPipeline.initVision(webcamName, aprilTag);
         telemetry.update();
-
-        while(opModeInInit()){
-            if(!isStopRequested()){
-                ObjectDirection = CameraPipeline.randomization(thresh);
-                randomization = CameraPipeline.PosToNum(ObjectDirection);
-
-                telemetry.addLine("Ready to Start");
-                telemetry.addData("Location:", ObjectDirection);
-                telemetry.addData("Color:", color);
-                telemetry.addData("Right:", rightPer);
-                telemetry.addData("Left:", leftPer);
-
-                telemetry.update();
-            }
-        }
-
-        waitForStart();
-        webcam.stopRecordingPipeline();
-        webcam.closeCameraDevice();
         visionPortal.setProcessorEnabled(aprilTag, true);
 
         while (opModeIsActive())
@@ -110,7 +111,6 @@ public class VisionOpmode extends LinearOpMode
             telemetry.addData("Location", ObjectDirection);
             telemetry.update();
         }
-
         visionPortal.setProcessorEnabled(aprilTag, false);
         visionPortal.close();
     }

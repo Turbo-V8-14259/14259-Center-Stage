@@ -45,8 +45,8 @@ public class AprilTagTest extends LinearOpMode{
     public void runOpMode() {
 
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-        aprilTag = ac.initAprilTag();
-        visionPortal = AprilTagPipeline.initVision(webcamName);
+        aprilTag = AprilTagPipeline.initAprilTag();
+        visionPortal = AprilTagPipeline.initVision(webcamName,aprilTag);
 
         telemetry.update();
 
@@ -84,7 +84,7 @@ public class AprilTagTest extends LinearOpMode{
         WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         aprilTag = ac.initAprilTag();
-        visionPortal = AprilTagPipeline.initVision(webcamName);
+        visionPortal = ac.initVision(webcamName,aprilTag);
 
 //        VisionPortal.Builder builder = new VisionPortal.Builder()
 //                .setCamera(hardwareMap.get(WebcamName.class, "Webcam 1"))

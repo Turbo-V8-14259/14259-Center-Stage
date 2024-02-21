@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.vision.tests;
 
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.color;
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.leftPer;
+import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -16,17 +20,14 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class OpenCVTestRed extends LinearOpMode
 {
     OpenCvWebcam webcam;
+    String ObjectDirection;
+    int thresh = 15;
+    int randomization = 1;
 
     @Override
     public void runOpMode()
     {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
-        CameraPipeline p = new CameraPipeline(telemetry);
-        webcam.setPipeline(p);
-
-        webcam.setMillisecondsPermissionTimeout(5000);
+        webcam = CameraPipeline.initPipeline(hardwareMap, telemetry);
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
             @Override
@@ -44,10 +45,18 @@ public class OpenCVTestRed extends LinearOpMode
 
         CameraPipeline.setColor("RED");
 
-        telemetry.addLine("Waiting for start");
-        telemetry.addData("Current Detection", CameraPipeline.ObjectDirection);
-        telemetry.addData("Color", CameraPipeline.color);
-        telemetry.update();
+        while(opModeInInit() && !isStopRequested()){
+            ObjectDirection = CameraPipeline.randomization(thresh);
+            randomization = CameraPipeline.PosToNum(ObjectDirection);
+
+            telemetry.addLine("Ready to Start");
+            telemetry.addData("Location:", ObjectDirection);
+            telemetry.addData("Color:", color);
+            telemetry.addData("Right:", rightPer);
+            telemetry.addData("Left:", leftPer);
+
+            telemetry.update();
+        }
 
         /*
          * Wait for the user to press start on the Driver Station

@@ -101,29 +101,23 @@ public class RegionalsRed extends LinearOpMode {
             public void onError(int errorCode) {}
         });
 
-        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
-        aprilTag = ac.initAprilTag();
-        visionPortal = AprilTagPipeline.initVision(webcamName);
-        telemetry.update();
-
-        while(opModeInInit()){
+        while(opModeInInit() &&!isStopRequested()){
             ObjectDirection = CameraPipeline.randomization(thresh);
-
-            if(isStopRequested()){
-                webcam.stopRecordingPipeline();
-                webcam.closeCameraDevice();
-                return;
-            }
-
             randomization = CameraPipeline.PosToNum(ObjectDirection);
+
             telemetry.addData("Location:", ObjectDirection);
             telemetry.addData("Color:", color);
             telemetry.update();
         }
-         waitForStart();
         webcam.stopRecordingPipeline();
         webcam.closeCameraDevice();
+        waitForStart();
+
+        WebcamName webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        aprilTag = AprilTagPipeline.initAprilTag();
+        visionPortal = AprilTagPipeline.initVision(webcamName, aprilTag);
         visionPortal.setProcessorEnabled(aprilTag, true);
+
         int aprilTagNum = randomization + 1;
         aprilTagNum += 3; //RED ONLY
 
