@@ -235,8 +235,9 @@ public class RegionalsTeleOP extends LinearOpMode {
                     if(sensor1.present()&&sensor2.present()) {
                         claw.setState(Claw.ClawState.LATCHED);
                     }
+                }else{
+                    claw.setState(Claw.ClawState.UNLATCHED);
                 }
-
             }else if(scoringState == 9){
                 claw.setState(Claw.ClawState.LATCHED);
                 if(timeToggle){//timeToggle starts at true by default
