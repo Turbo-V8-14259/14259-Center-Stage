@@ -14,6 +14,14 @@ public class nine11 {
     public double target = 0;
 
     private ServoMotorBetter drone;
+    private static final double LOWER_BOUND = 0;
+    private static final double UPPER_BOUND = 1;
+
+    public nine11(ServoMotorBetter drone){
+        this.drone = drone;
+        this.drone.setLowerBound(LOWER_BOUND);
+        this.drone.setUpperBound(UPPER_BOUND);
+    }
 
     public nine11.DroneState getState(){
         return droneFSM;
