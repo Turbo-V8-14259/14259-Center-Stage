@@ -51,30 +51,16 @@ public class RegionalsTeleOP extends LinearOpMode {
     boolean colorMode = true;
     @Override
     public void runOpMode() throws InterruptedException {
-        pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "Pitch")));
-        slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"rightSlides")));
-        led = new Blinkdin(hardwareMap.get(RevBlinkinLedDriver.class, "led"));
-        intakeMotor = hardwareMap.get(DcMotorEx.class, "Intake");
-        claw = new Claw(new ServoMotorBetter(hardwareMap.get(Servo.class, "claw")));
-        sensor1 = new PixelSensor(hardwareMap.get(ColorSensor.class, "Color1"));
-        sensor2 = new PixelSensor(hardwareMap.get(ColorSensor.class, "Color2"));
-        intakeArm1 = hardwareMap.get(Servo.class, "intakeArm");
-        intakeArm2 = hardwareMap.get(Servo.class, "intakeArm2");
-        intake = new LTIntake(intakeMotor, new ServoMotorBetter(intakeArm2), new ServoMotorBetter(intakeArm1));
-        gamepadOne = new stickyGamepad(gamepad1);
-        Gamepad2 = new stickyGamepad(gamepad2);
-        Servo wrist = hardwareMap.get(Servo.class, "wrist");
-        Servo arm = hardwareMap.get(Servo.class, "arm");
-        wrist1 = new Wrist(new ServoMotorBetter(wrist));
-        arm1 = new DepoArm(new ServoMotorBetter(arm), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
-        wrist1.setState(Wrist.WristState.INITIALIZE);
-        arm1.setState(DepoArm.DepoArmState.INITIALIZE);
-        arm1.update();
-        wrist1.update();
-        drive = new SampleMecanumDrive(hardwareMap);
-        intake.setState(LTIntake.IntakeState.INTAKE_TELE);
-        intake.update();
+
+
+
+        
+        this.initializeMethods();
         waitForStart();
+
+
+
+
         while (opModeIsActive()){
             intake.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
             if(intakingDriveMove){
@@ -422,6 +408,31 @@ public class RegionalsTeleOP extends LinearOpMode {
         }
     }
 
+    public void initializeMethods(){
+        pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "Pitch")));
+        slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"rightSlides")));
+        led = new Blinkdin(hardwareMap.get(RevBlinkinLedDriver.class, "led"));
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "Intake");
+        claw = new Claw(new ServoMotorBetter(hardwareMap.get(Servo.class, "claw")));
+        sensor1 = new PixelSensor(hardwareMap.get(ColorSensor.class, "Color1"));
+        sensor2 = new PixelSensor(hardwareMap.get(ColorSensor.class, "Color2"));
+        intakeArm1 = hardwareMap.get(Servo.class, "intakeArm");
+        intakeArm2 = hardwareMap.get(Servo.class, "intakeArm2");
+        intake = new LTIntake(intakeMotor, new ServoMotorBetter(intakeArm2), new ServoMotorBetter(intakeArm1));
+        gamepadOne = new stickyGamepad(gamepad1);
+        Gamepad2 = new stickyGamepad(gamepad2);
+        Servo wrist = hardwareMap.get(Servo.class, "wrist");
+        Servo arm = hardwareMap.get(Servo.class, "arm");
+        wrist1 = new Wrist(new ServoMotorBetter(wrist));
+        arm1 = new DepoArm(new ServoMotorBetter(arm), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
+        wrist1.setState(Wrist.WristState.INITIALIZE);
+        arm1.setState(DepoArm.DepoArmState.INITIALIZE);
+        arm1.update();
+        wrist1.update();
+        drive = new SampleMecanumDrive(hardwareMap);
+        intake.setState(LTIntake.IntakeState.INTAKE_TELE);
+        intake.update();
+    }
 
 
 }
