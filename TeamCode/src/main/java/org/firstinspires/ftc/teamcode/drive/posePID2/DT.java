@@ -238,4 +238,34 @@ public class DT{
     public void setMaxPower(double maxPower){
         this.maxPower = maxPower;
     }
+
+    //Takes in current posx, posy, posr, targetx, and targety
+    //calculates the angle to follow that requires the least rotation
+    public double toPoint(double x, double y, double r, double x2, double y2){
+        double x3 = x2 - x;
+        double y3 = y2 - y;
+
+        double x4 = Math.cos(r);
+        double y4 = Math.sin(r);
+
+        double dotProduct = x3 * x4 + y3 * y4;
+
+        double magnitude = Math.sqrt(x3 * x3 + y3 * y3);
+        double cosine = Math.acos(dotProduct / magnitude);
+        double angle = Math.atan2(y3, x3);
+        double finalAngle=0;
+
+        if(nearlyEqual(Math.cos(angle), Math.cos(r+cosine))&&nearlyEqual(Math.sin(angle), Math.sin(r+cosine))){
+            finalAngle = r+cosine;
+        }
+        if(nearlyEqual(Math.cos(angle), Math.cos(r-cosine))&&nearlyEqual(Math.sin(angle), Math.sin(r-cosine))){
+            finalAngle = r-cosine;
+        }
+
+
+        return finalAngle;
+    }
+    public boolean nearlyEqual(double a, double b) {
+        return Math.abs(a - b) < 1e-9;
+    }
 }
