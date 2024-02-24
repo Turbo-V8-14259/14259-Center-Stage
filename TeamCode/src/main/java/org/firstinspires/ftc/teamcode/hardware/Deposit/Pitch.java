@@ -18,13 +18,15 @@ public class Pitch {
         SCOREATLEVEL,
         CALCULATED_UP,
         AUTON_PRELOAD,
-        SLIGHT_UP
+        SLIGHT_UP,
+        AUTON_PRELOAD_SLIGHT_UP,
+        AUTON_CYCLE
     }
 
     public int level = 0;
 
     public int angle = 0;
-    public double[] angles = {0,0.25,0.35,0.45,0.65,.75,.9,1};
+    public double[] angles = {0,0.25,0.35,0.45,0.55,.75,.9,1};
 
 
 
@@ -35,7 +37,7 @@ public class Pitch {
     public double target = 0;
     private static final double DEGREES_TO_TICKS = 0;
     private static final double LOWER_BOUND = 0;
-    private static final double UPPER_BOUND = 6000;
+    private static final double UPPER_BOUND = 6600;
     private static final double INIT_DEGREES = 0;
 
     private double targetPitchPosition = 0;
@@ -119,7 +121,12 @@ public class Pitch {
                 target = 0;
                 break;
             case AUTON_PRELOAD:
-                target = .2;
+                target = .3;
+                break;
+            case AUTON_CYCLE:
+                target = .4;
+            case AUTON_PRELOAD_SLIGHT_UP:
+                target = .35;
                 break;
             case SCORE_MIDDLE:
                 target = 0.2;

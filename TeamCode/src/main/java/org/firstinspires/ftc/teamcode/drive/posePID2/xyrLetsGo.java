@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp (name = "pose pid tuner")
 @Config
-@Disabled
 public class xyrLetsGo extends LinearOpMode {
     public static double y = 0.0, x = 0.0, r = 0.0;
     @Override

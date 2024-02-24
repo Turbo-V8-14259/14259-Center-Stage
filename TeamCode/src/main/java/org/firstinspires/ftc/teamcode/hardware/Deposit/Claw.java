@@ -15,7 +15,7 @@ public class Claw {
     public ClawState clawFSM = ClawState.LATCHED;
 
 
-    private static final double LOWER_BOUND = .43;
+    private static final double LOWER_BOUND = .44;
     private static final double UPPER_BOUND = .39;
 
 

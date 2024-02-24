@@ -14,8 +14,8 @@ public class nine11 {
     public double target = 0;
 
     private ServoMotorBetter drone;
-    private static final double LOWER_BOUND = 0;
-    private static final double UPPER_BOUND = 1;
+    private static final double LOWER_BOUND = 0.23;
+    private static final double UPPER_BOUND = 0.55;
 
     public nine11(ServoMotorBetter drone){
         this.drone = drone;
@@ -30,10 +30,10 @@ public class nine11 {
         this.droneFSM = state;
         switch(droneFSM){
             case INITIALIZE:
-                target = 0;
+                target = 1;
                 break;
             case SCORE:
-                target = 1;
+                target = 0;
             case CALCAULATE:
                 break;
             case STOPPED:

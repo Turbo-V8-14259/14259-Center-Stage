@@ -69,7 +69,7 @@ public class DepoArm {
                 target = .85;//.1
                 break;
             case TRANSFER:
-                target = .84;
+                target = .85;
                 break;
             case ABOVE_TRANSFER:
                 target = .74;

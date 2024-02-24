@@ -22,7 +22,8 @@ public class DepoSlides {
 
         CALCULATED_UP,
         RUNTOPOSITION,
-        AUTO_PRELOAD_SCORE
+        AUTO_PRELOAD_SCORE,
+        AUTO_PIXEL_SCORE
     }
     public DepositState depositFSM = DepositState.STOPPED;
 
@@ -39,7 +40,7 @@ public class DepoSlides {
     public int level = 0;
     public double manualPosition = 0;
     public int extension = 0;
-    public int[] inches = {0,5,10,15,20,25,30};
+    public int[] inches = {0,-5,-10,-15,-20,-25,-30};
     public int spaceInInches = 0;
 //    public double[] extensions = {0,0.2,0.3,0.4,0.8,1};
 
@@ -115,22 +116,22 @@ public class DepoSlides {
         this.depositFSM = state;
         switch (depositFSM) {
             case UP:
-                this.targetDepositInches = 27;
+                this.targetDepositInches = -27;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
             case AUTO_PRELOAD_SCORE:
-                this.targetDepositInches = 9;
+                this.targetDepositInches = -9;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
             case DOWN:
-                this.targetDepositInches = 2;
+                this.targetDepositInches = -2;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
             case OVER_IN:
-                this.targetDepositInches = .75;
+                this.targetDepositInches = -1;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
@@ -146,6 +147,12 @@ public class DepoSlides {
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
+            case AUTO_PIXEL_SCORE:
+                this.targetDepositInches = -30;
+                this.setInches(targetDepositInches);
+                this.pidRunning = true;
+                break;
+
             case RUNTOPOSITION:
                 this.targetDepositInches = this.manualPosition;
                 this.setInches(targetDepositInches);

@@ -68,7 +68,8 @@ public class LTIntake{
                 target = .4;
                 break;
             case STACK_HIGH:
-                target = 0.3;
+                target2 = .56;
+                target = .44;
                 break;
             case UP:
                 target = 0.1;

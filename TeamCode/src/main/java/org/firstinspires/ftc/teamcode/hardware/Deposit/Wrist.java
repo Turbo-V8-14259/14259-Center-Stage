@@ -32,7 +32,7 @@ public class Wrist {
     public double target = 0;
     public double manualPosition = 0.5;
     public int level = 0;
-    public double[] levelOffset = {0.1,0.08,0.04,0,0,0,.1};
+    public double[] levelOffset = {0.1,0.0,0.0,0,0,0,0};
 //    public double[] levelOffset = {0,0,0,0,0,0,.1};
 
     public Wrist(ServoMotorBetter wrist) {
@@ -82,7 +82,7 @@ public class Wrist {
                 target = .95;
                 break;
             case LT_SCORE:
-                target = .9 - levelOffset[level];
+                target = 1 - levelOffset[level];
                 break;
             case Manual:
                 target = manualPosition;

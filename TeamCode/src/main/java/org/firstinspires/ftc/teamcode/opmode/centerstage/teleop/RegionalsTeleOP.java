@@ -17,6 +17,7 @@ import org.firstinspires.ftc.teamcode.hardware.Deposit.Wrist;
 import org.firstinspires.ftc.teamcode.hardware.Intake.LTIntake;
 import org.firstinspires.ftc.teamcode.hardware.Sensors.Blinkdin;
 import org.firstinspires.ftc.teamcode.hardware.Sensors.PixelSensor;
+import org.firstinspires.ftc.teamcode.hardware.drone.nine11;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.DcMotorBetter;
 import org.firstinspires.ftc.teamcode.usefuls.Motor.ServoMotorBetter;
@@ -49,19 +50,50 @@ public class RegionalsTeleOP extends LinearOpMode {
     stickyGamepad gamepad;
 
     boolean colorMode = true;
+    nine11 drone;
     @Override
     public void runOpMode() throws InterruptedException {
 
 
 
-        
-        this.initializeMethods();
+
+
+        drone = new nine11(new ServoMotorBetter(hardwareMap.get(Servo.class, "drone")));
+        pitch = new Pitch(new DcMotorBetter(hardwareMap.get(DcMotorEx.class, "Pitch")));
+        slides = new DepoSlides(new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"leftSlides")), new DcMotorBetter(hardwareMap.get(DcMotorEx.class,"rightSlides")));
+        led = new Blinkdin(hardwareMap.get(RevBlinkinLedDriver.class, "led"));
+        intakeMotor = hardwareMap.get(DcMotorEx.class, "Intake");
+        claw = new Claw(new ServoMotorBetter(hardwareMap.get(Servo.class, "claw")));
+        sensor1 = new PixelSensor(hardwareMap.get(ColorSensor.class, "Color1"));
+        sensor2 = new PixelSensor(hardwareMap.get(ColorSensor.class, "Color2"));
+        intakeArm1 = hardwareMap.get(Servo.class, "intakeArm");
+        intakeArm2 = hardwareMap.get(Servo.class, "intakeArm2");
+        intake = new LTIntake(intakeMotor, new ServoMotorBetter(intakeArm2), new ServoMotorBetter(intakeArm1));
+        gamepadOne = new stickyGamepad(gamepad1);
+        Gamepad2 = new stickyGamepad(gamepad2);
+        gamepad = new stickyGamepad(gamepad1);
+        Servo wrist = hardwareMap.get(Servo.class, "wrist");
+        Servo arm = hardwareMap.get(Servo.class, "arm");
+        wrist1 = new Wrist(new ServoMotorBetter(wrist));
+        arm1 = new DepoArm(new ServoMotorBetter(arm), new ServoMotorBetter(hardwareMap.get(Servo.class, "fake")));
+        wrist1.setState(Wrist.WristState.INITIALIZE);
+        arm1.setState(DepoArm.DepoArmState.INITIALIZE);
+        arm1.update();
+        wrist1.update();
+        drive = new SampleMecanumDrive(hardwareMap);
+        intake.setState(LTIntake.IntakeState.INTAKE_TELE);
+        intake.update();
+        drone.setState(nine11.DroneState.INITIALIZE);
+        drone.update();
         waitForStart();
 
 
 
 
         while (opModeIsActive()){
+            if(gamepadOne.dpad_up){
+                drone.setState(nine11.DroneState.SCORE);
+            }
             intake.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
             if(intakingDriveMove){
                 drive.setWeightedDrivePower(
@@ -100,6 +132,7 @@ public class RegionalsTeleOP extends LinearOpMode {
             slides.update();
             pitch.update();
             led.update();
+            drone.update();
             if(colorMode){
                 this.updateColorFSM();
             }else{
@@ -322,7 +355,7 @@ public class RegionalsTeleOP extends LinearOpMode {
                 timeToggle = false;
             }
             if(timer.milliseconds() > TimeStamp + 500){
-                pitch.setState(Pitch.PitchState.SLIGHT_UP);
+//                pitch.setState(Pitch.PitchState.SLIGHT_UP);
             }
         }else if(scoringState == 5){
             pitch.setState(Pitch.PitchState.INITIALIZE);
