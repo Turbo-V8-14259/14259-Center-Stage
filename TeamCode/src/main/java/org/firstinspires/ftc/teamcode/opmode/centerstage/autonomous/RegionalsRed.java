@@ -641,7 +641,7 @@ public class RegionalsRed extends LinearOpMode {
 
             drive.update();
             pitch.update();
-            slides.update();
+//            slides.update();
             wrist1.update();
             arm1.update();
             intake.update();

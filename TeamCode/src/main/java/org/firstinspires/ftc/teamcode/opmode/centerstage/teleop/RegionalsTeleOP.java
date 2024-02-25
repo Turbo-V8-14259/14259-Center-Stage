@@ -164,10 +164,8 @@ public class RegionalsTeleOP extends LinearOpMode {
         }else if(climbSafe == 5){
             scoringState = 12;
         }
-        if(gamepadOne.left_bumper){
-            intakingDriveMove = true;
-        }else if(gamepadOne.right_bumper){
-            intakingDriveMove = false;
+        if(gamepadOne.right_bumper){
+            intakingDriveMove = !intakingDriveMove;
         }
         if(gamepadOne.a || Gamepad2.a){
             scoringState ++;
