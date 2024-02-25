@@ -35,7 +35,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @Config
-@Autonomous
+@Autonomous(name = "Regionals red")
 public class TestPathsRed extends LinearOpMode {
     boolean timeToggle = true;
     double TimeStamp = 0;
@@ -136,7 +136,7 @@ public class TestPathsRed extends LinearOpMode {
                     drive.lineTo(55, -41, Math.toRadians(-180));
                     arm1.setState(DepoArm.DepoArmState.LT_SCORE);
                     wrist1.setState(Wrist.WristState.LT_SCORE);
-                    //                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD);
+                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD);
 
                     if(drive.isAtTarget()){
                         currentState++;
@@ -167,13 +167,13 @@ public class TestPathsRed extends LinearOpMode {
                         timeToggle = true;
                     }
                 }else if(currentState == 3){
-//                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
+                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
 //                    intake.setState(LTIntake.IntakeState.INTAKE_TELE);
                     if(timeToggle){//timeToggle starts at true by default
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
                     }
-                    if(timer.milliseconds() > TimeStamp + 1000){
+                    if(timer.milliseconds() > TimeStamp + 1500){
                         currentState++;
                         timeToggle = true;
                     }
@@ -183,14 +183,16 @@ public class TestPathsRed extends LinearOpMode {
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
                     }
+                    if(timer.milliseconds() > TimeStamp + 250){
+                        pitch.setState(Pitch.PitchState.AUTON_PRELOAD_SLIGHT_UP);
+                    }
                     if(timer.milliseconds() > TimeStamp + 750){
                         currentState++;
                         timeToggle = true;
                     }
                 }else if (currentState == 5){
-                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD_SLIGHT_UP);
                     drive.setMaxPower(.4);
-                    drive.lineTo(47, -45, Math.toRadians(-180));
+                    drive.lineTo(46.5, -45, Math.toRadians(-180));
                     if(timeToggle){//timeToggle starts at true by default
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
@@ -202,7 +204,7 @@ public class TestPathsRed extends LinearOpMode {
                 }else if (currentState == 6){
                     drive.setMaxPower(1);
                     drive.lineTo(startBPose.getX()+7,-53,Math.toRadians(-270));
-                    slides.setState(DepoSlides.DepositState.DOWN);
+                    slides.setState(DepoSlides.DepositState.OVER_IN);
                     pitch.setState(Pitch.PitchState.INITIALIZE);
                     arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
                     wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
@@ -315,13 +317,15 @@ public class TestPathsRed extends LinearOpMode {
             }else if(randomization == 1){ //middle
                 if(currentState == 0){
                     drive.setMaxPower(1);
-                    drive.lineTo(55, -37, Math.toRadians(-180));
+                    drive.lineTo(55, -36, Math.toRadians(-180));
                     arm1.setState(DepoArm.DepoArmState.LT_SCORE);
                     wrist1.setState(Wrist.WristState.LT_SCORE);
+                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD);
                     if(drive.isAtTarget()){
                         currentState++;
                     }
                 }else if(currentState == 1){
+                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
 //                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD);
 //                    if(Math.abs(pitch.getCurrentPosition() - pitch.target) < .05){
 //                        currentState++;
@@ -352,7 +356,7 @@ public class TestPathsRed extends LinearOpMode {
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
                     }
-                    if(timer.milliseconds() > TimeStamp + 1000){
+                    if(timer.milliseconds() > TimeStamp + 1750){
                         currentState++;
                         timeToggle = true;
                     }
@@ -361,6 +365,9 @@ public class TestPathsRed extends LinearOpMode {
                     if(timeToggle){//timeToggle starts at true by default
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
+                    }
+                    if(timer.milliseconds() > TimeStamp + 250){
+                        pitch.setState(Pitch.PitchState.AUTON_PRELOAD_SLIGHT_UP);
                     }
                     if(timer.milliseconds() > TimeStamp + 750){
                         currentState++;
@@ -373,13 +380,17 @@ public class TestPathsRed extends LinearOpMode {
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
                     }
-                    if(timer.milliseconds() > TimeStamp + 500){
+                    if(timer.milliseconds() > TimeStamp + 250){
                         currentState++;
                         timeToggle = true;
                     }
                 }else if (currentState == 6){
                     drive.setMaxPower(1);
                     drive.lineTo(startBPose.getX()-4,-53,Math.toRadians(-270));
+                    slides.setState(DepoSlides.DepositState.OVER_IN);
+                    pitch.setState(Pitch.PitchState.INITIALIZE);
+                    arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
+                    wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
 //                    drive.setMaxPower(.7);
 //                    drive.lineTo(25,-25,Math.toRadians(-180));
 //                    if(drive.isAtTarget()){
@@ -395,7 +406,7 @@ public class TestPathsRed extends LinearOpMode {
                     }
                 }else if(currentState == 7){
                     drive.setMaxPower(.4);
-                    drive.lineTo(startBPose.getX()-4, -33, Math.toRadians(-270));
+                    drive.lineTo(startBPose.getX()-4, -35, Math.toRadians(-270));
                     intake.setPower(-.35);
                     if(timeToggle){//timeToggle starts at true by default
                         TimeStamp = timer.milliseconds();
@@ -477,10 +488,12 @@ public class TestPathsRed extends LinearOpMode {
                     drive.lineTo(55, -27, Math.toRadians(-180));
                     arm1.setState(DepoArm.DepoArmState.LT_SCORE);
                     wrist1.setState(Wrist.WristState.LT_SCORE);
+                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD);
                     if(drive.isAtTarget()){
                         currentState++;
                     }
                 }else if(currentState == 1){
+                    slides.setState(DepoSlides.DepositState.AUTO_PRELOAD_SCORE);
 //                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD);
 //                    if(Math.abs(pitch.getCurrentPosition() - pitch.target) < .05){
 //                        currentState++;
@@ -489,7 +502,7 @@ public class TestPathsRed extends LinearOpMode {
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
                     }
-                    if(timer.milliseconds() > TimeStamp + 1000){
+                    if(timer.milliseconds() > TimeStamp + 1200){
                         currentState++;
                         timeToggle = true;
                     }
@@ -515,17 +528,20 @@ public class TestPathsRed extends LinearOpMode {
                         timeToggle = true;
                     }
                 }else if(currentState == 4){
-//                    claw.setState(Claw.ClawState.UNLATCHED);
+                    claw.setState(Claw.ClawState.UNLATCHED);
                     if(timeToggle){//timeToggle starts at true by default
                         TimeStamp = timer.milliseconds();
                         timeToggle = false;
                     }
-                    if(timer.milliseconds() > TimeStamp + 10){
+                    if(timer.milliseconds() > TimeStamp + 250){
+                        pitch.setState(Pitch.PitchState.AUTON_PRELOAD_SLIGHT_UP);
+                    }
+                    if(timer.milliseconds() > TimeStamp + 750){
                         currentState++;
                         timeToggle = true;
                     }
                 }else if (currentState == 5){
-//                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD_SLIGHT_UP);
+                    pitch.setState(Pitch.PitchState.AUTON_PRELOAD_SLIGHT_UP);
                     drive.setMaxPower(.4);
                     drive.lineTo(47, -29, Math.toRadians(-180));
                     if(timeToggle){//timeToggle starts at true by default
@@ -537,6 +553,10 @@ public class TestPathsRed extends LinearOpMode {
                         timeToggle = true;
                     }
                 }else if (currentState == 6){
+                    pitch.setState(Pitch.PitchState.INITIALIZE);
+                    slides.setState(DepoSlides.DepositState.OVER_IN);
+                    arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
+                    wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
                     drive.setMaxPower(.7);
                     drive.lineTo(18,-37,Math.toRadians(-180));
                     if(drive.isAtTarget()){
@@ -575,6 +595,7 @@ public class TestPathsRed extends LinearOpMode {
                     pitch.setState(Pitch.PitchState.INITIALIZE);
                     arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
                     wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
+
                     if(Math.abs(pitch.getCurrentPosition() - pitch.target) < .05){
                         if(timeToggle){//timeToggle starts at true by default
                             TimeStamp = timer.milliseconds();
@@ -725,7 +746,7 @@ public class TestPathsRed extends LinearOpMode {
 
             drive.update();
             pitch.update();
-//            slides.update();
+            slides.update();
             wrist1.update();
             arm1.update();
             intake.update();

@@ -51,6 +51,7 @@ public class RegionalsTeleOP extends LinearOpMode {
 
     boolean colorMode = true;
     nine11 drone;
+    int b = 0;
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -92,6 +93,15 @@ public class RegionalsTeleOP extends LinearOpMode {
 
         while (opModeIsActive()){
             if(gamepadOne.dpad_up){
+                drone.setState(nine11.DroneState.SCORE);
+            }
+            if(Gamepad2.b){
+                b++;
+            }
+            if(b == 1){
+                pitch.setAngle(4);
+                slides.setSpaceInInches(6);
+            }else if(b == 2){
                 drone.setState(nine11.DroneState.SCORE);
             }
             intake.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
@@ -149,6 +159,7 @@ public class RegionalsTeleOP extends LinearOpMode {
         telemetry.addData("slides level ", slides.getSpaceInInches());
         telemetry.addData("intake forward? ", intakingDriveMove);
         telemetry.addData("scoring state", scoringState);
+        telemetry.addData("b",b);
         telemetry.update();
     }
 
@@ -282,6 +293,7 @@ public class RegionalsTeleOP extends LinearOpMode {
             slides.setState(DepoSlides.DepositState.OVER_IN);
             if(!sensor1.getColor().equals("NOTHING")&&!sensor2.getColor().equals("NOTHING")){
                 claw.setState(Claw.ClawState.LATCHED);
+                gamepad1.rumble(250);
             }else{
                 claw.setState(Claw.ClawState.UNLATCHED);
             }

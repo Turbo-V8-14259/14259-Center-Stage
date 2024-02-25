@@ -14,8 +14,8 @@ public class nine11 {
     public double target = 0;
 
     private ServoMotorBetter drone;
-    private static final double LOWER_BOUND = 0.23;
-    private static final double UPPER_BOUND = 0.55;
+    private static final double LOWER_BOUND = .3;
+    private static final double UPPER_BOUND = .65;
 
     public nine11(ServoMotorBetter drone){
         this.drone = drone;

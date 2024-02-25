@@ -121,7 +121,7 @@ public class DepoSlides {
                 this.pidRunning = true;
                 break;
             case AUTO_PRELOAD_SCORE:
-                this.targetDepositInches = -9;
+                this.targetDepositInches = -10;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
@@ -131,7 +131,7 @@ public class DepoSlides {
                 this.pidRunning = true;
                 break;
             case OVER_IN:
-                this.targetDepositInches = -1;
+                this.targetDepositInches = -.5;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;

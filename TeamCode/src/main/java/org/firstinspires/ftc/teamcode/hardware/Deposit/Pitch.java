@@ -121,7 +121,7 @@ public class Pitch {
                 target = 0;
                 break;
             case AUTON_PRELOAD:
-                target = .3;
+                target = .28;
                 break;
             case AUTON_CYCLE:
                 target = .4;

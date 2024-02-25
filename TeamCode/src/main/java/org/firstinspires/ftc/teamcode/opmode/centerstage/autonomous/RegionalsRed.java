@@ -8,6 +8,7 @@ import static org.firstinspires.ftc.teamcode.vision.CameraPipeline.rightPer;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -36,6 +37,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 @Config
 @Autonomous
+@Disabled
 public class RegionalsRed extends LinearOpMode {
     boolean timeToggle = true;
     double TimeStamp = 0;

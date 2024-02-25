@@ -66,10 +66,10 @@ public class DepoArm {
         this.depoArmFSM = state;
         switch (depoArmFSM){
             case INITIALIZE:
-                target = .85;//.1
+                target = .88;//.1
                 break;
             case TRANSFER:
-                target = .85;
+                target = .88;
                 break;
             case ABOVE_TRANSFER:
                 target = .74;
