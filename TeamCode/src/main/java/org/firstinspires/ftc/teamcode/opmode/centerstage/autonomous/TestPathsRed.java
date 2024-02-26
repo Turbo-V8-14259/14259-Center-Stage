@@ -558,7 +558,7 @@ public class TestPathsRed extends LinearOpMode {
                     arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
                     wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
                     drive.setMaxPower(.7);
-                    drive.lineTo(18,-37,Math.toRadians(-180));
+                    drive.lineTo(18,-32,Math.toRadians(-180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }

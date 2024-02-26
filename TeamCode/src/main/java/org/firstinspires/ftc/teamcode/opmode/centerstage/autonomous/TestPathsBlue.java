@@ -35,7 +35,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 @Config
-@Autonomous(name = "Regionals blue")
+@Autonomous(name = "Regionals blue fr")
 public class TestPathsBlue extends LinearOpMode {
     boolean timeToggle = true;
     double TimeStamp = 0;
@@ -128,7 +128,7 @@ public class TestPathsBlue extends LinearOpMode {
 
 
         while(opModeIsActive()){
-            //right (farthest to the center of the feild)
+            //left (farthest to the center of the feild)
             //detection = AprilTagPipeline.getSpecificTagData(aprilTag, aprilTagNum);
             if(randomization == 0){
                 if(currentState == 0){
@@ -558,7 +558,7 @@ public class TestPathsBlue extends LinearOpMode {
                     arm1.setState(DepoArm.DepoArmState.INTERMEDIATE);
                     wrist1.setState(Wrist.WristState.ABOVE_TRANSFER);
                     drive.setMaxPower(.7);
-                    drive.lineTo(18,37,Math.toRadians(180));
+                    drive.lineTo(18,32,Math.toRadians(180));
                     if(drive.isAtTarget()){
                         currentState++;
                     }
@@ -650,7 +650,7 @@ public class TestPathsBlue extends LinearOpMode {
                     if(drive.isAtTarget()) currentState ++ ;
 
                 }else if(currentState == 15){
-                    drive.setYTarget(-56);
+                    drive.setYTarget(56);
                     drive.setRTarget(Math.toRadians(225));
 //                    drive.setRTarget(drive.toPoint(drive.getX(), drive.getY(), drive.getR(), -60, -32));
                     if(drive.isAtTarget()) currentState++;

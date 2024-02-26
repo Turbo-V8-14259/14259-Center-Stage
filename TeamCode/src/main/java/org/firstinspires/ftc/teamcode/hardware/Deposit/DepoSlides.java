@@ -126,12 +126,12 @@ public class DepoSlides {
                 this.pidRunning = true;
                 break;
             case DOWN:
-                this.targetDepositInches = -2;
+                this.targetDepositInches = -3;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
             case OVER_IN:
-                this.targetDepositInches = -.5;
+                this.targetDepositInches = -1;
                 this.setInches(targetDepositInches);
                 this.pidRunning = true;
                 break;
