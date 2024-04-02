@@ -45,8 +45,10 @@ public class PathTest extends LinearOpMode {
                     if(PurePursuitUtil.distanceTo(drive.getLocation(), nextWaypoint)>lookaheadRadius) {
 
                         Pose2d follow = PurePursuitUtil.followMe(currentWaypoint, nextWaypoint, drive.getLocation(), lookaheadRadius);
-                        double newAngle = drive.toPoint(drive.getX(), drive.getY(), drive.getR(), follow.getX(), follow.getY());
-                        drive.lineTo(follow.getX(), follow.getY(), newAngle);
+//                        double newAngle = drive.toPoint(drive.getX(), drive.getY(), drive.getR(), follow.getX(), follow.getY());
+//                        drive.lineTo(follow.getX(), follow.getY(), newAngle);
+                        drive.lineTo(follow.getX(), follow.getY(), follow.getHeading());
+
                         drive.setMaxPower(1);
                         drive.update();
                         telemetry.addData("robot x", drive.getX());
