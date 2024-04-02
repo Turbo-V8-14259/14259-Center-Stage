@@ -122,9 +122,9 @@ public class DT{
         if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
         if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
 
-        if(Math.abs(xPower) < 0.1) xPower = 0;
+        if(Math.abs(xPower) < 0.07) xPower = 0;
         else xPower += DTConstants.XYBasePower * Math.signum(xPower)* 1/maxPower;
-        if(Math.abs(yPower) < 0.1) yPower = 0;
+        if(Math.abs(yPower) < 0.07) yPower = 0;
         else yPower += DTConstants.XYBasePower * Math.signum(yPower) * 1/maxPower; // doesnt work since y becomes x and x becomes y
         if (Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
         else rOut += DTConstants.RBasePower * Math.signum(rOut) * 1/maxPower; //this works tho
