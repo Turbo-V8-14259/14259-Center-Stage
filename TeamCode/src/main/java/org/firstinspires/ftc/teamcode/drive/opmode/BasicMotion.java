@@ -22,7 +22,7 @@ public class BasicMotion extends LinearOpMode {
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("frontRight");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("backRight");
 
-        double rx = 1;
+        double rx = 0;
         double angle = 135;
 
         double ratio = (angle/360)*SECSPERROTATION;
@@ -42,15 +42,15 @@ public class BasicMotion extends LinearOpMode {
 
         while (opModeIsActive()) {
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-            double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
-
-            if(timer.milliseconds()<=ratio) {
-
-//            double rx = gamepad1.right_stick_x;
-              rx= 1;
-            }else{
-                rx = 0;
-            }
+            double x = gamepad1.left_stick_x; // Counteract imperfect strafing
+            rx = gamepad1.right_stick_x;
+//            if(timer.milliseconds()<=ratio) {
+//
+////            double rx = gamepad1.right_stick_x;
+//              rx= 1;
+//            }else{
+//                rx = 0;
+//            }
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio,
             // but only if at least one is out of the range [-1, 1]
