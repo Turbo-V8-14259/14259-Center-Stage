@@ -7,12 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import java.util.Timer;
+import org.firstinspires.ftc.teamcode.hardware.Sensors.Imu;
+import com.qualcomm.robotcore.hardware.IMU;
 
 @TeleOp
 public class BasicMotion extends LinearOpMode {
     final double SECSPERROTATION = 1200;
+    private Imu imu;
     @Override
     public void runOpMode() throws InterruptedException {
         // Declare our motors
@@ -22,8 +23,8 @@ public class BasicMotion extends LinearOpMode {
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("frontRight");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("backRight");
 
-        double rx = 0;
-        double angle = 135;
+        double rx = 1;
+        double angle = 45;
 
         double ratio = (angle/360)*SECSPERROTATION;
         ElapsedTime timer = new ElapsedTime();
@@ -36,21 +37,25 @@ public class BasicMotion extends LinearOpMode {
         frontLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
+        imu = new Imu(hardwareMap.get(IMU.class, "imu"));
+        imu.init();
+
         waitForStart();
         timer.reset();
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
+            imu.update();
             double y = -gamepad1.left_stick_y; // Remember, Y stick value is reversed
-            double x = gamepad1.left_stick_x; // Counteract imperfect strafing
-            rx = gamepad1.right_stick_x;
-//            if(timer.milliseconds()<=ratio) {
-//
-////            double rx = gamepad1.right_stick_x;
-//              rx= 1;
-//            }else{
-//                rx = 0;
-//            }
+            double x = gamepad1.left_stick_x * 1.1; // Counteract imperfect strafing
+
+
+            if(Math.abs(imu.getYawR()-angle)>=2) {
+                rx=0.1;
+            }else{
+                rx=0;
+            }
+
             // Denominator is the largest motor power (absolute value) or 1
             // This ensures all the powers maintain the same ratio,
             // but only if at least one is out of the range [-1, 1]
@@ -64,9 +69,12 @@ public class BasicMotion extends LinearOpMode {
             backLeftMotor.setPower(backLeftPower);
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
-            telemetry.addData("left stick data ", -y);
-            telemetry.addData("right stick data ", rx);
-            telemetry.addData("timer secs ", timer.seconds());
+
+
+            telemetry.addData("yaw", imu.getYawR()); //this is the value we're going to be using for centerstage
+            telemetry.addData("pitch", imu.getPitchR());
+            telemetry.addData("roll", imu.getRollR());
+
             telemetry.update();
         }
     }
