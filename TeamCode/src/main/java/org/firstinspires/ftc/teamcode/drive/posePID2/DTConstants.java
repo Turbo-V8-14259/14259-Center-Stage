@@ -7,6 +7,8 @@ public class DTConstants {
     public static double xyP = .075, xyI = 0, xyD = 0;
     public static double rP = 0.35, rI = 0, rD = 0;
 
+    public static double pPrP = 1, pPrI = 0, pPrD = 0;
+
     public static double RBasePower = .1;
     public static double XYBasePower = .07;
 

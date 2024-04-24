@@ -43,7 +43,7 @@ public class PathTest extends LinearOpMode {
                 Pose2d nextWaypoint = wayPoints.get(currentWaypointIndex + 1);
                 while(!PurePursuitUtil.passedWayPt(drive.getLocation(), nextWaypoint, lookaheadRadius)){
                     if(PurePursuitUtil.distanceTo(drive.getLocation(), nextWaypoint)>lookaheadRadius) {
-
+                        drive.setPurePersuiting(true);
                         Pose2d follow = PurePursuitUtil.followMe(currentWaypoint, nextWaypoint, drive.getLocation(), lookaheadRadius);
                         double newAngle = drive.toPoint(drive.getX(), drive.getY(), drive.getR(), follow.getX(), follow.getY());
                         drive.lineTo(follow.getX(), follow.getY(), newAngle);

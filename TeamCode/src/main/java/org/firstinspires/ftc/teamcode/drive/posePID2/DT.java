@@ -27,8 +27,10 @@ public class DT{
 
     private double errorX, errorY; //PEE JAY
 
-    private BasicPID xController, yController, rController;
-    private PIDCoefficients xyCoeff, rCoeff;
+    private boolean purePersuiting = false;
+
+    private BasicPID xController, yController, rController, pprController;
+    private PIDCoefficients xyCoeff, rCoeff, pprCoeff;
 
     private double xOut, yOut, rOut;
     private double twistedR, count, lastAngle;
@@ -56,6 +58,7 @@ public class DT{
         this.xController = new BasicPID(xyCoeff);
         this.yController = new BasicPID(xyCoeff);
         this.rController = new BasicPID(rCoeff);
+        this.pprController = new BasicPID(pprCoeff);
         this.xTarget = 0;
         this.yTarget = 0;
         this.rTarget = 0;
@@ -81,6 +84,8 @@ public class DT{
         this.xController = new BasicPID(xyCoeff);
         this.yController = new BasicPID(xyCoeff);
         this.rController = new BasicPID(rCoeff);
+        this.pprController = new BasicPID(pprCoeff);
+
         this.xTarget = startPose.getX();
         this.yTarget = startPose.getY();
         this.rTarget = startPose.getHeading();
@@ -107,10 +112,17 @@ public class DT{
         deltaX = xTarget - xRn;
         xOut = xController.calculate(xTarget, xRn);
         yOut = -yController.calculate(yTarget, yRn);
+
         if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
         lastAngle = rRn;
         twistedR = count * (2* M.PI) + rRn;
-        rOut = -rController.calculate(rTarget, twistedR);
+
+        if(purePersuiting){
+            rOut = -pprController.calculate(rTarget, twistedR);
+        }else{
+            rOut = -rController.calculate(rTarget, twistedR);
+        }
+//        rOut = -rController.calculate(rTarget, twistedR);
         xPower = xOut * T.cos(rRn) - yOut * T.sin(rRn);
         yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
 
@@ -141,6 +153,10 @@ public class DT{
         }else{
             isAtTarget = false;
         }
+    }
+
+    public void setPurePersuiting(boolean isPurePersuiting){
+        purePersuiting = isPurePersuiting;
     }
     public Pose2d getLocation(){
         return new Pose2d(xRn, yRn, rRn);
