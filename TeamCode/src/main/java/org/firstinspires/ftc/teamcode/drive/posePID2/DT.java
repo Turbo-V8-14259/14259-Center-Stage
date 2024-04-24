@@ -40,6 +40,8 @@ public class DT{
 
     private double maxPower = 1;
     private double flPower, frPower, blPower, brPower;
+    
+    private double normalize;
 
     public DT(HardwareMap hardwareMap){
         this.vs = hardwareMap.voltageSensor.iterator().next();
@@ -95,7 +97,7 @@ public class DT{
         blPower = (y-x+r);
         brPower = (y+x-r);
         frPower = (y-x-r);
-        double normalize = Math.max(Math.abs(flPower) + Math.abs(blPower) + Math.abs(brPower) + Math.abs(frPower),1);
+        normalize = Math.max(Math.abs(flPower) + Math.abs(blPower) + Math.abs(brPower) + Math.abs(frPower),1);
         leftFront.setPower((flPower/normalize) * maxPower);
         leftRear.setPower((blPower/normalize) * maxPower);
         rightRear.setPower((brPower/normalize) * maxPower);
