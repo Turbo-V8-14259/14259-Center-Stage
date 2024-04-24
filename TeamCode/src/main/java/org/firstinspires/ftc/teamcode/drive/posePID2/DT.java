@@ -115,7 +115,7 @@ public class DT{
         this.xTarget = startPose.getX();
         this.yTarget = startPose.getY();
         this.rTarget = startPose.getHeading();
-        
+
         this.setPurePersuiting(isPurePersuiting);
     }
     public void setPowers(double y, double x, double r){
