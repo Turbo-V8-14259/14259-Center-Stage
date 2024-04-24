@@ -57,6 +57,7 @@ public class DT{
         this.leftRear.setDirection(DcMotor.Direction.REVERSE);
         this.xyCoeff = new PIDCoefficients(DTConstants.xyP, DTConstants.xyI, DTConstants.xyD);
         this.rCoeff = new PIDCoefficients(DTConstants.rP, DTConstants.rI, DTConstants.rD);
+        this.pprCoeff = new PIDCoefficients(DTConstants.pPrP, DTConstants.pPrI, DTConstants.pPrD);
         this.xController = new BasicPID(xyCoeff);
         this.yController = new BasicPID(xyCoeff);
         this.rController = new BasicPID(rCoeff);
@@ -83,6 +84,7 @@ public class DT{
         this.leftRear.setDirection(DcMotor.Direction.REVERSE);
         this.xyCoeff = new PIDCoefficients(DTConstants.xyP, DTConstants.xyI, DTConstants.xyD);
         this.rCoeff = new PIDCoefficients(DTConstants.rP, DTConstants.rI, DTConstants.rD);
+        this.pprCoeff = new PIDCoefficients(DTConstants.pPrP, DTConstants.pPrI, DTConstants.pPrD);
         this.xController = new BasicPID(xyCoeff);
         this.yController = new BasicPID(xyCoeff);
         this.rController = new BasicPID(rCoeff);
@@ -107,6 +109,7 @@ public class DT{
         this.leftRear.setDirection(DcMotor.Direction.REVERSE);
         this.xyCoeff = new PIDCoefficients(DTConstants.xyP, DTConstants.xyI, DTConstants.xyD);
         this.rCoeff = new PIDCoefficients(DTConstants.rP, DTConstants.rI, DTConstants.rD);
+        this.pprCoeff = new PIDCoefficients(DTConstants.pPrP, DTConstants.pPrI, DTConstants.pPrD);
         this.xController = new BasicPID(xyCoeff);
         this.yController = new BasicPID(xyCoeff);
         this.rController = new BasicPID(rCoeff);
