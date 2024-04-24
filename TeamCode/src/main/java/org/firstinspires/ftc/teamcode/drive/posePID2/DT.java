@@ -92,6 +92,32 @@ public class DT{
         this.yTarget = startPose.getY();
         this.rTarget = startPose.getHeading();
     }
+    public DT(HardwareMap hardwareMap, Pose2d startPose, boolean isPurePersuiting){
+        this.vs = hardwareMap.voltageSensor.iterator().next();
+        this.drive = new SampleMecanumDrive(hardwareMap);
+        this.drive.setPoseEstimate(startPose);
+        this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
+        this.leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
+        this.rightRear = hardwareMap.get(DcMotorEx.class, "RightBack");
+        this.rightFront = hardwareMap.get(DcMotorEx.class, "RightFront");
+
+        this.rightRear.setDirection(DcMotor.Direction.FORWARD);
+        this.rightFront.setDirection(DcMotor.Direction.FORWARD);
+        this.leftFront.setDirection(DcMotor.Direction.REVERSE);
+        this.leftRear.setDirection(DcMotor.Direction.REVERSE);
+        this.xyCoeff = new PIDCoefficients(DTConstants.xyP, DTConstants.xyI, DTConstants.xyD);
+        this.rCoeff = new PIDCoefficients(DTConstants.rP, DTConstants.rI, DTConstants.rD);
+        this.xController = new BasicPID(xyCoeff);
+        this.yController = new BasicPID(xyCoeff);
+        this.rController = new BasicPID(rCoeff);
+        this.pprController = new BasicPID(pprCoeff);
+
+        this.xTarget = startPose.getX();
+        this.yTarget = startPose.getY();
+        this.rTarget = startPose.getHeading();
+        
+        this.setPurePersuiting(isPurePersuiting);
+    }
     public void setPowers(double y, double x, double r){
         flPower = (y+x+r);
         blPower = (y-x+r);
