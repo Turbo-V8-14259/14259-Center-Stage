@@ -103,10 +103,8 @@ public class DT{
         rRn = drive.getPoseEstimate().getHeading();
         xOut = xController.calculate(xTarget, xRn);
         yOut = -yController.calculate(yTarget, yRn);
-        deltaY = yTarget - yRn; //PEE JAY
-        deltaX = xTarget - xRn; //PEE JAY
-//        errorX = deltaX * T.cos(rRn) - deltaY * T.sin(rRn); //PEE JAY
-//        errorY = deltaX * T.sin(rRn) + deltaY * T.cos(rRn); //PEE JAY
+        deltaY = yTarget - yRn;
+        deltaX = xTarget - xRn;
         xOut = xController.calculate(xTarget, xRn);
         yOut = -yController.calculate(yTarget, yRn);
         if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
@@ -125,9 +123,9 @@ public class DT{
         if(Math.abs(xPower) < 0.07) xPower = 0;
         else xPower += DTConstants.XYBasePower * Math.signum(xPower)* 1/maxPower;
         if(Math.abs(yPower) < 0.07) yPower = 0;
-        else yPower += DTConstants.XYBasePower * Math.signum(yPower) * 1/maxPower; // doesnt work since y becomes x and x becomes y
+        else yPower += DTConstants.XYBasePower * Math.signum(yPower) * 1/maxPower;
         if (Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
-        else rOut += DTConstants.RBasePower * Math.signum(rOut) * 1/maxPower; //this works tho
+        else rOut += DTConstants.RBasePower * Math.signum(rOut) * 1/maxPower;
         compensator = vs.getVoltage() / 12.5;
         xPower/=compensator;
         yPower/=compensator;
