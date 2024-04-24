@@ -86,15 +86,15 @@ public class DT{
         this.rTarget = startPose.getHeading();
     }
     public void setPowers(double y, double x, double r){
-        double normalize = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(r),1);
-        flPower = ((y+x+r)/normalize);
-        blPower = ((y-x+r)/normalize);
-        brPower = ((y+x-r)/normalize);
-        frPower = ((y-x-r)/normalize);
-        leftFront.setPower(flPower * maxPower);
-        leftRear.setPower(blPower * maxPower);
-        rightRear.setPower(brPower * maxPower);
-        rightFront.setPower(frPower * maxPower);
+        flPower = (y+x+r);
+        blPower = (y-x+r);
+        brPower = (y+x-r);
+        frPower = (y-x-r);
+        double normalize = Math.max(Math.abs(flPower) + Math.abs(blPower) + Math.abs(brPower) + Math.abs(frPower),1);
+        leftFront.setPower((flPower/normalize) * maxPower);
+        leftRear.setPower((blPower/normalize) * maxPower);
+        rightRear.setPower((brPower/normalize) * maxPower);
+        rightFront.setPower((frPower/normalize) * maxPower);
     }
     public void update(){
         drive.updatePoseEstimate();
