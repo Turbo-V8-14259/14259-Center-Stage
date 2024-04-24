@@ -110,8 +110,8 @@ public class DT{
         yOut = -yController.calculate(yTarget, yRn);
         deltaY = yTarget - yRn;
         deltaX = xTarget - xRn;
-        xOut = xController.calculate(xTarget, xRn);
-        yOut = -yController.calculate(yTarget, yRn);
+//        xOut = xController.calculate(xTarget, xRn);
+//        yOut = -yController.calculate(yTarget, yRn);
 
         if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
         lastAngle = rRn;
