@@ -284,6 +284,13 @@ public class DT{
         this.maxPower = maxPower;
     }
 
+    public void finishPurePersuiting(Pose2d endPoint){
+        purePersuiting = false;
+        setXTarget(endPoint.getX());
+        setYTarget(endPoint.getY());
+        setRTarget(endPoint.getHeading());
+    }
+
     //Takes in current posx, posy, posr, targetx, and targety
     //calculates the angle to follow that requires the least rotation
     public double toPoint(double x, double y, double r, double x2, double y2){
