@@ -34,14 +34,15 @@ public class DT{
 
     private boolean purePersuiting = false;
 
-    private BasicPID xController, yController, rController, pprController;
-    private PIDCoefficients xyCoeff, rCoeff, pprCoeff;
+    private BasicPID xController, yController, rController, pprController, NxController, NyController;
+    private PIDCoefficients xyCoeff, rCoeff, pprCoeff, NxyCoeff;
 
     private double xOut, yOut, rOut;
     private double twistedR, count, lastAngle;
     private double xPower, yPower;
 
     private boolean isAtXYTarget;
+    private boolean ending = false;
 
     private double maxPower = 1;
     public double followRadius = 0;
@@ -67,12 +68,16 @@ public class DT{
         this.leftFront.setDirection(DcMotor.Direction.REVERSE);
         this.leftRear.setDirection(DcMotor.Direction.REVERSE);
         this.xyCoeff = new PIDCoefficients(DTConstants.xyP, DTConstants.xyI, DTConstants.xyD);
+        this.NxyCoeff = new PIDCoefficients(DTConstants.NxyP, DTConstants.NxyI, DTConstants.NxyD);
         this.rCoeff = new PIDCoefficients(DTConstants.rP, DTConstants.rI, DTConstants.rD);
         this.pprCoeff = new PIDCoefficients(DTConstants.pPrP, DTConstants.pPrI, DTConstants.pPrD);
         this.xController = new BasicPID(xyCoeff);
         this.yController = new BasicPID(xyCoeff);
         this.rController = new BasicPID(rCoeff);
         this.pprController = new BasicPID(pprCoeff);
+        this.NxController = new BasicPID(NxyCoeff);
+        this.NyController = new BasicPID(NxyCoeff);
+
         this.xTarget = 0;
         this.yTarget = 0;
         this.rTarget = 0;
@@ -99,7 +104,10 @@ public class DT{
         this.xController = new BasicPID(xyCoeff);
         this.yController = new BasicPID(xyCoeff);
         this.rController = new BasicPID(rCoeff);
+        this.NxyCoeff = new PIDCoefficients(DTConstants.NxyP, DTConstants.NxyI, DTConstants.NxyD);
         this.pprController = new BasicPID(pprCoeff);
+        this.NxController = new BasicPID(NxyCoeff);
+        this.NyController = new BasicPID(NxyCoeff);
         this.xTarget = 0;
         this.yTarget = 0;
         this.rTarget = 0;
@@ -178,41 +186,42 @@ public class DT{
         }
     }
     public void update(){
-        lastHeading = currentHeading;
-        drive.updatePoseEstimate();
-        xRn = drive.getPoseEstimate().getX();
-        yRn = drive.getPoseEstimate().getY();
-        rRn = drive.getPoseEstimate().getHeading();
-        xOut = xController.calculate(xTarget, xRn);
-        yOut = -yController.calculate(yTarget, yRn);
+        if(!ending){
+            lastHeading = currentHeading;
+            drive.updatePoseEstimate();
+            xRn = drive.getPoseEstimate().getX();
+            yRn = drive.getPoseEstimate().getY();
+            rRn = drive.getPoseEstimate().getHeading();
+            xOut = xController.calculate(xTarget, xRn);
+            yOut = -yController.calculate(yTarget, yRn);
 //        double n = Math.hypot(xOut,yOut);
 //        xOut = maxPower * Math.signum(xOut);
 //        yOut = maxPower * Math.signum(yOut);
-        xOut *= maxPower / followRadius;
-        yOut *= maxPower / followRadius;
+            xOut *= maxPower / followRadius;
+            yOut *= maxPower / followRadius;
 
-        deltaY = yTarget - yRn;
-        deltaX = xTarget - xRn;
+            deltaY = yTarget - yRn;
+            deltaX = xTarget - xRn;
 //        xOut = xController.calculate(xTarget, xRn);
 //        yOut = -yController.calculate(yTarget, yRn);
 
-        if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
-        lastAngle = rRn;
-        twistedR = count * (2* M.PI) + rRn;
-        currentHeading = twistedR;
-        lastTime = currentTime;
-        currentTime = timer.nanoseconds() / 1000000;
-        turnVelocity = (currentHeading-lastHeading)/(currentTime-lastTime);
-        rOut = -((rTarget -  twistedR) * 1.3 - turnVelocity * 105);
+            if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
+            lastAngle = rRn;
+            twistedR = count * (2* M.PI) + rRn;
+            currentHeading = twistedR;
+            lastTime = currentTime;
+            currentTime = timer.nanoseconds() / 1000000;
+            turnVelocity = (currentHeading-lastHeading)/(currentTime-lastTime);
+            rOut = -((rTarget -  twistedR) * 1.3 - turnVelocity * 105);
 //        rOut = -rController.calculate(rTarget, twistedR);
-        xPower = (xOut * T.cos(rRn) - yOut * T.sin(rRn));
-        yPower = (xOut * T.sin(rRn) + yOut * T.cos(rRn));
+            xPower = (xOut * T.cos(rRn) - yOut * T.sin(rRn));
+            yPower = (xOut * T.sin(rRn) + yOut * T.cos(rRn));
 
-        deltaR = rTarget - twistedR;
+            deltaR = rTarget - twistedR;
 
-        if(Math.abs(xPower) > DTConstants.maxAxialPower) xPower = DTConstants.maxAxialPower * Math.signum(xPower);
-        if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
-        if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
+            if(Math.abs(xPower) > DTConstants.maxAxialPower) xPower = DTConstants.maxAxialPower * Math.signum(xPower);
+            if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
+            if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
 //
 //        if(Math.abs(xPower) < 0.05) xPower = 0;
 //        else xPower += DTConstants.XYBasePower * Math.signum(xPower)* 1/maxPower;
@@ -221,29 +230,98 @@ public class DT{
 //        if (Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
 //        else rOut += DTConstants.RBasePower * Math.signum(rOut) * 1/maxPower;
 
-        double zeroMoveAngle = Math.toRadians(25);
-        double errorScale = 1 - (Math.abs(deltaR) / zeroMoveAngle);
-        if(errorScale < 0) { errorScale = 0; }
+            double zeroMoveAngle = Math.toRadians(25);
+            double errorScale = 1 - (Math.abs(deltaR) / zeroMoveAngle);
+            if(errorScale < 0) { errorScale = 0; }
 
-        xPower *= errorScale;
-        yPower *= errorScale;
+            xPower *= errorScale;
+            yPower *= errorScale;
 
-        compensator = vs.getVoltage() / 12.5;
-        xPower/=compensator;
-        yPower/=compensator;
-        rOut/=compensator;
+            compensator = vs.getVoltage() / 12.5;
+            xPower/=compensator;
+            yPower/=compensator;
+            rOut/=compensator;
 
 //        setPowers(xPower, yPower,rOut);
 //        setPowers(-xPower, 0,0);
-        setPowers(-xPower, -yPower,rOut);
+            setPowers(-xPower, -yPower,rOut);
 //        setPowers(0, 0,rOut);
 
 
 
-        if(Math.abs(deltaX) < 2 && Math.abs(deltaY)<2 && Math.abs(deltaR) < DTConstants.allowedAngularError){
-            isAtTarget = true;
+            if(Math.abs(deltaX) < 2 && Math.abs(deltaY)<2 && Math.abs(deltaR) < DTConstants.allowedAngularError){
+                isAtTarget = true;
+            }else{
+                isAtTarget = false;
+            }
+
         }else{
-            isAtTarget = false;
+            lastHeading = currentHeading;
+            drive.updatePoseEstimate();
+            xRn = drive.getPoseEstimate().getX();
+            yRn = drive.getPoseEstimate().getY();
+            rRn = drive.getPoseEstimate().getHeading();
+            xOut = NxController.calculate(xTarget, xRn);
+            yOut = -NyController.calculate(yTarget, yRn);
+//        double n = Math.hypot(xOut,yOut);
+//        xOut = maxPower * Math.signum(xOut);
+//        yOut = maxPower * Math.signum(yOut);
+
+            deltaY = yTarget - yRn;
+            deltaX = xTarget - xRn;
+//        xOut = xController.calculate(xTarget, xRn);
+//        yOut = -yController.calculate(yTarget, yRn);
+
+            if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
+            lastAngle = rRn;
+            twistedR = count * (2* M.PI) + rRn;
+            currentHeading = twistedR;
+            lastTime = currentTime;
+            currentTime = timer.nanoseconds() / 1000000;
+            turnVelocity = (currentHeading-lastHeading)/(currentTime-lastTime);
+            rOut = -((rTarget -  twistedR) * 1.3 - turnVelocity * 105);
+//        rOut = -rController.calculate(rTarget, twistedR);
+            xPower = (xOut * T.cos(rRn) - yOut * T.sin(rRn));
+            yPower = (xOut * T.sin(rRn) + yOut * T.cos(rRn));
+
+            deltaR = rTarget - twistedR;
+
+            if(Math.abs(xPower) > DTConstants.maxAxialPower) xPower = DTConstants.maxAxialPower * Math.signum(xPower);
+            if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
+            if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
+//
+//        if(Math.abs(xPower) < 0.05) xPower = 0;
+//        else xPower += DTConstants.XYBasePower * Math.signum(xPower)* 1/maxPower;
+//        if(Math.abs(yPower) < 0.05) yPower = 0;
+//        else yPower += DTConstants.XYBasePower * Math.signum(yPower) * 1/maxPower;
+//        if (Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
+//        else rOut += DTConstants.RBasePower * Math.signum(rOut) * 1/maxPower;
+
+            double zeroMoveAngle = Math.toRadians(25);
+            double errorScale = 1 - (Math.abs(deltaR) / zeroMoveAngle);
+            if(errorScale < 0) { errorScale = 0; }
+
+            xPower *= errorScale;
+            yPower *= errorScale;
+
+            compensator = vs.getVoltage() / 12.5;
+            xPower/=compensator;
+            yPower/=compensator;
+            rOut/=compensator;
+
+//        setPowers(xPower, yPower,rOut);
+//        setPowers(-xPower, 0,0);
+            setPowers(-xPower, -yPower,rOut);
+//        setPowers(0, 0,rOut);
+
+
+
+            if(Math.abs(deltaX) < 2 && Math.abs(deltaY)<2 && Math.abs(deltaR) < DTConstants.allowedAngularError){
+                isAtTarget = true;
+            }else{
+                isAtTarget = false;
+            }
+
         }
 
     }
@@ -388,5 +466,9 @@ public class DT{
     }
     public boolean isForceStopped(){
         return forceStop;
+    }
+
+    public void setPathEndHold(boolean a){
+        this.ending = a;
     }
 }

@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 @Config
 public class PathTest extends LinearOpMode {
     ElapsedTime timer = new ElapsedTime();
-    double previousTime;
+    double previousTime = 0 ;
     double currentTime = 0;
 
     int currentWaypointIndex = 0;
@@ -40,29 +40,36 @@ public class PathTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
-            previousTime = currentTime;
-            currentTime = timer.nanoseconds()/1000000000;
-            updateTime = currentTime - previousTime;
+            currentTime = timer.milliseconds()/(Math.pow(10,9));
             if(i == 0){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
-                wayPoints.add(new Pose2d(40,-60));
-                wayPoints.add(new Pose2d(80,0));
-                followPath(wayPoints, .2, 23, 20, 0, -99, drive);
-                if(Math.hypot((80 - drive.getX()), 0 - drive.getY()) < 5){
-                    i++;
+                wayPoints.add(new Pose2d(10,30));
+                wayPoints.add(new Pose2d(57,30));
+                wayPoints.add(new Pose2d(57,0));
+                if(Math.hypot((57 - drive.getX()), 0 - drive.getY()) < 20){
+                    drive.setPathEndHold(true);
+                    drive.lineTo(57,0, Math.toRadians(-90));
+                    if(Math.hypot((57 - drive.getX()), 0 - drive.getY()) < 3) {
+                        i++;
+                    }
+                }else{
+                    followPath(wayPoints, .2, 23, 20, 0, -99, drive);
                 }
             }else if(i==1){
-                ArrayList<Pose2d> wayPoints = new ArrayList<>();
-                wayPoints.add(new Pose2d(80,0));
-                wayPoints.add(new Pose2d(0, 0));
-                followPath(wayPoints, .2, 23, 20, 0, -99, drive);
+                drive.setPathEndHold(false);
+                ArrayList<Pose2d> wayPoints1 = new ArrayList<>();
+                wayPoints1.add(new Pose2d(57,0));
+                wayPoints1.add(new Pose2d(0, 0));
+                followPath(wayPoints1, .2, 23, 20, 0, -99, drive);
             }
-
 //            wayPoints.add(new Pose2d(72,10));
-
-            telemetry.addData("hz ", 1/updateTime);
+            telemetry.addData("i ", i);
+            telemetry.addData("hz ", 1/(currentTime-previousTime));
+            telemetry.addData("delta from final wp1 ", Math.hypot((80 - drive.getX()), 0 - drive.getY()));
             telemetry.update();
+            drive.update();
+            previousTime = currentTime;
         }
 
 
@@ -80,7 +87,6 @@ public class PathTest extends LinearOpMode {
         drive.lineTo(followDrive.getX(), followDrive.getY(),drive.toPoint(drive.getX(), drive.getY(), drive.getR(), followHeading.getX(), followHeading.getY() + headingOffset));
 
         drive.setMaxPower(movePower);
-        drive.update();
     }
 
 
