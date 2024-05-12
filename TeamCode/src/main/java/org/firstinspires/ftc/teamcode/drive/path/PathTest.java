@@ -8,64 +8,80 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.ArrayList;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.path.PurePursuitUtil;
 import org.firstinspires.ftc.teamcode.drive.posePID2.DT;
+import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 
 @TeleOp (name = "PPTest")
 @Config
 public class PathTest extends LinearOpMode {
+    ElapsedTime timer = new ElapsedTime();
+    double previousTime;
+    double currentTime = 0;
+
+    int currentWaypointIndex = 0;
+    double lookaheadRadius = 20;
+    double lookaheadRadiusHeading = 23;
+    double updateTime;
+
+    DT drive;
+
+    int i = 0;
     @Override
     public void runOpMode() throws InterruptedException {
-        int currentWaypointIndex = 0;
-        double lookaheadRadius = 15;
-        DT drive = new DT(hardwareMap);
+
+
+        drive = new DT(hardwareMap);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        final ArrayList<Pose2d> wayPoints = new ArrayList<>();
-        wayPoints.add(new Pose2d(0, 0));
-        wayPoints.add(new Pose2d(10,30));
-        wayPoints.add(new Pose2d(57,30));
-        wayPoints.add(new Pose2d(57,5));
-        wayPoints.add(new Pose2d(1,1));
-//        wayPoints.add(new Pose2d(30,15));
-//        wayPoints.add(new Pose2d(10,20 ));
-//        wayPoints.add(new Pose2d(30,15));
-//        wayPoints.add(new Pose2d(0,0));
-//        wayPoints.add(new Pose2d(0,20));
-//        wayPoints.add(new Pose2d(30,0));
-//        wayPoints.add(new Pose2d(0,0));
+        drive.followRadius = lookaheadRadius;
+
 
         waitForStart();
-        while(opModeIsActive()){
-            if (currentWaypointIndex < wayPoints.size()-1) {
-
-                Pose2d currentWaypoint = wayPoints.get(currentWaypointIndex);
-                Pose2d nextWaypoint = wayPoints.get(currentWaypointIndex + 1);
-                while(!PurePursuitUtil.passedWayPt(drive.getLocation(), nextWaypoint, lookaheadRadius)){
-                    if(PurePursuitUtil.distanceTo(drive.getLocation(), nextWaypoint)>lookaheadRadius) {
-                        drive.setPurePersuiting(true);
-                        Pose2d follow = PurePursuitUtil.followMe(currentWaypoint, nextWaypoint, drive.getLocation(), lookaheadRadius);
-                        double newAngle = drive.toPoint(drive.getX(), drive.getY(), drive.getR(), follow.getX(), follow.getY());
-                        drive.lineTo(follow.getX(), follow.getY(), newAngle);
-//                        drive.lineTo(follow.getX(), follow.getY(), follow.getHeading());
-
-                        drive.setMaxPower(1);
-                        drive.update();
-                        telemetry.addData("robot x", drive.getX());
-                        telemetry.addData("robot y", drive.getY());
-                        telemetry.update();
-                    }else{
-                        break;
-                    }
+        while(opModeIsActive()) {
+            previousTime = currentTime;
+            currentTime = timer.nanoseconds()/1000000000;
+            updateTime = currentTime - previousTime;
+            if(i == 0){
+                ArrayList<Pose2d> wayPoints = new ArrayList<>();
+                wayPoints.add(new Pose2d(0, 0));
+                wayPoints.add(new Pose2d(40,-60));
+                wayPoints.add(new Pose2d(80,0));
+                followPath(wayPoints, .2, 23, 20, 0, -99, drive);
+                if(Math.hypot((80 - drive.getX()), 0 - drive.getY()) < 5){
+                    i++;
                 }
-                telemetry.addData("Robot passed waypoint ", (currentWaypointIndex+1));
-                currentWaypointIndex++;
-
-            } else {
-                telemetry.addData("Robot reached the final waypoint.", 0);
+            }else if(i==1){
+                ArrayList<Pose2d> wayPoints = new ArrayList<>();
+                wayPoints.add(new Pose2d(80,0));
+                wayPoints.add(new Pose2d(0, 0));
+                followPath(wayPoints, .2, 23, 20, 0, -99, drive);
             }
 
+//            wayPoints.add(new Pose2d(72,10));
 
+            telemetry.addData("hz ", 1/updateTime);
+            telemetry.update();
         }
+
+
     }
+
+    Pose2d lastTranslatePoint = new Pose2d(0,0);
+    Pose2d lastHeadingPoint = new Pose2d(0,0);
+    void followPath(ArrayList<Pose2d> path, double movePower, double headingRadius, double moveRadius, double headingOffset, double lockAngle, DT drive) {
+        Pose2d followDrive = PurePursuitUtil.followMe(path, drive.getLocation(), moveRadius, lastTranslatePoint, false);
+        lastTranslatePoint = followDrive;
+
+        Pose2d followHeading = PurePursuitUtil.followMe(path, drive.getLocation(), headingRadius, lastHeadingPoint, true);
+        lastHeadingPoint = followHeading;
+
+        drive.lineTo(followDrive.getX(), followDrive.getY(),drive.toPoint(drive.getX(), drive.getY(), drive.getR(), followHeading.getX(), followHeading.getY() + headingOffset));
+
+        drive.setMaxPower(movePower);
+        drive.update();
+    }
+
+
 }

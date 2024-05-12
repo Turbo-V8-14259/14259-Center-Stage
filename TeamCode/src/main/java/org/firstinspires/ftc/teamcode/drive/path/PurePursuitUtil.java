@@ -8,10 +8,20 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import java.util.ArrayList;
 
 public class PurePursuitUtil {
-    public static ArrayList<Pose2d> lineCircleIntersection(Pose2d circleCenter, double radius, Pose2d linePoint1, Pose2d linePoint2) {
+    public static ArrayList<Pose2d> lineCircleIntersection(Pose2d circleCenter, double radius, Pose2d linePoint1, Pose2d linePoint2, boolean extendLast) {
         double discTolerance = 0.01;
         double m1;
         ArrayList<Pose2d> allPoints = new ArrayList<>();
+
+        double vertShift = 0;
+
+        // no verticals
+        if (linePoint2.getX() == linePoint1.getX()) {
+            vertShift = 0.001;
+        }
+
+        linePoint1 = new Pose2d(linePoint1.getX() + vertShift, linePoint1.getY());
+
         // Handle vertical line
         if (linePoint2.getX() - linePoint1.getX() != 0) {
             m1 = (linePoint2.getY() - linePoint1.getY()) / (linePoint2.getX() - linePoint1.getX());
@@ -49,10 +59,10 @@ public class PurePursuitUtil {
                 xroot2 += circleCenter.getX();
                 yroot2 += circleCenter.getY();
 
-                if (withinSegment(linePoint1.getX(), linePoint2.getX(), xroot1)) {
+                if (withinSegment(linePoint1.getX(), linePoint2.getX(), xroot1) || extendLast) {
                     allPoints.add(new Pose2d(xroot1, yroot1, heading(circleCenter, xroot1, yroot1)));
                 }
-                if (withinSegment(linePoint1.getX(), linePoint2.getX(), xroot2)) {
+                if (withinSegment(linePoint1.getX(), linePoint2.getX(), xroot2) || extendLast) {
                     allPoints.add(new Pose2d(xroot2, yroot2,heading(circleCenter, xroot2, yroot2)));
                 }
             } else if (disc >= 0 && disc <= discTolerance) {
@@ -63,7 +73,7 @@ public class PurePursuitUtil {
                 allPoints.add(new Pose2d(xroot, yroot, heading(circleCenter, xroot, yroot)));
             }else{
                 Pose2d pt = recoveryPt(linePoint1, linePoint2, circleCenter);
-                allPoints.add(pt);
+                //allPoints.add(pt);
             }
         } catch (Exception e) {
             // Handle exceptions
@@ -76,20 +86,58 @@ public class PurePursuitUtil {
         return value>min(start, end)&&value<max(start, end);
     }
 
-    public static Pose2d followMe(Pose2d wayPt1, Pose2d wayPt2, Pose2d robotLocation, double followRadius ){
 
-        ArrayList<Pose2d> intersections = lineCircleIntersection(robotLocation, followRadius,wayPt1, wayPt2);
-        if(intersections.size()==2){
-            if(abs(wayPt2.getX()-intersections.get(0).getX())<abs(wayPt2.getX()-intersections.get(1).getX())){
-                return intersections.get(0);
-            }else{
-                return intersections.get(1);
+    public static Pose2d followMe(ArrayList<Pose2d> path, Pose2d robotLocation, double followRadius, Pose2d lastPoint, boolean extendLast ){
+
+        boolean actuallyExtend = false;
+
+        // stores all intersections, valid or not, for the entire path
+        ArrayList<Pose2d> allIntersections = new ArrayList<>();
+        // cycles through all the line segments and fills the allIntersections array with actual intersections
+        for(int lineIndex = 0; lineIndex < path.size() - 1; lineIndex ++) {
+
+            // if calculating for last line segment, then enable actually extend
+            if(lineIndex == path.size() - 2) { actuallyExtend = extendLast; }
+
+            // get way points from path for the current index being tested
+            Pose2d wayPt1 = path.get(lineIndex);
+            Pose2d wayPt2 = path.get(lineIndex + 1);
+
+            // the 2 intersections for the current line index
+            ArrayList<Pose2d> intersections = lineCircleIntersection(robotLocation, followRadius, wayPt1, wayPt2, actuallyExtend);
+
+            // is the line positive with respect to x axis
+            double positiveLine = 1;
+            if(wayPt2.getX() < wayPt1.getX()) { positiveLine = -1; }
+
+            // if 2 valid intersections, then save the one that's more along the line
+            if(intersections.size() == 2) {
+                if (positiveLine * intersections.get(0).getX() > positiveLine * intersections.get(1).getX()) {
+                    allIntersections.add(intersections.get(0));
+                } else {
+                    allIntersections.add(intersections.get(1));
+                }
             }
-        }else if(intersections.size()==1){
-            return intersections.get(0);
-        }else{
-            return robotLocation;//return last robot location?
+
+            // if there's only one intersection then save that
+            else if(intersections.size() == 1) {
+                allIntersections.add(intersections.get(0));
+            }
+
+            // if you're closer to the last point than follow radius then add it to the list, unless you're extending
+            else if((Math.hypot(wayPt2.getX() - robotLocation.getX(), wayPt2.getY() - robotLocation.getY()) < followRadius) && !actuallyExtend) {
+                allIntersections.add(wayPt2);
+            }
+
         }
+
+
+
+        // if we didn't find anything return robot location
+        if(allIntersections.size() == 0) { return lastPoint; }
+
+        return allIntersections.get(allIntersections.size() - 1);
+
 
     }
 

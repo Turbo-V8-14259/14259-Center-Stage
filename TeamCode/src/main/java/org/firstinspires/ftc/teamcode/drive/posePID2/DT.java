@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
@@ -15,6 +16,8 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.T;
 
 @Config
 public class DT{
+
+    private boolean forceStop = false;
     private SampleMecanumDrive drive;
     private VoltageSensor vs;
     private double compensator;
@@ -26,6 +29,8 @@ public class DT{
     private boolean isAtTarget;
 
     private double errorX, errorY; //PEE JAY
+
+    public double turnVelocity;
 
     private boolean purePersuiting = false;
 
@@ -39,9 +44,42 @@ public class DT{
     private boolean isAtXYTarget;
 
     private double maxPower = 1;
+    public double followRadius = 0;
     private double flPower, frPower, blPower, brPower;
     
     private double normalize;
+    ElapsedTime timer = new ElapsedTime();
+    double currentTime = 0;
+    double lastTime = 0;
+    double currentHeading = 0;
+    double lastHeading = 0;
+    public DT(HardwareMap hardwareMap, ElapsedTime timer){
+        this.timer = timer;
+        this.vs = hardwareMap.voltageSensor.iterator().next();
+        this.drive = new SampleMecanumDrive(hardwareMap);
+        this.drive.setPoseEstimate(new Pose2d(0, 0, 0));
+        this.leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
+        this.leftRear = hardwareMap.get(DcMotorEx.class, "LeftBack");
+        this.rightRear = hardwareMap.get(DcMotorEx.class, "RightBack");
+        this.rightFront = hardwareMap.get(DcMotorEx.class, "RightFront");
+        this.rightRear.setDirection(DcMotor.Direction.FORWARD);
+        this.rightFront.setDirection(DcMotor.Direction.FORWARD);
+        this.leftFront.setDirection(DcMotor.Direction.REVERSE);
+        this.leftRear.setDirection(DcMotor.Direction.REVERSE);
+        this.xyCoeff = new PIDCoefficients(DTConstants.xyP, DTConstants.xyI, DTConstants.xyD);
+        this.rCoeff = new PIDCoefficients(DTConstants.rP, DTConstants.rI, DTConstants.rD);
+        this.pprCoeff = new PIDCoefficients(DTConstants.pPrP, DTConstants.pPrI, DTConstants.pPrD);
+        this.xController = new BasicPID(xyCoeff);
+        this.yController = new BasicPID(xyCoeff);
+        this.rController = new BasicPID(rCoeff);
+        this.pprController = new BasicPID(pprCoeff);
+        this.xTarget = 0;
+        this.yTarget = 0;
+        this.rTarget = 0;
+        if(drive.getPoseEstimate().getX() != 0 || drive.getPoseEstimate().getY() != 0 || drive.getPoseEstimate().getHeading() != 0){
+            drive.setPoseEstimate(new Pose2d(0, 0, 0));
+        }
+    }
 
     public DT(HardwareMap hardwareMap){
         this.vs = hardwareMap.voltageSensor.iterator().next();
@@ -122,23 +160,37 @@ public class DT{
         this.setPurePersuiting(isPurePersuiting);
     }
     public void setPowers(double y, double x, double r){
-        flPower = (y+x+r);
-        blPower = (y-x+r);
-        brPower = (y+x-r);
-        frPower = (y-x-r);
-        normalize = Math.max(Math.abs(flPower) + Math.abs(blPower) + Math.abs(brPower) + Math.abs(frPower),1);
-        leftFront.setPower((flPower/normalize) * maxPower);
-        leftRear.setPower((blPower/normalize) * maxPower);
-        rightRear.setPower((brPower/normalize) * maxPower);
-        rightFront.setPower((frPower/normalize) * maxPower);
+        if(!forceStop){
+            normalize = Math.max(Math.abs(x) + Math.abs(y) + Math.abs(r), 1);
+            flPower = (y+x+r);
+            blPower = (y-x+r);
+            brPower = (y+x-r);
+            frPower = (y-x-r);
+            leftFront.setPower((flPower/normalize));
+            leftRear.setPower((blPower/normalize));
+            rightRear.setPower((brPower/normalize));
+            rightFront.setPower((frPower/normalize));
+        }else{
+            leftFront.setPower(0);
+            leftRear.setPower(0);
+            rightFront.setPower(0);
+            rightRear.setPower(0);
+        }
     }
     public void update(){
+        lastHeading = currentHeading;
         drive.updatePoseEstimate();
         xRn = drive.getPoseEstimate().getX();
         yRn = drive.getPoseEstimate().getY();
         rRn = drive.getPoseEstimate().getHeading();
         xOut = xController.calculate(xTarget, xRn);
         yOut = -yController.calculate(yTarget, yRn);
+//        double n = Math.hypot(xOut,yOut);
+//        xOut = maxPower * Math.signum(xOut);
+//        yOut = maxPower * Math.signum(yOut);
+        xOut *= maxPower / followRadius;
+        yOut *= maxPower / followRadius;
+
         deltaY = yTarget - yRn;
         deltaX = xTarget - xRn;
 //        xOut = xController.calculate(xTarget, xRn);
@@ -147,28 +199,35 @@ public class DT{
         if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
         lastAngle = rRn;
         twistedR = count * (2* M.PI) + rRn;
-
-        if(purePersuiting){
-            rOut = -pprController.calculate(rTarget, twistedR);
-        }else{
-            rOut = -rController.calculate(rTarget, twistedR);
-        }
+        currentHeading = twistedR;
+        lastTime = currentTime;
+        currentTime = timer.nanoseconds() / 1000000;
+        turnVelocity = (currentHeading-lastHeading)/(currentTime-lastTime);
+        rOut = -((rTarget -  twistedR) * 1.3 - turnVelocity * 105);
 //        rOut = -rController.calculate(rTarget, twistedR);
-        xPower = xOut * T.cos(rRn) - yOut * T.sin(rRn);
-        yPower = xOut * T.sin(rRn) + yOut * T.cos(rRn);
+        xPower = (xOut * T.cos(rRn) - yOut * T.sin(rRn));
+        yPower = (xOut * T.sin(rRn) + yOut * T.cos(rRn));
 
         deltaR = rTarget - twistedR;
 
         if(Math.abs(xPower) > DTConstants.maxAxialPower) xPower = DTConstants.maxAxialPower * Math.signum(xPower);
         if(Math.abs(yPower) > DTConstants.maxAxialPower) yPower = DTConstants.maxAxialPower * Math.signum(yPower);
         if(Math.abs(rOut) > DTConstants.maxAngularPower) rOut = DTConstants.maxAngularPower * Math.signum(rOut);
+//
+//        if(Math.abs(xPower) < 0.05) xPower = 0;
+//        else xPower += DTConstants.XYBasePower * Math.signum(xPower)* 1/maxPower;
+//        if(Math.abs(yPower) < 0.05) yPower = 0;
+//        else yPower += DTConstants.XYBasePower * Math.signum(yPower) * 1/maxPower;
+//        if (Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
+//        else rOut += DTConstants.RBasePower * Math.signum(rOut) * 1/maxPower;
 
-        if(Math.abs(xPower) < 0.07) xPower = 0;
-        else xPower += DTConstants.XYBasePower * Math.signum(xPower)* 1/maxPower;
-        if(Math.abs(yPower) < 0.07) yPower = 0;
-        else yPower += DTConstants.XYBasePower * Math.signum(yPower) * 1/maxPower;
-        if (Math.abs(deltaR) < DTConstants.allowedAngularError) rOut = 0;
-        else rOut += DTConstants.RBasePower * Math.signum(rOut) * 1/maxPower;
+        double zeroMoveAngle = Math.toRadians(25);
+        double errorScale = 1 - (Math.abs(deltaR) / zeroMoveAngle);
+        if(errorScale < 0) { errorScale = 0; }
+
+        xPower *= errorScale;
+        yPower *= errorScale;
+
         compensator = vs.getVoltage() / 12.5;
         xPower/=compensator;
         yPower/=compensator;
@@ -177,6 +236,8 @@ public class DT{
 //        setPowers(xPower, yPower,rOut);
 //        setPowers(-xPower, 0,0);
         setPowers(-xPower, -yPower,rOut);
+//        setPowers(0, 0,rOut);
+
 
 
         if(Math.abs(deltaX) < 2 && Math.abs(deltaY)<2 && Math.abs(deltaR) < DTConstants.allowedAngularError){
@@ -184,6 +245,7 @@ public class DT{
         }else{
             isAtTarget = false;
         }
+
     }
 
     public void setPurePersuiting(boolean isPurePersuiting){
@@ -319,5 +381,12 @@ public class DT{
     }
     public boolean nearlyEqual(double a, double b) {
         return Math.abs(a - b) < 1e-9;
+    }
+
+    public void setForceStop(boolean b){
+        forceStop =b;
+    }
+    public boolean isForceStopped(){
+        return forceStop;
     }
 }
