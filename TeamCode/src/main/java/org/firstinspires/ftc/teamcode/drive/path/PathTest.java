@@ -18,13 +18,10 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 @Config
 public class PathTest extends LinearOpMode {
     ElapsedTime timer = new ElapsedTime();
-    double previousTime = 0 ;
-    double currentTime = 0;
+    long previousTime = 0 ;
+    long currentTime = 0;
 
-    int currentWaypointIndex = 0;
     double lookaheadRadius = 20;
-    double lookaheadRadiusHeading = 23;
-    double updateTime;
 
     DT drive;
 
@@ -34,35 +31,29 @@ public class PathTest extends LinearOpMode {
 
 
         drive = new DT(hardwareMap);
+        drive.setPathEndHold(false);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        drive.followRadius = lookaheadRadius;
-
+        drive.setFollowRadius(lookaheadRadius);
 
         waitForStart();
         while(opModeIsActive()) {
-            currentTime = timer.nanoseconds()/(Math.pow(10,9));
+            currentTime = timer.nanoseconds()/1000000000;
             if(i == 0){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
                 wayPoints.add(new Pose2d(10,30));
                 wayPoints.add(new Pose2d(57,30));
                 wayPoints.add(new Pose2d(57,0));
-                //this logic doenst work
-                if(Math.hypot((57 - drive.getX()), 0 - drive.getY()) < 20){
-                    drive.setPathEndHold(true);
-                    drive.lineTo(57,0, Math.toRadians(-90));
-                    if(Math.hypot((57 - drive.getX()), 0 - drive.getY()) < 3) {
-                        i++;
-                    }
-                }else{
-                    followPath(wayPoints, .2, 23, 20, 0, -99, drive);
+                //this logic doenst work?
+                followPath(wayPoints, .2, 23, 20, 0, -99, drive);
+                if(Math.hypot((57 - drive.getX()), 0 - drive.getY()) < 20) {
+                    i++;
                 }
             }else if(i==1){
-                drive.setPathEndHold(false);
-                ArrayList<Pose2d> wayPoints1 = new ArrayList<>();
-                wayPoints1.add(new Pose2d(57,0));
-                wayPoints1.add(new Pose2d(0, 0));
-                followPath(wayPoints1, .2, 23, 20, 0, -99, drive);
+                ArrayList<Pose2d> wayPoints = new ArrayList<>();
+                wayPoints.add(new Pose2d(57,0));
+                wayPoints.add(new Pose2d(0, 0));
+                followPath(wayPoints, .2, 23, 20, 0, -99, drive);
             }
 //            wayPoints.add(new Pose2d(72,10));
             telemetry.addData("i ", i);

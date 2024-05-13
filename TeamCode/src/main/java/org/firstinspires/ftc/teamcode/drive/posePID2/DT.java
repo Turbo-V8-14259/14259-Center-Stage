@@ -45,7 +45,7 @@ public class DT{
     private boolean ending = false;
 
     private double maxPower = 1;
-    public double followRadius = 0;
+    private double followRadius = 0;
     private double flPower, frPower, blPower, brPower;
     
     private double normalize;
@@ -470,5 +470,9 @@ public class DT{
 
     public void setPathEndHold(boolean a){
         this.ending = a;
+    }
+
+    public void setFollowRadius(double radius){
+        this.followRadius = radius;
     }
 }
