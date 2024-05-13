@@ -40,13 +40,14 @@ public class PathTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
-            currentTime = timer.milliseconds()/(Math.pow(10,9));
+            currentTime = timer.nanoseconds()/(Math.pow(10,9));
             if(i == 0){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
                 wayPoints.add(new Pose2d(10,30));
                 wayPoints.add(new Pose2d(57,30));
                 wayPoints.add(new Pose2d(57,0));
+                //this logic doenst work
                 if(Math.hypot((57 - drive.getX()), 0 - drive.getY()) < 20){
                     drive.setPathEndHold(true);
                     drive.lineTo(57,0, Math.toRadians(-90));
