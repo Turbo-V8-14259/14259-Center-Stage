@@ -140,7 +140,11 @@ public class DriveSim {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startFPose)
+                        drive.trajectorySequenceBuilder(new Pose2d(0,0))
+                                .lineTo(new Vector2d(10,50))
+                                .lineTo(new Vector2d(57,50))
+                                .lineTo(new Vector2d(57,0))
+                                .lineTo(new Vector2d(0,0))
 
 //                                .lineTo(leftBProp)
 //                                .turn(nninetyTurn)
@@ -315,12 +319,12 @@ public class DriveSim {
 //                                .lineTo(FFirstR)
 //                                  <-- front right bottom
 //
-                                .lineTo(FFirstM)
-                                .turn(nninetyTurn)
-                                .lineTo(middleFProp)
-                                .lineTo(FStackI2)
-                                .lineTo(FStackI1)
-                                .lineTo(FStack)
+//                                .lineTo(FFirstM)
+//                                .turn(nninetyTurn)
+//                                .lineTo(middleFProp)
+//                                .lineTo(FStackI2)
+//                                .lineTo(FStackI1)
+//                                .lineTo(FStack)
 //                                .lineTo(FStackI1)
 //                                .lineTo(FStackI2)
 //                                .lineTo(FFirstM)
