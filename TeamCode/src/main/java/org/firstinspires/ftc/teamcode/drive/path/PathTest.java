@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 @Config
 public class PathTest extends LinearOpMode {
     ElapsedTime timer = new ElapsedTime();
-    long previousTime = 0 ;
-    long currentTime = 0;
+    double previousTime = 0;
+    double currentTime = 0;
 
     double lookaheadRadius = 20;
 
@@ -37,23 +37,24 @@ public class PathTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
+            previousTime = currentTime;
             currentTime = timer.nanoseconds()/1000000000;
             if(i == 0){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
-                wayPoints.add(new Pose2d(10,30));
-                wayPoints.add(new Pose2d(57,30));
-                wayPoints.add(new Pose2d(57,0));
+                wayPoints.add(new Pose2d(10,50));
+                wayPoints.add(new Pose2d(57,50));
                 //this logic doenst work?
-                followPath(wayPoints, .2, 23, 20, 0, -99, drive);
+                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
                 if(Math.hypot((57 - drive.getX()), 0 - drive.getY()) < 20) {
                     i++;
                 }
             }else if(i==1){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
+                wayPoints.add(new Pose2d(57,50));
                 wayPoints.add(new Pose2d(57,0));
-                wayPoints.add(new Pose2d(0, 0));
-                followPath(wayPoints, .2, 23, 20, 0, -99, drive);
+                wayPoints.add(new Pose2d(-20, 0));
+                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
             }
 //            wayPoints.add(new Pose2d(72,10));
             telemetry.addData("i ", i);
@@ -61,7 +62,6 @@ public class PathTest extends LinearOpMode {
             telemetry.addData("delta from final wp1 ", Math.hypot((80 - drive.getX()), 0 - drive.getY()));
             telemetry.update();
             drive.update();
-            previousTime = currentTime;
         }
 
 
