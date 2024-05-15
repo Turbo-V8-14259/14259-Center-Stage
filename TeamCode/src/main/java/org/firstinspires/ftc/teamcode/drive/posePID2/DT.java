@@ -237,10 +237,10 @@ public class DT{
             xPower *= errorScale;
             yPower *= errorScale;
 
-            compensator = vs.getVoltage() / 12.5;
-            xPower/=compensator;
-            yPower/=compensator;
-            rOut/=compensator;
+//            compensator = vs.getVoltage() / 12.5;
+//            xPower/=compensator;
+//            yPower/=compensator;
+//            rOut/=compensator;
 
 //        setPowers(xPower, yPower,rOut);
 //        setPowers(-xPower, 0,0);
@@ -304,10 +304,10 @@ public class DT{
             xPower *= errorScale;
             yPower *= errorScale;
 
-            compensator = vs.getVoltage() / 12.5;
-            xPower/=compensator;
-            yPower/=compensator;
-            rOut/=compensator;
+//            compensator = vs.getVoltage() / 12.5;
+//            xPower/=compensator;
+//            yPower/=compensator;
+//            rOut/=compensator;
 
 //        setPowers(xPower, yPower,rOut);
 //        setPowers(-xPower, 0,0);
