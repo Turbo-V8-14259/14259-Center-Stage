@@ -38,7 +38,7 @@ public class PathTest extends LinearOpMode {
         waitForStart();
         while(opModeIsActive()) {
             previousTime = currentTime;
-            currentTime = timer.nanoseconds()/1000000000;
+            currentTime = timer.nanoseconds()/10000000000.0;
             if(i == 0){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
@@ -46,15 +46,28 @@ public class PathTest extends LinearOpMode {
                 wayPoints.add(new Pose2d(57,50));
                 //this logic doenst work?
                 followPath(wayPoints, .5, 23, 20, 0, -99, drive);
-                if(Math.hypot((57 - drive.getX()), 0 - drive.getY()) < 20) {
+                if(Math.hypot((57 - drive.getX()), 50 - drive.getY()) < 20) {
                     i++;
                 }
             }else if(i==1){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(57,50));
                 wayPoints.add(new Pose2d(57,0));
+                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
+                if(Math.hypot((57 - drive.getX()), 0 - drive.getY()) < 20) {
+                    i++;
+                }
+            }else if(i ==2 ){
+                ArrayList<Pose2d> wayPoints = new ArrayList<>();
+                wayPoints.add(new Pose2d(57,0));
                 wayPoints.add(new Pose2d(-20, 0));
                 followPath(wayPoints, .5, 23, 20, 0, -99, drive);
+                if(Math.hypot((-20 - drive.getX()), 0 - drive.getY()) < 20) {
+                    i++;
+                }
+            }else if(i == 3){
+                drive.setPathEndHold(true);
+                drive.lineTo(-20,0,Math.toRadians(180));
             }
 //            wayPoints.add(new Pose2d(72,10));
             telemetry.addData("i ", i);

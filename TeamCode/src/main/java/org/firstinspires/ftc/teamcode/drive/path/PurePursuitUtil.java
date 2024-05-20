@@ -112,10 +112,10 @@ public class PurePursuitUtil {
 
             // if 2 valid intersections, then save the one that's more along the line
             if(intersections.size() == 2) {
-                if (positiveLine * intersections.get(0).getX() > positiveLine * intersections.get(1).getX()) {
-                    allIntersections.add(intersections.get(0));
-                } else {
+                if(Math.hypot(wayPt2.getX() - intersections.get(0).getX(), wayPt2.getY() - intersections.get(0).getY()) > Math.hypot(wayPt2.getX() - intersections.get(1).getX(), wayPt2.getY() -intersections.get(1).getY())){
                     allIntersections.add(intersections.get(1));
+                } else {
+                    allIntersections.add(intersections.get(0));
                 }
             }
 
