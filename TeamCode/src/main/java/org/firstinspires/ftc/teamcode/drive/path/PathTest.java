@@ -43,12 +43,14 @@ public class PathTest extends LinearOpMode {
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
                 wayPoints.add(new Pose2d(10,50));
-                wayPoints.add(new Pose2d(57,50));
-                //this logic doenst work?
+
+
                 followPath(wayPoints, .5, 23, 20, 0, -99, drive);
-                if(Math.hypot((57 - drive.getX()), 50 - drive.getY()) < 20) {
-                    i++;
-                }
+                //this logic doenst work?
+//                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
+//                if(Math.hypot((57 - drive.getX()), 50 - drive.getY()) < 20) {
+//                    i++;
+//                }
             }else if(i==1){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(57,50));
@@ -83,15 +85,17 @@ public class PathTest extends LinearOpMode {
     Pose2d lastTranslatePoint = new Pose2d(0,0);
     Pose2d lastHeadingPoint = new Pose2d(0,0);
     void followPath(ArrayList<Pose2d> path, double movePower, double headingRadius, double moveRadius, double headingOffset, double lockAngle, DT drive) {
-        Pose2d followDrive = PurePursuitUtil.followMe(path, drive.getLocation(), moveRadius, lastTranslatePoint, false);
+        Pose2d followDrive = PurePursuitUtil.followMe(path, drive.getLocation(), moveRadius, headingRadius, lastTranslatePoint);
         lastTranslatePoint = followDrive;
 
-        Pose2d followHeading = PurePursuitUtil.followMe(path, drive.getLocation(), headingRadius, lastHeadingPoint, true);
+
+        Pose2d followHeading = PurePursuitUtil.followMe(path, drive.getLocation(), moveRadius, headingRadius, lastHeadingPoint);
         lastHeadingPoint = followHeading;
 
         drive.lineTo(followDrive.getX(), followDrive.getY(),drive.toPoint(drive.getX(), drive.getY(), drive.getR(), followHeading.getX(), followHeading.getY() + headingOffset));
 
         drive.setMaxPower(movePower);
+
     }
 
 
