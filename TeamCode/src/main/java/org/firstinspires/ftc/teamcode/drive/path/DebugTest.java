@@ -34,6 +34,7 @@ public class DebugTest extends LinearOpMode {
         drive.setPathEndHold(false);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         drive.setFollowRadius(lookaheadRadius);
+        DebugUtil.updateSegment(1);
 
         waitForStart();
         while(opModeIsActive()) {
@@ -42,9 +43,13 @@ public class DebugTest extends LinearOpMode {
             if(i == 0){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
-                wayPoints.add(new Pose2d(10,20));
-                wayPoints.add(new Pose2d(60, 70));
-                wayPoints.add(new Pose2d(10, 0 ));
+                wayPoints.add(new Pose2d(0,70));
+                wayPoints.add(new Pose2d(10, 40));
+                wayPoints.add(new Pose2d(5,10 ));
+                wayPoints.add(new Pose2d(0, 0));
+
+
+
 
                 followPath(wayPoints, .5, 23, 20, 0, -99, drive);
                 //this logic doenst work?
@@ -59,6 +64,7 @@ public class DebugTest extends LinearOpMode {
             telemetry.addData("delta from final wp1 ", Math.hypot((80 - drive.getX()), 0 - drive.getY()));
             telemetry.addData("robot x", drive.getX());
             telemetry.addData("robot y", drive.getY());
+            telemetry.addData("segment", DebugUtil.getSegment());
             telemetry.update();
             drive.update();
         }
