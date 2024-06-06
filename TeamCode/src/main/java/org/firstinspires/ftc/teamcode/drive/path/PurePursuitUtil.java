@@ -94,10 +94,10 @@ public class PurePursuitUtil {
         // stores all intersections, valid or not, for the entire path
         ArrayList<Pose2d> allIntersections = new ArrayList<>();
         // cycles through all the line segments and fills the allIntersections array with actual intersections
-        for(int lineIndex = 0; lineIndex < path.size(); lineIndex ++) {
+        for(int lineIndex = 0; lineIndex < path.size()-2; lineIndex ++) {
 
             // if calculating for last line segment, then enable actually extend
-            if(lineIndex == path.size() - 2) {
+            if (lineIndex == path.size() - 3) {
                 Pose2d wayPt1 = path.get(lineIndex);
                 Pose2d wayPt2 = path.get(lineIndex + 1);
 
@@ -117,10 +117,10 @@ public class PurePursuitUtil {
                 }
 
                 // if you're closer to the last point than follow radius then add it to the list, unless you're extending
-                else if ((Math.hypot(wayPt2.getX() - robotLocation.getX(), wayPt2.getY() - robotLocation.getY()) < followRadius) ) {
+                else if ((Math.hypot(wayPt2.getX() - robotLocation.getX(), wayPt2.getY() - robotLocation.getY()) < followRadius)) {
                     allIntersections.add(wayPt2);
                 }
-            }else {
+            } else {
 
                 // get way points from path for the current index being tested
                 Pose2d wayPt1 = path.get(lineIndex);
@@ -138,17 +138,17 @@ public class PurePursuitUtil {
                     positiveLine = -1;
                 }
 
-                if(fintersections.size()!=0){
-                    if(fintersections.size()==1){
+                if (fintersections.size() != 0) {
+                    if (fintersections.size() == 1) {
                         allIntersections.add(fintersections.get(0));
-                    }else if(fintersections.size()==2){
+                    } else if (fintersections.size() == 2) {
                         if (Math.hypot(wayPt3.getX() - intersections.get(0).getX(), wayPt3.getY() - intersections.get(0).getY()) > Math.hypot(wayPt3.getX() - intersections.get(1).getX(), wayPt3.getY() - intersections.get(1).getY())) {
                             allIntersections.add(fintersections.get(1));
                         } else {
                             allIntersections.add(fintersections.get(0));
                         }
                     }
-                }else {
+                } else {
                     // if 2 valid intersections, then save the one that's more along the line
                     if (intersections.size() == 2) {
                         if (Math.hypot(wayPt2.getX() - intersections.get(0).getX(), wayPt2.getY() - intersections.get(0).getY()) > Math.hypot(wayPt2.getX() - intersections.get(1).getX(), wayPt2.getY() - intersections.get(1).getY())) {
@@ -164,14 +164,14 @@ public class PurePursuitUtil {
                     }
 
                     // if you're closer to the last point than follow radius then add it to the list, unless you're extending
-                    else if ((Math.hypot(wayPt2.getX() - robotLocation.getX(), wayPt2.getY() - robotLocation.getY()) < followRadius) ) {
+                    else if ((Math.hypot(wayPt2.getX() - robotLocation.getX(), wayPt2.getY() - robotLocation.getY()) < followRadius)) {
                         allIntersections.add(wayPt2);
                     }
+
                 }
             }
+
         }
-
-
 
         // if we didn't find anything return robot location
         if(allIntersections.size() == 0) { return lastPoint; }

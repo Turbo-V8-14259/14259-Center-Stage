@@ -43,7 +43,7 @@ public class PathTest extends LinearOpMode {
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
                 wayPoints.add(new Pose2d(10,50));
-
+                wayPoints.add(new Pose2d(15, 40));
 
                 followPath(wayPoints, .5, 23, 20, 0, -99, drive);
                 //this logic doenst work?
