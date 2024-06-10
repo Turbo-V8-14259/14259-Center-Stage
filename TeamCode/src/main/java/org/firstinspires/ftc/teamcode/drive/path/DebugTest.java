@@ -43,9 +43,9 @@ public class DebugTest extends LinearOpMode {
             if(i == 0){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
-                wayPoints.add(new Pose2d(0,70));
-                wayPoints.add(new Pose2d(10, 40));
-                wayPoints.add(new Pose2d(5,10 ));
+                wayPoints.add(new Pose2d(35,70));
+                wayPoints.add(new Pose2d(70, 0));
+               
                 wayPoints.add(new Pose2d(0, 0));
 
 
