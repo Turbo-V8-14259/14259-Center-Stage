@@ -13,6 +13,10 @@ public class DebugUtil {
 
     private static int touchCounter=0;
 
+    private static boolean ending = false;
+
+    private static boolean closeEnough = false;
+
     public static int getSegment(){
         return segment;
     }
@@ -106,7 +110,7 @@ public class DebugUtil {
         }
     }
 
-    public static Pose2d followMe(ArrayList<Pose2d> path, Pose2d robotLocation, double followRadius, Pose2d lastPoint ){
+    public static Pose2d followMe(ArrayList<Pose2d> path, Pose2d robotLocation, double followRadius, Pose2d lastPoint, boolean heading ){
 
 
 
@@ -118,7 +122,14 @@ public class DebugUtil {
             Pose2d wayPt2 = path.get(segment);
 
             ArrayList<Pose2d> intersections = lineCircleIntersection(robotLocation, followRadius, wayPt1, wayPt2);
-            if (intersections.size() == 2) {
+            if(ending){
+                allIntersections.add(wayPt2);
+            }
+            else if ((Math.hypot(wayPt2.getX() - robotLocation.getX(), wayPt2.getY() - robotLocation.getY()) < followRadius)) {
+                allIntersections.add(wayPt2);
+                ending=true;
+            }
+            else if (intersections.size() == 2) {
                 if (Math.hypot(wayPt2.getX() - intersections.get(0).getX(), wayPt2.getY() - intersections.get(0).getY()) > Math.hypot(wayPt2.getX() - intersections.get(1).getX(), wayPt2.getY() - intersections.get(1).getY())) {
                     allIntersections.add(intersections.get(1));
                 } else {
@@ -131,10 +142,10 @@ public class DebugUtil {
                 allIntersections.add(intersections.get(0));
             }
 
-            // if you're closer to the last point than follow radius then add it to the list, unless you're extending
-            else if ((Math.hypot(wayPt2.getX() - robotLocation.getX(), wayPt2.getY() - robotLocation.getY()) < followRadius)) {
-                allIntersections.add(wayPt2);
-            }
+
+
+
+
         }else{
             Pose2d wayPt1 = path.get(segment-1);
             Pose2d wayPt2 = path.get(segment);
@@ -184,82 +195,7 @@ public class DebugUtil {
 
 
         }
-        // cycles through all the line segments and fills the allIntersections array with actual intersections
-//        for(int lineIndex = 0; lineIndex < path.size() - 1; lineIndex ++) {
-//
-//            // if calculating for last line segment, then enable actually extend
-//
-//            if (lineIndex == path.size() - 2) {
-//                Pose2d wayPt1 = path.get(lineIndex);
-//                Pose2d wayPt2 = path.get(lineIndex + 1);
-//
-//                ArrayList<Pose2d> intersections = lineCircleIntersection(robotLocation, followRadius, wayPt1, wayPt2);
-//                if (intersections.size() == 2) {
-//                    if (Math.hypot(wayPt2.getX() - intersections.get(0).getX(), wayPt2.getY() - intersections.get(0).getY()) > Math.hypot(wayPt2.getX() - intersections.get(1).getX(), wayPt2.getY() - intersections.get(1).getY())) {
-//                        allIntersections.add(intersections.get(1));
-//                    } else {
-//                        allIntersections.add(intersections.get(0));
-//                    }
-//                }
-//
-//                // if there's only one intersection then save that
-//                else if (intersections.size() == 1) {
-//                    allIntersections.add(intersections.get(0));
-//                }
-//
-//                // if you're closer to the last point than follow radius then add it to the list, unless you're extending
-//                else if ((Math.hypot(wayPt2.getX() - robotLocation.getX(), wayPt2.getY() - robotLocation.getY()) < followRadius)) {
-//                    allIntersections.add(wayPt2);
-//                }
-//            } else {
-//                // get way points from path for the current index being tested
-//                Pose2d wayPt1 = path.get(lineIndex);
-//                Pose2d wayPt2 = path.get(lineIndex + 1);
-//                Pose2d wayPt3 = path.get(lineIndex + 2);
-//                // the 2 intersections for the current line index
-//                ArrayList<Pose2d> intersections = lineCircleIntersection(robotLocation, followRadius, wayPt1, wayPt2);
-//                ArrayList<Pose2d> fintersections = lineCircleIntersection(robotLocation, followRadius, wayPt2, wayPt3);
-//                // is the line positive with respect to x axis
-//                double positiveLine = 1;
-//                if (wayPt2.getX() < wayPt1.getX()) {
-//                    positiveLine = -1;
-//                }
-//                if (fintersections.size() != 0) {
-//                    if (fintersections.size() == 1) {
-//                        allIntersections.add(fintersections.get(0));
-//                    } else if (fintersections.size() == 2) {
-//                        if (Math.hypot(wayPt3.getX() - fintersections.get(0).getX(), wayPt3.getY() - fintersections.get(0).getY()) > Math.hypot(wayPt3.getX() - fintersections.get(1).getX(), wayPt3.getY() - fintersections.get(1).getY())) {
-//                            allIntersections.add(fintersections.get(1));
-//                        } else {
-//                            allIntersections.add(fintersections.get(0));
-//                        }
-//                    }
-//                } else {
-//                    // if 2 valid intersections, then save the one that's more along the line
-//                    if (intersections.size() == 2) {
-//                        if (Math.hypot(wayPt2.getX() - intersections.get(0).getX(), wayPt2.getY() - intersections.get(0).getY()) > Math.hypot(wayPt2.getX() - intersections.get(1).getX(), wayPt2.getY() - intersections.get(1).getY())) {
-//                            allIntersections.add(intersections.get(1));
-//                        } else {
-//                            allIntersections.add(intersections.get(0));
-//                        }
-//                    }
-//
-//                    // if there's only one intersection then save that
-//                    else if (intersections.size() == 1) {
-//                        allIntersections.add(intersections.get(0));
-//                    }
-//
-//                    // if you're closer to the last point than follow radius then add it to the list, unless you're extending
-//                    else if ((Math.hypot(wayPt2.getX() - robotLocation.getX(), wayPt2.getY() - robotLocation.getY()) < followRadius)) {
-//                        allIntersections.add(wayPt2);
-//                    }
-//
-//                }
-//
-//
-//            }
-//        }
-//
+
 
         // if we didn't find anything return robot location
         if(allIntersections.size() == 0) { return lastPoint; }
@@ -326,5 +262,13 @@ public class DebugUtil {
     }
     public static double distanceTo(Pose2d robot, Pose2d target){
         return hypot(robot.getX()-target.getX(), robot.getY()-target.getY());
+    }
+
+    public static boolean getEnding(){
+        return ending;
+    }
+
+    public static void updateEnding(boolean a){
+        ending=a;
     }
 }

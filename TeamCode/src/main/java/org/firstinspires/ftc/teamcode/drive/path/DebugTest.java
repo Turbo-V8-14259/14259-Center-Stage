@@ -35,36 +35,40 @@ public class DebugTest extends LinearOpMode {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         drive.setFollowRadius(lookaheadRadius);
         DebugUtil.updateSegment(1);
+        DebugUtil.updateEnding(false);
 
         waitForStart();
         while(opModeIsActive()) {
             previousTime = currentTime;
             currentTime = timer.nanoseconds()/10000000000.0;
+
             if(i == 0){
                 ArrayList<Pose2d> wayPoints = new ArrayList<>();
                 wayPoints.add(new Pose2d(0, 0));
-                wayPoints.add(new Pose2d(35,70));
+                wayPoints.add(new Pose2d(35,60));
                 wayPoints.add(new Pose2d(70, 0));
-               
+
                 wayPoints.add(new Pose2d(0, 0));
 
 
 
 
                 followPath(wayPoints, .5, 23, 20, 0, -99, drive);
-                //this logic doenst work?
-//                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
-//                if(Math.hypot((57 - drive.getX()), 50 - drive.getY()) < 20) {
-//                    i++;
-//                }
+//                //this logic doenst work?
+////                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
+////                if(Math.hypot((57 - drive.getX()), 50 - drive.getY()) < 20) {
+////                    i++;
+////                }
             }
 //            wayPoints.add(new Pose2d(72,10));
+            drive.setMaxPower(0.5);
             telemetry.addData("i ", i);
             telemetry.addData("hz ", 1/(currentTime-previousTime));
             telemetry.addData("delta from final wp1 ", Math.hypot((80 - drive.getX()), 0 - drive.getY()));
             telemetry.addData("robot x", drive.getX());
             telemetry.addData("robot y", drive.getY());
             telemetry.addData("segment", DebugUtil.getSegment());
+            telemetry.addData("ending", DebugUtil.getEnding());
             telemetry.update();
             drive.update();
         }
@@ -74,17 +78,24 @@ public class DebugTest extends LinearOpMode {
 
     Pose2d lastTranslatePoint = new Pose2d(0,0);
     Pose2d lastHeadingPoint = new Pose2d(0,0);
-    void followPath(ArrayList<Pose2d> path, double movePower, double headingRadius, double moveRadius, double headingOffset, double lockAngle, DT drive) {
-        Pose2d followDrive = DebugUtil.followMe(path, drive.getLocation(), moveRadius,  lastTranslatePoint);
+    public void followPath(ArrayList<Pose2d> path, double movePower, double headingRadius, double moveRadius, double headingOffset, double lockAngle, DT drive) {
+
+        //false for urm non heading ig
+        Pose2d followDrive = DebugUtil.followMe(path, drive.getLocation(), moveRadius, lastTranslatePoint, false);
         lastTranslatePoint = followDrive;
 
+        //true for heading
 
-        Pose2d followHeading = DebugUtil.followMe(path, drive.getLocation(), moveRadius,  lastHeadingPoint);
+        Pose2d followHeading = DebugUtil.followMe(path, drive.getLocation(), headingRadius, lastHeadingPoint, true);
         lastHeadingPoint = followHeading;
-
+        if(DebugUtil.getEnding()) {
+            drive.setPathEndHold(true);
+        }
         drive.lineTo(followDrive.getX(), followDrive.getY(),drive.toPoint(drive.getX(), drive.getY(), drive.getR(), followHeading.getX(), followHeading.getY() + headingOffset));
 
         drive.setMaxPower(movePower);
+
+
 
     }
 
