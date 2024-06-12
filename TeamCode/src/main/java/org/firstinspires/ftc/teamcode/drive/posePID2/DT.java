@@ -28,6 +28,7 @@ public class DT{
     private double deltaX, deltaY, deltaR;
     private boolean isAtTarget;
 
+
     private double errorX, errorY; //PEE JAY
 
     public double turnVelocity;
@@ -53,7 +54,12 @@ public class DT{
     double currentTime = 0;
     double lastTime = 0;
     double currentHeading = 0;
+    double currentX = 0;
+    double lastX = 0;
     double lastHeading = 0;
+    double xVelocity=0;
+    double deltaTime = 0;
+    double twistedX = 0;
     public DT(HardwareMap hardwareMap, ElapsedTime timer){
         this.timer = timer;
         this.vs = hardwareMap.voltageSensor.iterator().next();
@@ -188,6 +194,7 @@ public class DT{
     public void update(){
         if(!ending){
             lastHeading = currentHeading;
+
             drive.updatePoseEstimate();
             xRn = drive.getPoseEstimate().getX();
             yRn = drive.getPoseEstimate().getY();
@@ -256,29 +263,43 @@ public class DT{
             }
 
         }else{
+
             lastHeading = currentHeading;
             drive.updatePoseEstimate();
             xRn = drive.getPoseEstimate().getX();
+            currentX = xRn;
             yRn = drive.getPoseEstimate().getY();
             rRn = drive.getPoseEstimate().getHeading();
-            xOut = NxController.calculate(xTarget, xRn);
+
+//            xOut = NxController.calculate(xTarget, xRn);
             yOut = -NyController.calculate(yTarget, yRn);
 //        double n = Math.hypot(xOut,yOut);
 //        xOut = maxPower * Math.signum(xOut);
 //        yOut = maxPower * Math.signum(yOut);
 
             deltaY = yTarget - yRn;
-            deltaX = xTarget - xRn;
+//            deltaX = xTarget - xRn;
 //        xOut = xController.calculate(xTarget, xRn);
 //        yOut = -yController.calculate(yTarget, yRn);
 
             if(Math.abs(rRn - lastAngle) > M.PI) count += Math.signum(lastAngle - rRn);
             lastAngle = rRn;
             twistedR = count * (2* M.PI) + rRn;
+
+
+
             currentHeading = twistedR;
+
             lastTime = currentTime;
+
             currentTime = timer.nanoseconds() / 1000000;
-            turnVelocity = (currentHeading-lastHeading)/(currentTime-lastTime);
+
+
+            deltaTime = currentTime - lastTime;
+
+            turnVelocity = (currentHeading-lastHeading)/(deltaTime);
+            xVelocity = (currentX - lastX)/(deltaTime);
+            xOut = 0;
             rOut = -((rTarget -  twistedR) * 1.3 - turnVelocity * 105);
 //        rOut = -rController.calculate(rTarget, twistedR);
             xPower = (xOut * T.cos(rRn) - yOut * T.sin(rRn));
@@ -301,8 +322,8 @@ public class DT{
             double errorScale = 1 - (Math.abs(deltaR) / zeroMoveAngle);
             if(errorScale < 0) { errorScale = 0; }
 
-            xPower *= errorScale;
-            yPower *= errorScale;
+            xPower =0;
+            yPower =0;
 
 //            compensator = vs.getVoltage() / 12.5;
 //            xPower/=compensator;
@@ -318,10 +339,10 @@ public class DT{
 
             if(Math.abs(deltaX) < 2 && Math.abs(deltaY)<2 && Math.abs(deltaR) < DTConstants.allowedAngularError){
                 isAtTarget = true;
-            }else{
+            }else {
                 isAtTarget = false;
             }
-
+            lastX = currentX;
         }
 
     }
@@ -474,5 +495,9 @@ public class DT{
     
     public void setFollowRadius(double radius){
         this.followRadius = radius;
+    }
+
+    public double getXPower(){
+        return xVelocity;
     }
 }

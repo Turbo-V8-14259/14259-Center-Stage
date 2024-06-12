@@ -31,7 +31,7 @@ public class DebugTest extends LinearOpMode {
 
 
         drive = new DT(hardwareMap);
-        drive.setPathEndHold(false);
+
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
         drive.setFollowRadius(lookaheadRadius);
         DebugUtil.updateSegment(1);
@@ -39,37 +39,31 @@ public class DebugTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()) {
+            drive.setPathEndHold(true);
             previousTime = currentTime;
             currentTime = timer.nanoseconds()/10000000000.0;
 
-            if(i == 0){
-                ArrayList<Pose2d> wayPoints = new ArrayList<>();
-                wayPoints.add(new Pose2d(0, 0));
-                wayPoints.add(new Pose2d(35,60));
-                wayPoints.add(new Pose2d(70, 0));
+//            if(i == 0) {
+//                ArrayList<Pose2d> wayPoints = new ArrayList<>();
+//                wayPoints.add(new Pose2d(0, 0));
+//                wayPoints.add(new Pose2d(35, 60));
+//                wayPoints.add(new Pose2d(70, 0));
+//
+//                wayPoints.add(new Pose2d(0, 0));
+//
+//
+//                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
+//
+//            }
 
-                wayPoints.add(new Pose2d(0, 0));
+            drive.lineTo(20,0,Math.toRadians(0));
 
-
-
-
-                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
-//                //this logic doenst work?
-////                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
-////                if(Math.hypot((57 - drive.getX()), 50 - drive.getY()) < 20) {
-////                    i++;
-////                }
-            }
-//            wayPoints.add(new Pose2d(72,10));
             drive.setMaxPower(0.5);
             telemetry.addData("i ", i);
             telemetry.addData("hz ", 1/(currentTime-previousTime));
-            telemetry.addData("delta from final wp1 ", Math.hypot((80 - drive.getX()), 0 - drive.getY()));
-            telemetry.addData("robot x", drive.getX());
-            telemetry.addData("robot y", drive.getY());
-            telemetry.addData("segment", DebugUtil.getSegment());
-            telemetry.addData("ending", DebugUtil.getEnding());
+
             telemetry.update();
+
             drive.update();
         }
 
@@ -90,8 +84,11 @@ public class DebugTest extends LinearOpMode {
         lastHeadingPoint = followHeading;
         if(DebugUtil.getEnding()) {
             drive.setPathEndHold(true);
+            drive.lineTo(followDrive.getX(), followDrive.getY(),Math.toRadians(-180));
+        }else{
+            drive.lineTo(followDrive.getX(), followDrive.getY(),drive.toPoint(drive.getX(), drive.getY(), drive.getR(), followHeading.getX(), followHeading.getY() + headingOffset));
         }
-        drive.lineTo(followDrive.getX(), followDrive.getY(),drive.toPoint(drive.getX(), drive.getY(), drive.getR(), followHeading.getX(), followHeading.getY() + headingOffset));
+
 
         drive.setMaxPower(movePower);
 
