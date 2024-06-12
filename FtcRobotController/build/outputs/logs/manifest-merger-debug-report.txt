@@ -2,7 +2,10 @@
 manifest
 ADDED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml:2:1-79:12
 INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml:2:1-79:12
+INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml:2:1-79:12
 	package
+		INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
+		ADDED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml:2:1-79:12
 		INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
 	android:versionName
 		ADDED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml:5:11-36
@@ -122,7 +125,13 @@ uses-sdk
 INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
 INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
+INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
+INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
 	android:targetSdkVersion
 		INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
+		ADDED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
+		INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
 	android:minSdkVersion
+		INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
+		ADDED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml
 		INJECTED from /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/src/main/AndroidManifest.xml

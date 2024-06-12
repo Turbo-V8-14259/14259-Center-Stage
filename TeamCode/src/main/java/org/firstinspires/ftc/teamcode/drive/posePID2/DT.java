@@ -59,7 +59,9 @@ public class DT{
     double lastHeading = 0;
     double xVelocity=0;
     double deltaTime = 0;
-    double twistedX = 0;
+    double lastY = 0;
+    double currentY = 0;
+    double yVelocity = 0;
     public DT(HardwareMap hardwareMap, ElapsedTime timer){
         this.timer = timer;
         this.vs = hardwareMap.voltageSensor.iterator().next();
@@ -263,21 +265,21 @@ public class DT{
             }
 
         }else{
-
             lastHeading = currentHeading;
             drive.updatePoseEstimate();
             xRn = drive.getPoseEstimate().getX();
             currentX = xRn;
             yRn = drive.getPoseEstimate().getY();
+            currentY = yRn;
             rRn = drive.getPoseEstimate().getHeading();
 
 //            xOut = NxController.calculate(xTarget, xRn);
-            yOut = -NyController.calculate(yTarget, yRn);
+//            yOut = -NyController.calculate(yTarget, yRn);
 //        double n = Math.hypot(xOut,yOut);
 //        xOut = maxPower * Math.signum(xOut);
 //        yOut = maxPower * Math.signum(yOut);
 
-            deltaY = yTarget - yRn;
+//            deltaY = yTarget - yRn;
 //            deltaX = xTarget - xRn;
 //        xOut = xController.calculate(xTarget, xRn);
 //        yOut = -yController.calculate(yTarget, yRn);
@@ -299,7 +301,10 @@ public class DT{
 
             turnVelocity = (currentHeading-lastHeading)/(deltaTime);
             xVelocity = (currentX - lastX)/(deltaTime);
-            xOut = 0;
+            yVelocity = (currentY - lastY)/(deltaTime);
+
+            xOut = ((xTarget - currentX) * .05 - xVelocity * 0);
+            yOut = -((yTarget - currentY) * .05 - yVelocity * 0);
             rOut = -((rTarget -  twistedR) * 1.3 - turnVelocity * 105);
 //        rOut = -rController.calculate(rTarget, twistedR);
             xPower = (xOut * T.cos(rRn) - yOut * T.sin(rRn));
@@ -322,8 +327,8 @@ public class DT{
             double errorScale = 1 - (Math.abs(deltaR) / zeroMoveAngle);
             if(errorScale < 0) { errorScale = 0; }
 
-            xPower =0;
-            yPower =0;
+            xPower *=errorScale;
+            yPower *=errorScale;
 
 //            compensator = vs.getVoltage() / 12.5;
 //            xPower/=compensator;
@@ -343,6 +348,7 @@ public class DT{
                 isAtTarget = false;
             }
             lastX = currentX;
+            lastY = currentY;
         }
 
     }

@@ -1,24 +1,25 @@
-org.firstinspires.ftc.teamcode.TeamCode-appcompat-1.2.0-0 /Users/joy/.gradle/caches/transforms-3/062a3f458de16c5b8ba80b32687f2c0f/transformed/appcompat-1.2.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-RobotCore-9.0.0-1 /Users/joy/.gradle/caches/transforms-3/0a019b25ffc4a66a83b020b6102ce949/transformed/jetified-RobotCore-9.0.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-Inspection-9.0.0-2 /Users/joy/.gradle/caches/transforms-3/0d277a87b0749d67510bb852894442c7/transformed/jetified-Inspection-9.0.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-dashboard-0.4.14-3 /Users/joy/.gradle/caches/transforms-3/3197fe920085597cd22906bfafc8a082/transformed/jetified-dashboard-0.4.14/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-homeostasis-FTC-1.0.8-4 /Users/joy/.gradle/caches/transforms-3/3984cdce083343ecd5e34897709a6d43/transformed/jetified-homeostasis-FTC-1.0.8/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-opencv-repackaged-bundled-dylibs-4.7.0-A-5 /Users/joy/.gradle/caches/transforms-3/56652da6c65a089206d3aa7d865766bc/transformed/jetified-opencv-repackaged-bundled-dylibs-4.7.0-A/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-FtcCommon-9.0.0-6 /Users/joy/.gradle/caches/transforms-3/627e5d148bc77e4c9ce6fe19c1772969/transformed/jetified-FtcCommon-9.0.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-apriltag-2.0.0-7 /Users/joy/.gradle/caches/transforms-3/74e52f2d42f6443a0b1593f3bf3a5135/transformed/jetified-apriltag-2.0.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-zxing-android-embedded-4.3.0-8 /Users/joy/.gradle/caches/transforms-3/9689cb0bb4eb968f21471c8ae0e38efa/transformed/jetified-zxing-android-embedded-4.3.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-Blocks-9.0.0-9 /Users/joy/.gradle/caches/transforms-3/972bd81b3e117d72e6dad0485d6dba77/transformed/jetified-Blocks-9.0.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-Hardware-9.0.0-10 /Users/joy/.gradle/caches/transforms-3/ab8353d16e3f4650b4101715f2ad06cd/transformed/jetified-Hardware-9.0.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-OnBotJava-9.0.0-11 /Users/joy/.gradle/caches/transforms-3/bdaca16b1e0510c92313a4572b13fbf4/transformed/jetified-OnBotJava-9.0.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-RobotServer-9.0.0-12 /Users/joy/.gradle/caches/transforms-3/c2a6dae49e47412c7a561011d6beb955/transformed/jetified-RobotServer-9.0.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-fast-load-0.1.2-13 /Users/joy/.gradle/caches/transforms-3/d374d59d016c25104abbd1d681a501bc/transformed/jetified-fast-load-0.1.2/res
-org.firstinspires.ftc.teamcode.TeamCode-core-1.3.0-14 /Users/joy/.gradle/caches/transforms-3/f26ac05df949041dcef3b09c389d7869/transformed/core-1.3.0/res
-org.firstinspires.ftc.teamcode.TeamCode-jetified-appcompat-resources-1.2.0-15 /Users/joy/.gradle/caches/transforms-3/f5d828beeac0755866dff3d33fbe8f06/transformed/jetified-appcompat-resources-1.2.0/res
-org.firstinspires.ftc.teamcode.TeamCode-packaged_res-16 /Users/joy/Documents/GitHub/14259-Center-Stage/FtcRobotController/build/intermediates/packaged_res/debug
-org.firstinspires.ftc.teamcode.TeamCode-pngs-17 /Users/joy/Documents/GitHub/14259-Center-Stage/TeamCode/build/generated/res/pngs/debug
-org.firstinspires.ftc.teamcode.TeamCode-resValues-18 /Users/joy/Documents/GitHub/14259-Center-Stage/TeamCode/build/generated/res/resValues/debug
-org.firstinspires.ftc.teamcode.TeamCode-mergeDebugResources-19 /Users/joy/Documents/GitHub/14259-Center-Stage/TeamCode/build/intermediates/incremental/debug/mergeDebugResources/merged.dir
-org.firstinspires.ftc.teamcode.TeamCode-mergeDebugResources-20 /Users/joy/Documents/GitHub/14259-Center-Stage/TeamCode/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir
-org.firstinspires.ftc.teamcode.TeamCode-merged_res-21 /Users/joy/Documents/GitHub/14259-Center-Stage/TeamCode/build/intermediates/merged_res/debug
-org.firstinspires.ftc.teamcode.TeamCode-debug-22 /Users/joy/Documents/GitHub/14259-Center-Stage/TeamCode/src/debug/res
-org.firstinspires.ftc.teamcode.TeamCode-main-23 /Users/joy/Documents/GitHub/14259-Center-Stage/TeamCode/src/main/res
+org.firstinspires.ftc.teamcode.TeamCode-core-1.3.0-0 /Users/des_veve/.gradle/caches/transforms-3/080f313e68143e30a4633ed9df16502e/transformed/core-1.3.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-appcompat-resources-1.2.0-1 /Users/des_veve/.gradle/caches/transforms-3/0de24351b70db0cc25397c9dbcae2c0f/transformed/jetified-appcompat-resources-1.2.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-dashboard-0.4.14-2 /Users/des_veve/.gradle/caches/transforms-3/18909ae833627ca8c33fc91371fe3f95/transformed/jetified-dashboard-0.4.14/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-Blocks-9.1.0-3 /Users/des_veve/.gradle/caches/transforms-3/2935323b3b0a52b0540a05100067afa2/transformed/jetified-Blocks-9.1.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-Inspection-9.1.0-4 /Users/des_veve/.gradle/caches/transforms-3/39378d7d03876267f2c2d07ca29cd6c2/transformed/jetified-Inspection-9.1.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-Hardware-9.1.0-5 /Users/des_veve/.gradle/caches/transforms-3/3b45afb4a698d958ef63470af22d2afb/transformed/jetified-Hardware-9.1.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-opencv-repackaged-bundled-dylibs-4.7.0-A-6 /Users/des_veve/.gradle/caches/transforms-3/561415b838a86c1dd200218d280fef68/transformed/jetified-opencv-repackaged-bundled-dylibs-4.7.0-A/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-zxing-android-embedded-4.3.0-7 /Users/des_veve/.gradle/caches/transforms-3/77b030d33441ad2424efa99d4f05c37e/transformed/jetified-zxing-android-embedded-4.3.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-fast-load-0.1.2-8 /Users/des_veve/.gradle/caches/transforms-3/8a7b76d5616244c17f480b0a5ce4c55f/transformed/jetified-fast-load-0.1.2/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-apriltag-2.0.0-9 /Users/des_veve/.gradle/caches/transforms-3/8c29294e7d6270000637f21a9110154a/transformed/jetified-apriltag-2.0.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-OnBotJava-9.1.0-10 /Users/des_veve/.gradle/caches/transforms-3/8d95e5eb8d18b9d11b073ffa75793ec9/transformed/jetified-OnBotJava-9.1.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-RobotCore-9.1.0-11 /Users/des_veve/.gradle/caches/transforms-3/ac335ece44a5a65ac7459fea078164a7/transformed/jetified-RobotCore-9.1.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-homeostasis-FTC-1.0.8-12 /Users/des_veve/.gradle/caches/transforms-3/bb40af96768086dd8018f1cc434681f2/transformed/jetified-homeostasis-FTC-1.0.8/res
+org.firstinspires.ftc.teamcode.TeamCode-appcompat-1.2.0-13 /Users/des_veve/.gradle/caches/transforms-3/c6f9a08362f0b2ebd1f0ffa501e6b073/transformed/appcompat-1.2.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-RobotServer-9.1.0-14 /Users/des_veve/.gradle/caches/transforms-3/de1fe307e363c983ff65e179cd8790cd/transformed/jetified-RobotServer-9.1.0/res
+org.firstinspires.ftc.teamcode.TeamCode-jetified-FtcCommon-9.1.0-15 /Users/des_veve/.gradle/caches/transforms-3/ffb8e13a9627def6da07d53d549a5207/transformed/jetified-FtcCommon-9.1.0/res
+org.firstinspires.ftc.teamcode.TeamCode-packaged_res-16 /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/FtcRobotController/build/intermediates/packaged_res/debug
+org.firstinspires.ftc.teamcode.TeamCode-pngs-17 /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/TeamCode/build/generated/res/pngs/debug
+org.firstinspires.ftc.teamcode.TeamCode-resValues-18 /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/TeamCode/build/generated/res/resValues/debug
+org.firstinspires.ftc.teamcode.TeamCode-rs-19 /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/TeamCode/build/generated/res/rs/debug
+org.firstinspires.ftc.teamcode.TeamCode-mergeDebugResources-20 /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/TeamCode/build/intermediates/incremental/debug/mergeDebugResources/merged.dir
+org.firstinspires.ftc.teamcode.TeamCode-mergeDebugResources-21 /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/TeamCode/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir
+org.firstinspires.ftc.teamcode.TeamCode-merged_res-22 /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/TeamCode/build/intermediates/merged_res/debug
+org.firstinspires.ftc.teamcode.TeamCode-debug-23 /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/TeamCode/src/debug/res
+org.firstinspires.ftc.teamcode.TeamCode-main-24 /Users/des_veve/Desktop/FTC 2023-2024/14259-Center-Stage/14259-Center-Stage/TeamCode/src/main/res

@@ -21,7 +21,7 @@ public class DebugTest extends LinearOpMode {
     double previousTime = 0;
     double currentTime = 0;
 
-    double lookaheadRadius = 20;
+//    double lookaheadRadius = 20;
 
     DT drive;
 
@@ -33,9 +33,9 @@ public class DebugTest extends LinearOpMode {
         drive = new DT(hardwareMap);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-        drive.setFollowRadius(lookaheadRadius);
-        DebugUtil.updateSegment(1);
-        DebugUtil.updateEnding(false);
+//        drive.setFollowRadius(lookaheadRadius);
+//        DebugUtil.updateSegment(1);
+//        DebugUtil.updateEnding(false);
 
         waitForStart();
         while(opModeIsActive()) {
@@ -56,7 +56,7 @@ public class DebugTest extends LinearOpMode {
 //
 //            }
 
-            drive.lineTo(20,0,Math.toRadians(0));
+            drive.lineTo(0,20,Math.toRadians(0));
 
             drive.setMaxPower(0.5);
             telemetry.addData("i ", i);
