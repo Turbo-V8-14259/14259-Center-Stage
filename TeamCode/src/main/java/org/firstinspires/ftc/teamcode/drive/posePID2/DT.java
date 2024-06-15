@@ -206,8 +206,8 @@ public class DT{
 //        double n = Math.hypot(xOut,yOut);
 //        xOut = maxPower * Math.signum(xOut);
 //        yOut = maxPower * Math.signum(yOut);
-            xOut *= maxPower / followRadius;
-            yOut *= maxPower / followRadius;
+//            xOut *= maxPower / followRadius;
+//            yOut *= maxPower / followRadius;
 
             deltaY = yTarget - yRn;
             deltaX = xTarget - xRn;
