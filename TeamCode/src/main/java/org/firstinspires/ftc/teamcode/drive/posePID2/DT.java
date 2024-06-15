@@ -303,8 +303,8 @@ public class DT{
             xVelocity = (currentX - lastX)/(deltaTime);
             yVelocity = (currentY - lastY)/(deltaTime);
 
-            xOut = ((xTarget - currentX) * .05 - xVelocity * 0);
-            yOut = -((yTarget - currentY) * .05 - yVelocity * 0);
+            xOut = ((xTarget - currentX) * .075 - xVelocity * 0);
+            yOut = -((yTarget - currentY) * .075 - yVelocity * 0);
             rOut = -((rTarget -  twistedR) * 1.3 - turnVelocity * 105);
 //        rOut = -rController.calculate(rTarget, twistedR);
             xPower = (xOut * T.cos(rRn) - yOut * T.sin(rRn));

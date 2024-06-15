@@ -21,7 +21,7 @@ public class DebugTest extends LinearOpMode {
     double previousTime = 0;
     double currentTime = 0;
 
-//    double lookaheadRadius = 20;
+    double lookaheadRadius = 20;
 
     DT drive;
 
@@ -33,35 +33,35 @@ public class DebugTest extends LinearOpMode {
         drive = new DT(hardwareMap);
 
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-//        drive.setFollowRadius(lookaheadRadius);
-//        DebugUtil.updateSegment(1);
-//        DebugUtil.updateEnding(false);
+        drive.setFollowRadius(lookaheadRadius);
+        DebugUtil.updateSegment(1);
+        DebugUtil.updateEnding(false);
 
         waitForStart();
         while(opModeIsActive()) {
-            drive.setPathEndHold(true);
+//            drive.setPathEndHold(true);
             previousTime = currentTime;
-            currentTime = timer.nanoseconds()/10000000000.0;
+            currentTime = timer.nanoseconds()/1000000000.0;
 
-//            if(i == 0) {
-//                ArrayList<Pose2d> wayPoints = new ArrayList<>();
-//                wayPoints.add(new Pose2d(0, 0));
-//                wayPoints.add(new Pose2d(35, 60));
-//                wayPoints.add(new Pose2d(70, 0));
-//
-//                wayPoints.add(new Pose2d(0, 0));
-//
-//
-//                followPath(wayPoints, .5, 23, 20, 0, -99, drive);
-//
-//            }
 
-            drive.lineTo(0,20,Math.toRadians(0));
+            ArrayList<Pose2d> wayPoints = new ArrayList<>();
+            wayPoints.add(new Pose2d(0, 0));
+            wayPoints.add(new Pose2d(0, 60));
+            wayPoints.add(new Pose2d(20, 0));
+            wayPoints.add(new Pose2d(50, 60));
 
-            drive.setMaxPower(0.5);
+            wayPoints.add(new Pose2d(70, 30));
+
+
+            followPath(wayPoints, 1, 13, 13, 0, -99, drive);
+
+
+
+
+
             telemetry.addData("i ", i);
             telemetry.addData("hz ", 1/(currentTime-previousTime));
-
+            telemetry.addData("segment ", DebugUtil.getSegment());
             telemetry.update();
 
             drive.update();
