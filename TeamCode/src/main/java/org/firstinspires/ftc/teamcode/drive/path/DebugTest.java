@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.drive.path.PurePursuitUtil;
 import org.firstinspires.ftc.teamcode.drive.posePID2.DT;
+import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
 import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 
 @TeleOp (name = "Debug PP")
@@ -26,8 +27,11 @@ public class DebugTest extends LinearOpMode {
     DT drive;
 
     int i = 0;
+    double size = 0;
+
     @Override
     public void runOpMode() throws InterruptedException {
+        stickyGamepad gamepadOne;
 
 
         drive = new DT(hardwareMap);
@@ -36,7 +40,8 @@ public class DebugTest extends LinearOpMode {
         drive.setFollowRadius(lookaheadRadius);
         DebugUtil.updateSegment(1);
         DebugUtil.updateEnding(false);
-
+        drive.setOn(true);
+        gamepadOne = new stickyGamepad(gamepad1);
         waitForStart();
         while(opModeIsActive()) {
 //            drive.setPathEndHold(true);
@@ -44,27 +49,40 @@ public class DebugTest extends LinearOpMode {
             currentTime = timer.nanoseconds()/1000000000.0;
 
 
+            if(gamepadOne.b){
+//                wayPoints.add(new Pose2d(drive.getX(), drive.getY()));
+                size++;
+            }
             ArrayList<Pose2d> wayPoints = new ArrayList<>();
             wayPoints.add(new Pose2d(0, 0));
             wayPoints.add(new Pose2d(0, 60));
             wayPoints.add(new Pose2d(20, 0));
-            wayPoints.add(new Pose2d(50, 60));
-
-            wayPoints.add(new Pose2d(70, 30));
-
-
             followPath(wayPoints, 1, 13, 13, 0, -99, drive);
+//            wayPoints.add(new Pose2d(50, 60));
+//
+//            wayPoints.add(new Pose2d(70, 30));
 
-
-
+//            if(gamepad1.dpad_down){
+//                followPath(wayPoints, 1, 13, 13, 0, -99, drive);
+//                drive.setOn(true);
+//            }else{
+//                drive.setPowers(gamepad1.left_stick_y, -gamepad1.left_stick_x, gamepad1.right_stick_x);
+//            }
 
 
             telemetry.addData("i ", i);
             telemetry.addData("hz ", 1/(currentTime-previousTime));
+            telemetry.addData("pose x", drive.getX());
+            telemetry.addData("pose y", drive.getY());
+            telemetry.addData("pose x", drive.getR());
+            telemetry.addData("size", size);
+
+
             telemetry.addData("segment ", DebugUtil.getSegment());
             telemetry.update();
 
             drive.update();
+            gamepadOne.update();
         }
 
 
@@ -73,7 +91,6 @@ public class DebugTest extends LinearOpMode {
     Pose2d lastTranslatePoint = new Pose2d(0,0);
     Pose2d lastHeadingPoint = new Pose2d(0,0);
     public void followPath(ArrayList<Pose2d> path, double movePower, double headingRadius, double moveRadius, double headingOffset, double lockAngle, DT drive) {
-
         //false for urm non heading ig
         Pose2d followDrive = DebugUtil.followMe(path, drive.getLocation(), moveRadius, lastTranslatePoint, false);
         lastTranslatePoint = followDrive;
