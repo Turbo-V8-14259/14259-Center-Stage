@@ -3,17 +3,14 @@ package org.firstinspires.ftc.teamcode.drive.path;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.ArrayList;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.drive.path.PurePursuitUtil;
 import org.firstinspires.ftc.teamcode.drive.posePID2.DT;
 import org.firstinspires.ftc.teamcode.usefuls.Gamepad.stickyGamepad;
-import org.firstinspires.ftc.teamcode.usefuls.Math.M;
 
 @TeleOp (name = "Debug PP")
 @Config
@@ -92,12 +89,13 @@ public class DebugTest extends LinearOpMode {
     Pose2d lastHeadingPoint = new Pose2d(0,0);
     public void followPath(ArrayList<Pose2d> path, double movePower, double headingRadius, double moveRadius, double headingOffset, double lockAngle, DT drive) {
         //false for urm non heading ig
-        Pose2d followDrive = DebugUtil.followMe(path, drive.getLocation(), moveRadius, lastTranslatePoint, false);
+        //getFuturePos for vel extrapolation
+        Pose2d followDrive = DebugUtil.followMe(path, drive.getFuturePos(500), moveRadius, lastTranslatePoint, false);
         lastTranslatePoint = followDrive;
 
         //true for heading
 
-        Pose2d followHeading = DebugUtil.followMe(path, drive.getLocation(), headingRadius, lastHeadingPoint, true);
+        Pose2d followHeading = DebugUtil.followMe(path, drive.getFuturePos(500), headingRadius, lastHeadingPoint, true);
         lastHeadingPoint = followHeading;
         if(DebugUtil.getEnding()) {
             drive.setPathEndHold(true);

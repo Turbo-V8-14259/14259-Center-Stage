@@ -221,7 +221,11 @@ public class DT{
                 currentHeading = twistedR;
                 lastTime = currentTime;
                 currentTime = timer.nanoseconds() / 1000000;
-                turnVelocity = (currentHeading - lastHeading) / (currentTime - lastTime);
+                deltaTime = currentTime - lastTime;
+
+                turnVelocity = (currentHeading - lastHeading) / (deltaTime);
+                xVelocity = (currentX - lastX) / (deltaTime);
+                yVelocity = (currentY - lastY) / (deltaTime);
                 rOut = -((rTarget - twistedR) * 1.3 - turnVelocity * 105);
 //        rOut = -rController.calculate(rTarget, twistedR);
                 xPower = (xOut * T.cos(rRn) - yOut * T.sin(rRn));
@@ -417,6 +421,16 @@ public class DT{
     public double getDeltaR(){
         return deltaR;
     }
+    //i think velocity is in ms, not 100% sure
+    public Pose2d getFuturePos(int milliseconds){
+        double r1 = xVelocity/turnVelocity;
+        double r2 = yVelocity/turnVelocity;
+
+        double relDeltaX = Math.sin(deltaR) * r1 - (1.0 - Math.cos(deltaR)) * r2;
+        double relDeltaY = (1.0 - Math.cos(deltaR)) * r1 + Math.sin(deltaR) * r2;
+
+        return new Pose2d(xRn+relDeltaX, yRn+relDeltaY);
+    }
     public boolean isAtTarget(){
         return isAtTarget;
     }
@@ -510,7 +524,5 @@ public class DT{
         this.followRadius = radius;
     }
 
-    public double getXPower(){
-        return xVelocity;
-    }
+
 }
